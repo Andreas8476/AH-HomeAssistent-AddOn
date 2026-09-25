@@ -20,6 +20,21 @@ kurz auf dieses Projekt).
 - Bewusste Auslassungen: freitextige Relais-Zähler, personenbezogene Felder aus
   `getreg.json` (`USER_CONTACT`/`INSTALLER_CONTACT`).
 
+## 2026-09-25 — Verifikation + Modbus-Flag-Referenz
+
+- Phase 1 gegen das echte Testgerät (`192.168.20.54`, Modell "AHF280-TI-plus-15.8")
+  verifiziert: alle Sensoren/Binary-Sensoren liefern plausible Werte, inkl. der
+  einmalig geladenen `gettemperature_calibration.json`-Sensoren. Gerätekonfiguration
+  wurde korrekt dynamisch erkannt (anderes Modell als im ursprünglichen Beispiel-Dump).
+- Neue Referenzdoku [09_modbus-status-flags.md](09_modbus-status-flags.md):
+  Bit-für-Bit-Bedeutung der Status-/Fehler-Register (`MODBUS_VAL_STATUS`,
+  `MODBUS_VAL_STATUS_EXTENDED`, `MODBUS_VAL_ERROR_STATUS`, u.a.), aus der
+  offiziellen Modbus-Registerdoku des Herstellers. Dient aktuell nur als
+  Cross-Check/Grundlage für spätere Erweiterungen, keine neuen Entities.
+- Repo zu GitLab gepusht: `git@gitlab.com:SyberAlf/ah-homeassistent-addon.git`,
+  Tag `v0.1.0`. Zusätzliches Root-`CHANGELOG.md` (Keep a Changelog/SemVer)
+  ergänzt dieses Dokument für eine saubere Release-Historie auf GitLab.
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,

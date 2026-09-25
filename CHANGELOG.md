@@ -11,6 +11,17 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Referenzdoku [`09_modbus-status-flags.md`](custom_components/askoheat_plus/docs/09_modbus-status-flags.md):
+  Bit-für-Bit-Bedeutung der Modbus-Status-/Fehler-Register, aus der
+  offiziellen Registerdoku des Herstellers.
+
+### Verifiziert
+
+- Phase 1 erfolgreich gegen echtes Testgerät (`192.168.20.54`) geprüft — alle
+  Entities liefern plausible Werte.
+
 ## [0.1.0] - 2026-09-25
 
 ### Hinzugefügt

@@ -6,6 +6,11 @@ Beispiel-Dump aller Endpunkte eines Andreas' eigenen Geräts
 (`b4:8a:0a:49:5b:9c`, IP `.53` im Dump; Testgerät für diese Integration ist
 `192.168.20.54`).
 
+Für die Bedeutung der einzelnen Bits in den Status-/Fehler-Feldern
+(`MODBUS_VAL_STATUS`, `MODBUS_VAL_STATUS_EXTENDED`, `MODBUS_VAL_ERROR_STATUS`,
+...) siehe die eigene Referenz [09_modbus-status-flags.md](09_modbus-status-flags.md)
+(Quelle: offizielle Modbus-Registerdoku).
+
 Grundsätzliches: alle Endpunkte sind einfache, **unauthentifizierte** `GET`-
 Requests auf `http://<host>/<endpunkt>`, Antwort ist JSON. Es gibt Dutzende
 Endpunkte (`getall.json`, `_values.json`, `getcon.json`, `getsenec.json`, ...) —
