@@ -9,13 +9,24 @@
           "port": "Port",
           "scan_interval": "Polling interval (seconds)"
         }
+      },
+      "reconfigure": {
+        "title": "Reconfigure ASKOHEAT+",
+        "description": "Adjust host/IP address, port, or polling interval.",
+        "data": {
+          "host": "Host / IP address",
+          "port": "Port",
+          "scan_interval": "Polling interval (seconds)"
+        }
       }
     },
     "error": {
       "cannot_connect": "Could not connect to the device. Check the host/IP and make sure it is reachable on your local network."
     },
     "abort": {
-      "already_configured": "This device is already configured."
+      "already_configured": "This device is already configured.",
+      "reconfigure_successful": "Settings updated successfully.",
+      "wrong_device": "Found a different device at this address (different device ID). Please use the address of your already configured ASKOHEAT+, or add the device as new instead."
     }
   },
   "entity": {

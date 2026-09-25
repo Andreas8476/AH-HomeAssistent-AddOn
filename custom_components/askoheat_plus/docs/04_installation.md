@@ -114,6 +114,22 @@ werden:
    Bei Erfolg wird das Gerät mit Modellname als Titel angelegt, inkl. aller
    Sensoren/Binary-Sensoren/Number-Entities (siehe [05_entities.md](05_entities.md)).
 
+### Host/Port/Abfrageintervall später ändern
+
+Nicht nur bei der Ersteinrichtung möglich — auch danach jederzeit anpassbar,
+ohne die Integration zu entfernen und neu einzurichten:
+
+1. **Einstellungen → Geräte & Dienste → ASKOHEAT+** öffnen.
+2. Bei der Geräte-Kachel die drei Punkte (⋮) → **"Neu konfigurieren"**
+   ("Reconfigure").
+3. Werte anpassen, absenden — die Integration testet die neue Verbindung
+   genauso wie beim Ersteinrichten und lädt sich danach automatisch neu.
+
+**Wichtig:** Beim Neu-Konfigurieren muss unter der neuen Adresse dasselbe
+physische Gerät antworten (gleiche Geräte-ID) wie beim ursprünglichen Setup —
+sonst bricht der Dialog mit einer Fehlermeldung ab. Für ein komplett anderes
+Gerät stattdessen eine zweite, separate Integration einrichten.
+
 ## Variante B: Manuelle Installation (ohne HACS)
 
 1. Repository herunterladen (GitHub- oder GitLab-Link, z.B. "Download ZIP"

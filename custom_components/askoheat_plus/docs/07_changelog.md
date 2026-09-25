@@ -147,6 +147,26 @@ kurz auf dieses Projekt).
   Schritt 2 entsprechend für HACS selbst ausgebaut (inkl. GitHub-Konto
   anlegen, Device-Code-Flow erklärt). Schritte neu durchnummeriert (1–5).
 
+## 2026-09-25 — ASKOMA-Logo, nachträgliche Rekonfiguration
+
+- **ASKOMA-Logo eingebaut** (`custom_components/askoheat_plus/brand/`):
+  `icon.png`/`icon@2x.png` (quadratischer Ausschnitt des Berg+Kreuz-Symbols
+  aus Andreas' Originallogo, HA 2026.3+ liest Custom-Integration-Icons direkt
+  aus dem Komponentenordner, kein Zentral-Repo-Eintrag nötig — Muster wie bei
+  `froeling_lambdatronic_modbus/brand/icon.png`), `logo.png`
+  (Hellmodus-Wortmarke), `dark_logo.png`/`dark_logo@2x.png` (Dunkelmodus-
+  Variante). Bildzuschnitt lokal mit Pillow in einer isolierten venv erstellt
+  (System-Python bewusst nicht verändert).
+- **Neu: nachträgliche Rekonfiguration.** `config_flow.py` implementiert jetzt
+  `async_step_reconfigure` — Host/Port/Abfrageintervall sind über "Geräte &
+  Dienste → ASKOHEAT+ → ⋮ → Neu konfigurieren" jederzeit änderbar, nicht mehr
+  nur beim Ersteinrichten. Verbindungstest wie beim Ersteinrichten, plus
+  Schutz gegen versehentliches Umbiegen auf ein anderes physisches Gerät
+  (`_abort_if_unique_id_mismatch`). API-Methoden verifiziert durch direktes
+  Nachschlagen im tatsächlich installierten `homeassistant`-Quellcode via
+  `docker exec homeassistant` (Container-Zugriff diese Session neu entdeckt) —
+  zuverlässiger als die vorherige reine `py_compile`-Prüfung.
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,

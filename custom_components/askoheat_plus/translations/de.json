@@ -9,13 +9,24 @@
           "port": "Port",
           "scan_interval": "Abfrageintervall (Sekunden)"
         }
+      },
+      "reconfigure": {
+        "title": "ASKOHEAT+ neu konfigurieren",
+        "description": "Host/IP-Adresse, Port oder Abfrageintervall anpassen.",
+        "data": {
+          "host": "Host / IP-Adresse",
+          "port": "Port",
+          "scan_interval": "Abfrageintervall (Sekunden)"
+        }
       }
     },
     "error": {
       "cannot_connect": "Verbindung zum Gerät fehlgeschlagen. Bitte Host/IP prüfen und sicherstellen, dass es im lokalen Netzwerk erreichbar ist."
     },
     "abort": {
-      "already_configured": "Dieses Gerät ist bereits eingerichtet."
+      "already_configured": "Dieses Gerät ist bereits eingerichtet.",
+      "reconfigure_successful": "Einstellungen erfolgreich aktualisiert.",
+      "wrong_device": "Unter dieser Adresse wurde ein anderes Gerät gefunden (andere Geräte-ID). Bitte die Adresse deines bereits eingerichteten ASKOHEAT+ verwenden, oder das Gerät stattdessen neu hinzufügen."
     }
   },
   "entity": {

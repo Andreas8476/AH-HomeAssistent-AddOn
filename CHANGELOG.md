@@ -11,6 +11,23 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-09-25
+
+### Hinzugefügt
+
+- ASKOMA-Markenbilder (`custom_components/askoheat_plus/brand/`): `icon.png`,
+  `icon@2x.png`, `logo.png`, `dark_logo.png`, `dark_logo@2x.png`.
+- Nachträgliche Rekonfiguration: Host/Port/Abfrageintervall über "Geräte &
+  Dienste → ASKOHEAT+ → Neu konfigurieren" jederzeit änderbar, nicht mehr nur
+  beim Ersteinrichten.
+
+### Geändert
+
+- `docs/04_installation.md`: Schritt-für-Schritt-Anleitung zur Installation
+  eines Terminal-Add-ons ergänzt (vorher nur erwähnt, nicht erklärt) sowie
+  Hinweis zur nachträglichen Rekonfiguration.
+- Dashboard-Label-Abstände korrigiert (Feedback nach Screenshot-Review).
+
 ## [0.5.0] - 2026-09-25
 
 ### Hinzugefügt
@@ -106,7 +123,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Phase 2: Steuerung/Schreiben (Heizstufe, Leistungsvorgabe, Einspeisewert).
 - Phase 3: Lovelace-Dashboard mit Heizstab-Bildern.
 
-[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.5.0...main
+[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.6.0...main
+[0.6.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.5.0...v0.6.0
 [0.5.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.4.0...v0.5.0
 [0.4.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.3.0...v0.4.0
 [0.3.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.2.0...v0.3.0
