@@ -139,6 +139,13 @@ kurz auf dieses Projekt).
   HACS-Erstinstallation jetzt explizit unter "Voraussetzungen" genannt
   (vorher nur implizit in Schritt 1), inkl. terminalloser Alternative
   (File editor/Samba).
+- **Nachgelegt auf Wunsch von Andreas:** bloßes Erwähnen des Terminal-Add-ons
+  reichte nicht — Ziel ist eine Anleitung, der auch ein technisch unerfahrener
+  Anwender von Grund auf folgen kann. Schritt 1 der HACS-Variante jetzt eine
+  vollständige Klick-für-Klick-Anleitung zur Installation eines Terminal-
+  Add-ons (Add-on-Store öffnen, "Terminal & SSH" suchen/installieren/starten),
+  Schritt 2 entsprechend für HACS selbst ausgebaut (inkl. GitHub-Konto
+  anlegen, Device-Code-Flow erklärt). Schritte neu durchnummeriert (1–5).
 
 ## Offene Punkte
 

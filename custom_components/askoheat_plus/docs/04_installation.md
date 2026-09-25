@@ -9,31 +9,77 @@ HACS-Installation unten immer die GitHub-URL verwenden.
 
 ## Variante A: Installation über HACS (empfohlen für andere Nutzer)
 
-### Schritt 1 — HACS installieren (falls noch nicht vorhanden)
+Diese Variante ist komplett von vorn beschrieben — auch wenn du noch nie mit
+einem Terminal oder mit HACS gearbeitet hast:
+
+- **Schritt 1:** Terminal-Zugriff einrichten (nur falls noch nicht vorhanden)
+- **Schritt 2:** HACS installieren (nur falls noch nicht vorhanden)
+- **Schritt 3–5:** ASKOHEAT+ über HACS installieren und einrichten
+
+### Schritt 1 — Terminal-Zugriff einrichten (falls noch nicht vorhanden)
+
+Voraussetzung: dein Home Assistant läuft als **Home Assistant OS** oder
+**Supervised** (mit Add-on-Store). Prüfe das, indem du links in der
+Seitenleiste nach **"Add-ons"** oder **"Add-on-Store"** unter
+**Einstellungen** suchst — ist das nicht vorhanden (reines "Home Assistant
+Container"/"Core"), überspringe diesen Schritt und nutze direkt die
+terminallose Alternative weiter unten.
+
+1. Links in der Seitenleiste auf **Einstellungen** klicken.
+2. Dort auf **Add-ons** klicken.
+3. Unten rechts auf den blauen Button **Add-on-Store** klicken.
+4. Oben im Suchfeld **"Terminal"** eingeben.
+5. Das Add-on **"Terminal & SSH"** anklicken (offizielles Home-Assistant-
+   Add-on, kein Zusatz-Repository nötig). Falls es nicht auftaucht,
+   funktioniert alternativ auch **"Advanced SSH & Web Terminal"** genauso —
+   dafür muss ggf. erst ein zusätzliches Add-on-Repository hinzugefügt
+   werden, siehe <https://github.com/hassio-addons/repository>.
+6. Oben rechts auf **Installieren** klicken und warten, bis die Installation
+   abgeschlossen ist (kann 1–2 Minuten dauern, ein Fortschrittsbalken zeigt
+   den Stand).
+7. Nach der Installation: den Schalter **"Beim Start starten"** aktivieren
+   (empfohlen, damit das Terminal nach einem Neustart automatisch verfügbar
+   ist), danach oben auf **Starten** klicken.
+8. In der linken Seitenleiste erscheint jetzt ein neuer Menüpunkt
+   (**"Terminal"** bzw. **"SSH & Web Terminal"**). Anklicken öffnet eine
+   Kommandozeile direkt im Browser — dort im nächsten Schritt den
+   HACS-Installationsbefehl eingeben.
+
+### Schritt 2 — HACS installieren (falls noch nicht vorhanden)
 
 Falls in deiner Home Assistant Instanz unter **Einstellungen → Geräte &
 Dienste** noch kein "HACS" auftaucht:
 
-1. Terminal-Zugriff auf den HA-Host nötig, z.B. über ein Terminal-Add-on
-   ("Advanced SSH & Web Terminal" oder "Terminal & SSH" aus dem offiziellen
-   Add-on-Store — falls noch nicht installiert: **Einstellungen → Add-ons →
-   Add-on-Store**, dort suchen und installieren). Dort dann:
+1. Im Terminal aus Schritt 1 (oder per SSH, falls du das bevorzugst) folgenden
+   Befehl eingeben und mit Enter bestätigen:
    ```sh
    wget -O - https://get.hacs.xyz | bash -
    ```
-   (Alternative **ganz ohne Terminal-Add-on**: HACS-Ordner manuell über den
-   "File editor" oder Samba nach `<config>/custom_components/hacs/`
-   entpacken, siehe <https://hacs.xyz/docs/use/download/download/>.)
-2. Home Assistant neu starten (`ha core restart`).
-3. **Einstellungen → Geräte & Dienste → Integration hinzufügen** → "HACS" suchen.
+   Das Skript lädt HACS herunter und richtet es automatisch ein. Am Ende
+   sollte eine Erfolgsmeldung erscheinen.
+
+   **Alternative ganz ohne Terminal-Add-on:** HACS-ZIP von
+   <https://github.com/hacs/integration/releases/latest> herunterladen, den
+   darin enthaltenen Ordner `hacs` über das **"File editor"**-Add-on (oder per
+   Samba/Netzwerkfreigabe) nach `<config>/custom_components/hacs/`
+   hochladen/kopieren. Ausführliche, bebilderte Anleitung:
+   <https://hacs.xyz/docs/use/download/download/>.
+2. Home Assistant neu starten: **Einstellungen → System → Neu starten**
+   (oder auf diesem Host per Terminal: `ha core restart`).
+3. Nach dem Neustart: **Einstellungen → Geräte & Dienste → Integration
+   hinzufügen** (blauer Button unten rechts) → **"HACS"** eingeben und
+   auswählen.
 4. Dem Einrichtungsdialog folgen — HACS verlangt eine Anmeldung über ein
-   **GitHub-Konto** (Device-Code-Flow: Code wird angezeigt, auf
-   <https://github.com/login/device> eingeben und den HACS-Zugriff bestätigen).
-5. Nach Abschluss erscheint "HACS" in der Seitenleiste.
+   **GitHub-Konto** (falls noch keins vorhanden: kostenlos anlegbar unter
+   <https://github.com/signup>). Der Dialog zeigt einen Code an; diesen auf
+   <https://github.com/login/device> eingeben und den HACS-Zugriff im
+   Browser bestätigen.
+5. Nach Abschluss erscheint **"HACS"** als neuer Menüpunkt in der
+   Seitenleiste.
 
 Ausführliche, aktuelle Anleitung falls etwas abweicht: <https://hacs.xyz/docs/use/download/download/>.
 
-### Schritt 2 — ASKOHEAT+ als benutzerdefiniertes Repository hinzufügen
+### Schritt 3 — ASKOHEAT+ als benutzerdefiniertes Repository hinzufügen
 
 HACS kennt dieses Projekt nicht automatisch (kein Eintrag im offiziellen
 HACS-Standard-Store) — es muss einmalig als **Custom Repository** eingetragen
@@ -46,13 +92,13 @@ werden:
 4. **Kategorie:** `Integration`
 5. **Hinzufügen** klicken.
 
-### Schritt 3 — Installieren
+### Schritt 4 — Installieren
 
 1. In HACS nach **"ASKOHEAT+"** suchen (jetzt als Ergebnis sichtbar).
 2. Öffnen → **Herunterladen/Download** → aktuellste Version wählen → installieren.
 3. Home Assistant neu starten, wenn HACS danach fragt (`ha core restart`).
 
-### Schritt 4 — Einrichten (gilt für alle Installationsvarianten)
+### Schritt 5 — Einrichten (gilt für alle Installationsvarianten)
 
 1. **Einstellungen → Geräte & Dienste → Integration hinzufügen**.
 2. **"ASKOHEAT+"** suchen und auswählen.
@@ -75,7 +121,7 @@ werden:
 2. Den Ordner `custom_components/askoheat_plus/` aus dem Repo nach
    `<HA-Konfigurationsordner>/custom_components/askoheat_plus/` kopieren.
 3. Home Assistant neu starten.
-4. Weiter wie oben ab "Schritt 4 — Einrichten".
+4. Weiter wie oben ab "Schritt 5 — Einrichten".
 
 ## Variante C: Lokale Entwicklung auf diesem Host (aktueller Stand)
 
@@ -85,7 +131,7 @@ für diesen Host ist nichts zu installieren, nur:
 
 1. `ha core check` (Konfiguration validieren)
 2. `ha core restart`
-3. Weiter wie oben ab "Schritt 4 — Einrichten"
+3. Weiter wie oben ab "Schritt 5 — Einrichten"
 
 ## Voraussetzungen
 
