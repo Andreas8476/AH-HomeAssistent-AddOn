@@ -11,6 +11,21 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-25
+
+### Hinzugefügt
+
+- Neue `switch.emergency_mode`-Entity: steuert den Notbetrieb über die
+  parameterlosen `on`/`off`-Endpunkte (physische Taste am Gerät, kein
+  60s-Verfall). Live bestätigt gegen das Testgerät.
+
+### Entfernt
+
+- Der read-only Binary-Sensor `emergency_mode` — ersetzt durch die neue
+  Switch-Entity (Anzeige + Steuerung in einem).
+- Verwaiste Entity-Registry-Einträge aus vorherigen Aufräumarbeiten manuell
+  entfernt (Backup der Registry vorher angelegt).
+
 ## [0.3.0] - 2026-09-25
 
 ### Hinzugefügt
@@ -75,7 +90,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Phase 2: Steuerung/Schreiben (Heizstufe, Leistungsvorgabe, Einspeisewert).
 - Phase 3: Lovelace-Dashboard mit Heizstab-Bildern.
 
-[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.3.0...main
+[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.4.0...main
+[0.4.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.3.0...v0.4.0
 [0.3.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.2.0...v0.3.0
 [0.2.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.1.0...v0.2.0
 [0.1.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/tags/v0.1.0

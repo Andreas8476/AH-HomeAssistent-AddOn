@@ -38,6 +38,12 @@ CMD_HEATER_STEP = "heater%20step"
 CMD_LOAD_SETPOINT = "load%20setpoint"
 CMD_LOAD_FEEDIN = "load%20feedin"
 
+# Bare commands (no ?value=), act like the physical button on the device —
+# no 60s auto-revert, so no keep-alive needed for these.
+CMD_EMERGENCY_ON = "on"
+CMD_EMERGENCY_OFF = "off"
+PATH_EMERGENCY_MODE = "STATUS_FLAGS.EMERGENCY_MODE"
+
 PATH_NUMBER_OF_STEPS = "ASKOHEAT_PLUS_INFO.NUMBER_OF_STEPS"
 PATH_MAX_POWER = "ASKOHEAT_PLUS_INFO.MAX_POWER"
 

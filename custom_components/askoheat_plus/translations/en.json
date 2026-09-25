@@ -42,7 +42,6 @@
     },
     "binary_sensor": {
       "pump_output": { "name": "Pump" },
-      "emergency_mode": { "name": "Emergency mode" },
       "heater_disabled": { "name": "Heater disabled" },
       "relayboard_connected": { "name": "Relay board connected" },
       "current_flow": { "name": "Current flow" }
@@ -51,6 +50,9 @@
       "heater_step_target": { "name": "Target heater step" },
       "load_setpoint": { "name": "Load setpoint" },
       "load_feedin": { "name": "Feed-in value" }
+    },
+    "switch": {
+      "emergency_mode": { "name": "Emergency mode" }
     }
   }
 }

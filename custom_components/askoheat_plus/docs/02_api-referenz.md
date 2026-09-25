@@ -93,6 +93,17 @@ Pfad:
 Implementiert in `api.py` (`AskoheatApiClient.async_send_command`) und
 `number.py` (`AskoheatNumber.async_set_native_value`).
 
+Zusätzlich gibt es **parameterlose** Befehle, die exakt der physischen Taste
+am Gerät entsprechen — kein `?value=`, kein 60s-Verfall (das Gerät behält den
+Zustand bis zur nächsten Betätigung, wie eine echte Taste):
+
+| Switch-Entity | Endpunkt (an) | Endpunkt (aus) |
+|---|---|---|
+| Notbetrieb | `on` | `off` |
+
+Implementiert in `api.py` (`AskoheatApiClient.async_send_bare_command`) und
+`switch.py` (`AskoheatSwitch`).
+
 **Wichtig — automatischer Verfall nach 60 Sekunden, per Keep-Alive verhindert:**
 Laut Herstellerdoku löscht der Askoheat+ einen so gesetzten Wert nach 60
 Sekunden automatisch, wenn er nicht von einem (anderen) Steuergerät erneut

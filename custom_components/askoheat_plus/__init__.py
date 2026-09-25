@@ -11,7 +11,12 @@ from .api import AskoheatApiClient
 from .const import DEFAULT_PORT, DEFAULT_SCAN_INTERVAL
 from .coordinator import AskoheatDataUpdateCoordinator
 
-PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.NUMBER]
+PLATFORMS: list[Platform] = [
+    Platform.SENSOR,
+    Platform.BINARY_SENSOR,
+    Platform.NUMBER,
+    Platform.SWITCH,
+]
 
 type AskoheatConfigEntry = ConfigEntry[AskoheatDataUpdateCoordinator]
 

@@ -35,7 +35,6 @@ Abschnitt unten) sind **schreibbar**.
 | Key | Name (DE) | Pfad (in `gethome.json`) | Device Class | "on" bedeutet |
 |---|---|---|---|---|
 | `pump_output` | Pumpe | `ACTUAL_VALUES.PUMP_OUTPUT` | — | Pumpe läuft |
-| `emergency_mode` | Notbetrieb | `STATUS_FLAGS.EMERGENCY_MODE` | problem | Notbetrieb aktiv |
 | `heater_disabled` | Heizstab gesperrt | `STATUS_FLAGS.HEATER_DISABLED` | problem | Heizstab ist gesperrt |
 | `relayboard_connected` | Relayboard verbunden | `STATUS_FLAGS.RELAYBOARD_CONNECTED` | connectivity, diagnostic | Relayboard verbunden |
 | `current_flow` | Stromfluss | `STATUS_FLAGS.CURRENT_FLOW` | —, diagnostic | Stromfluss erkannt |
@@ -58,6 +57,24 @@ Nachsetzen nötig. Bei `0` stoppt das Keep-Alive automatisch.
 Ersetzen die früheren, rein lesenden Diagnose-Sensoren `set_heater_step` und
 `set_load_feedin` aus Phase 1 (entfernt, um doppelte Entities für denselben
 Wert zu vermeiden — siehe [07_changelog.md](07_changelog.md)).
+
+Manuelles Setzen (per Slider/Eingabefeld in der UI) funktioniert unabhängig
+davon, ob eine Entity zusätzlich per Automation/Blueprint verknüpft ist —
+beide Wege nutzen denselben `number.set_value`-Service, es gibt keinen
+gesonderten "Automatik-Modus". Siehe [10_automatisierung.md](10_automatisierung.md)
+für die optionale Zähler-Verknüpfung des Einspeisewerts.
+
+## Switch-Entity (`switch.py`)
+
+| Key | Name (DE) | Pfad (Anzeige) | Ein-Befehl | Aus-Befehl |
+|---|---|---|---|---|
+| `emergency_mode` | Notbetrieb | `STATUS_FLAGS.EMERGENCY_MODE` | `on` | `off` |
+
+Entspricht der physischen Taste am Gerät (`on`/`off`-Endpunkte ohne
+Parameter, siehe [02_api-referenz.md](02_api-referenz.md)) — **kein**
+60s-Verfall, daher kein Keep-Alive nötig, anders als bei den Number-Entities
+oben. Ersetzt den gleichnamigen, rein lesenden Binary-Sensor aus Phase 1
+(gleicher Grund wie bei den Number-Entities: Anzeige + Steuerung in einem).
 
 ## Diagnose-/Konfigurations-Entities standardmäßig deaktiviert
 

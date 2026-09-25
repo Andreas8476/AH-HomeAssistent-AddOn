@@ -42,7 +42,6 @@
     },
     "binary_sensor": {
       "pump_output": { "name": "Pumpe" },
-      "emergency_mode": { "name": "Notbetrieb" },
       "heater_disabled": { "name": "Heizstab gesperrt" },
       "relayboard_connected": { "name": "Relayboard verbunden" },
       "current_flow": { "name": "Stromfluss" }
@@ -51,6 +50,9 @@
       "heater_step_target": { "name": "Ziel-Heizstufe" },
       "load_setpoint": { "name": "Leistungsvorgabe" },
       "load_feedin": { "name": "Einspeisewert" }
+    },
+    "switch": {
+      "emergency_mode": { "name": "Notbetrieb" }
     }
   }
 }

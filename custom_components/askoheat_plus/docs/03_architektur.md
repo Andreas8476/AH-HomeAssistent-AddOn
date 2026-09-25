@@ -19,6 +19,8 @@
       config_flow.py
       sensor.py
       binary_sensor.py
+      number.py
+      switch.py
       translations/{de,en}.json
       docs/                                          # <- diese Dokumentation
 
@@ -44,7 +46,8 @@ Ordner `/homeassistant/askoheat_plus/` initialisiert.
 | `entity.py` | `AskoheatEntity` — gemeinsame Basisklasse (unique_id, device_info) |
 | `config_flow.py` | UI-Setup: Host/Port/Intervall abfragen, Verbindung testen, `unique_id` = `DEVICEID` |
 | `sensor.py` / `binary_sensor.py` | Deklarative Entity-Beschreibungen (`AskoheatSensorEntityDescription` mit `value_fn` + `source`) |
-| `number.py` | Steuerbare Werte (Phase 2): liest `SET_INPUTS.*` zur Anzeige, schreibt über `AskoheatApiClient.async_send_command` |
+| `number.py` | Steuerbare Werte (Phase 2): liest `SET_INPUTS.*` zur Anzeige, schreibt über `AskoheatApiClient.async_send_command`, plus Keep-Alive |
+| `switch.py` | Notbetrieb ein/aus: liest `STATUS_FLAGS.EMERGENCY_MODE`, schreibt über `AskoheatApiClient.async_send_bare_command` (kein Keep-Alive nötig) |
 | `__init__.py` | `async_setup_entry`/`async_unload_entry`, verdrahtet Client → Coordinator → `entry.runtime_data` → Plattformen |
 
 ## Datenfluss

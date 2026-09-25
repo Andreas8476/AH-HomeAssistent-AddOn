@@ -39,12 +39,9 @@ BINARY_SENSOR_DESCRIPTIONS: tuple[AskoheatBinarySensorEntityDescription, ...] = 
         icon="mdi:pump",
         value_fn=_active("ACTUAL_VALUES.PUMP_OUTPUT"),
     ),
-    AskoheatBinarySensorEntityDescription(
-        key="emergency_mode",
-        translation_key="emergency_mode",
-        device_class=BinarySensorDeviceClass.PROBLEM,
-        value_fn=_active("STATUS_FLAGS.EMERGENCY_MODE"),
-    ),
+    # Note: emergency_mode is no longer a binary_sensor — see switch.py,
+    # which both shows and controls it (the device exposes a real on/off
+    # command for it, unlike the other STATUS_FLAGS.* fields here).
     AskoheatBinarySensorEntityDescription(
         key="heater_disabled",
         translation_key="heater_disabled",

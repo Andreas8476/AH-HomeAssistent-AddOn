@@ -82,6 +82,24 @@ kurz auf dieses Projekt).
   Stegemann + Claude (Sonnet 5), Hinweis auf Andreas' Mitarbeit bei der
   ASKOMA AG (privates Projekt, keine offizielle ASKOMA-Software).
 
+## 2026-09-25 — Notbetrieb-Schalter
+
+- Neue `switch`-Entity `emergency_mode` (`switch.py`): steuert den Notbetrieb
+  über die parameterlosen `on`/`off`-Endpunkte (physische Taste am Gerät,
+  kein 60s-Verfall, daher kein Keep-Alive nötig). Ersetzt den gleichnamigen
+  read-only Binary-Sensor aus Phase 1.
+- `api.py`: neue Methode `async_send_bare_command` für parameterlose Befehle.
+- Live bestätigt: der neue Schalter hat einen echten Zustandswechsel des
+  Testgeräts korrekt erfasst (`off → on → off` während eines Neustarts).
+- Aufräumen: verwaiste Entity-Registry-Einträge (`sensor..._soll_heizstufe`,
+  `sensor..._soll_einspeisewert` aus Phase 2, sowie der abgelöste
+  `binary_sensor..._notbetrieb`) direkt in `.storage/core.entity_registry`
+  entfernt (Backup vorher angelegt), da kein Long-Lived-Access-Token für die
+  UI-seitige Löschung zur Verfügung stand.
+- Klargestellt: manuelles Setzen der Number-Entities (Ziel-Heizstufe,
+  Leistungsvorgabe, Einspeisewert) funktioniert bereits ohne weiteres Zutun,
+  unabhängig von einer zusätzlichen Automation-Verknüpfung.
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,

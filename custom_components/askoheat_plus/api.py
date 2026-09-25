@@ -110,6 +110,21 @@ class AskoheatApiClient:
         except TimeoutError as err:
             raise AskoheatApiError(f"Timeout sending command to {url}") from err
 
+    async def async_send_bare_command(self, path: str) -> None:
+        """Send a parameter-less command, e.g. path="on" for Emergency Mode.
+
+        Unlike async_send_command, these endpoints take no ``?value=`` and
+        act like a physical button press on the device (no 60s auto-revert).
+        """
+        url = f"{self.base_url}/{path}"
+        try:
+            async with self._session.get(url) as response:
+                response.raise_for_status()
+        except aiohttp.ClientError as err:
+            raise AskoheatApiError(f"Error sending command to {url}: {err}") from err
+        except TimeoutError as err:
+            raise AskoheatApiError(f"Timeout sending command to {url}") from err
+
 
 def get_path(data: dict[str, Any], path: str) -> Any | None:
     """Look up a dotted path (e.g. "ACTUAL_VALUES.ACTUAL_HEATER_STEP") in a nested dict."""
