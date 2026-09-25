@@ -14,12 +14,16 @@ HACS-Installation unten immer die GitHub-URL verwenden.
 Falls in deiner Home Assistant Instanz unter **Einstellungen → Geräte &
 Dienste** noch kein "HACS" auftaucht:
 
-1. Auf dem HA-Host per Terminal/SSH-Add-on:
+1. Terminal-Zugriff auf den HA-Host nötig, z.B. über ein Terminal-Add-on
+   ("Advanced SSH & Web Terminal" oder "Terminal & SSH" aus dem offiziellen
+   Add-on-Store — falls noch nicht installiert: **Einstellungen → Add-ons →
+   Add-on-Store**, dort suchen und installieren). Dort dann:
    ```sh
    wget -O - https://get.hacs.xyz | bash -
    ```
-   (Alternative ohne Terminal-Zugriff: HACS-Ordner manuell nach
-   `<config>/custom_components/hacs/` entpacken, siehe <https://hacs.xyz/docs/use/download/download/>.)
+   (Alternative **ganz ohne Terminal-Add-on**: HACS-Ordner manuell über den
+   "File editor" oder Samba nach `<config>/custom_components/hacs/`
+   entpacken, siehe <https://hacs.xyz/docs/use/download/download/>.)
 2. Home Assistant neu starten (`ha core restart`).
 3. **Einstellungen → Geräte & Dienste → Integration hinzufügen** → "HACS" suchen.
 4. Dem Einrichtungsdialog folgen — HACS verlangt eine Anmeldung über ein
@@ -89,5 +93,8 @@ für diesen Host ist nichts zu installieren, nur:
   (Standardport 80), keine Authentifizierung notwendig.
 - Keine zusätzlichen Python-Pakete (`requirements: []` im Manifest) — es wird
   nur die von Home Assistant bereits mitgebrachte `aiohttp`-Bibliothek genutzt.
-- Für Variante A (HACS): ein GitHub-Konto zur HACS-Anmeldung (unabhängig vom
-  eigenen ASKOHEAT+-Repo).
+- Für Variante A (HACS), falls HACS noch nicht installiert ist: ein
+  Terminal-Add-on ("Advanced SSH & Web Terminal" o.ä., aus dem Add-on-Store)
+  **oder** Zugriff auf den "File editor"/Samba für die terminallose
+  Alternative — plus ein GitHub-Konto zur HACS-Anmeldung (unabhängig vom
+  eigenen ASKOHEAT+-Repo). Ist HACS schon installiert, entfällt das.

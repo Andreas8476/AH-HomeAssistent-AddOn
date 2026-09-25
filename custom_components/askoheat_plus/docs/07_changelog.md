@@ -126,6 +126,20 @@ kurz auf dieses Projekt).
   HTTP 200, `ha core check`/Neustart fehlerfrei, keine Duplicate-Key-Warnungen
   mehr im Log.
 
+## 2026-09-25 — Dashboard-Feinschliff, Installationsdoku-Ergänzung
+
+- Nach Screenshot-Feedback von Andreas: Label-Abstände im Dashboard
+  vergrößert (Vorgabe/Einspeisewert lagen mit nur ~12 Prozentpunkten
+  Abstand fast übereinander), Temperatursensor-Labels breiter über die
+  Heizwendel verteilt statt eng gestapelt.
+- "Alle Werte"-Fallback-Karte: explizite kurze `name:`-Overrides für jede
+  Entity, da die vollen Standardnamen (inkl. Gerätename) in der
+  Entities-Karte abgeschnitten wurden.
+- `docs/04_installation.md`: Terminal/SSH-Add-on als Voraussetzung für die
+  HACS-Erstinstallation jetzt explizit unter "Voraussetzungen" genannt
+  (vorher nur implizit in Schritt 1), inkl. terminalloser Alternative
+  (File editor/Samba).
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
