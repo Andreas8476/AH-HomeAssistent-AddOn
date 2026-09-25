@@ -1,5 +1,11 @@
 # 06 — Entwicklung
 
+> ⚠️ **VERBINDLICHE REGEL: Jeder Commit geht auf BEIDE Remotes — GitLab
+> (`origin`) UND GitHub (`github`).** Kein Push nur auf eines der beiden.
+> Grund: GitLab ist das Haupt-Repo, GitHub ist zwingend nötig, damit HACS
+> funktioniert (HACS installiert nur aus öffentlichen GitHub-Repos). Siehe
+> Abschnitt "Zwei Git-Remotes" unten für die genauen Befehle.
+
 ## Wo der Code liegt
 
 - Repo-Root: `/homeassistant/askoheat_plus/`
@@ -41,6 +47,19 @@ Damit lässt sich unabhängig von Home Assistant prüfen, ob das Gerät erreichb
 ist und welche Felder es aktuell liefert — nützlich, um `value_fn`/Pfade in
 `sensor.py`/`binary_sensor.py` gegen echte Daten abzugleichen, bevor man einen
 HA-Neustart macht.
+
+## Zwei Git-Remotes: GitLab (`origin`) + GitHub (`github`)
+
+```sh
+git push origin main     # Haupt-Repo (GitLab)
+git push github main     # Öffentlicher Spiegel für HACS (GitHub)
+git push origin <tag>
+git push github <tag>
+```
+
+Beide sollen immer denselben Stand haben — nach jedem `commit` auf **beide**
+Remotes pushen. Grund: HACS installiert ausschließlich aus öffentlichen
+GitHub-Repos, siehe [04_installation.md](04_installation.md).
 
 ## Fallstricke
 

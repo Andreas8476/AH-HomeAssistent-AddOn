@@ -26,9 +26,9 @@ Das Projekt ist bewusst in Schritten angelegt:
 1. **Phase 1 — Lesen (dieser Stand)**: Sensoren/Binary-Sensoren, die den
    aktuellen Zustand des Geräts anzeigen (Heizstufe, Leistung, Temperatur,
    Status, Fehler). Kein Schreibzugriff.
-2. **Phase 2 — Schreiben** *(noch nicht umgesetzt)*: Heizstufe setzen,
-   Leistungsvorgabe setzen, Einspeisewert setzen — über die vom Hersteller
-   dokumentierten Inline-Commands (`number`/`select`-Entities oder Services).
+2. **Phase 2 — Schreiben** *(umgesetzt)*: Heizstufe, Leistungsvorgabe und
+   Einspeisewert setzen — über die vom Hersteller dokumentierten
+   Inline-Commands, als `number`-Entities.
 3. **Phase 3 — Dashboard** *(noch nicht umgesetzt)*: Ein Lovelace-Dashboard mit
    Bildern passend zum jeweiligen Heizstab-Modell.
 
@@ -48,3 +48,9 @@ Integration frei konfigurierbar, nicht hart kodiert).
 ## Weiterführende Dokumente
 
 Siehe [../docs/](.) — durchnummeriert, `02` beginnt mit der API-Referenz.
+
+## Autor
+
+Andreas Stegemann, in Zusammenarbeit mit Claude (Anthropic, Sonnet 5) als
+Coding-Assistent entwickelt. Privates Projekt, keine offizielle Software der
+ASKOMA AG — Details siehe [README.md](../../../README.md#autor).

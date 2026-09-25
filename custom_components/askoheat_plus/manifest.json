@@ -1,13 +1,13 @@
 {
   "domain": "askoheat_plus",
   "name": "ASKOHEAT+",
-  "codeowners": ["@SyberAlf"],
+  "codeowners": ["@Andreas8476"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://gitlab.com/SyberAlf/ah-homeassistent-addon",
+  "documentation": "https://github.com/Andreas8476/AH-HomeAssistent-AddOn",
   "integration_type": "device",
   "iot_class": "local_polling",
-  "issue_tracker": "https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/issues",
+  "issue_tracker": "https://github.com/Andreas8476/AH-HomeAssistent-AddOn/issues",
   "requirements": [],
   "version": "0.2.0"
 }

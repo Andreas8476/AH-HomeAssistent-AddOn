@@ -1,34 +1,87 @@
 # 04 — Installation
 
-## Variante A: Lokale Entwicklung auf diesem Host (aktueller Stand)
+Zwei Repositories, ein Stand: **[GitLab](https://gitlab.com/SyberAlf/ah-homeassistent-addon)**
+ist das Haupt-Repo, **[GitHub](https://github.com/Andreas8476/AH-HomeAssistent-AddOn)**
+ist ein öffentlicher Spiegel — nötig, weil **HACS ausschließlich öffentliche
+GitHub-Repositories** unterstützt ("Only public repositories hosted on GitHub
+will be compatible with HACS.", laut offizieller HACS-Doku). Für die
+HACS-Installation unten immer die GitHub-URL verwenden.
 
-Der Code liegt bereits unter `/homeassistant/askoheat_plus/` und ist per Symlink
-in `custom_components/` eingehängt (siehe [03_architektur.md](03_architektur.md)).
-Für diesen Host ist nichts weiter zu installieren — nur:
+## Variante A: Installation über HACS (empfohlen für andere Nutzer)
+
+### Schritt 1 — HACS installieren (falls noch nicht vorhanden)
+
+Falls in deiner Home Assistant Instanz unter **Einstellungen → Geräte &
+Dienste** noch kein "HACS" auftaucht:
+
+1. Auf dem HA-Host per Terminal/SSH-Add-on:
+   ```sh
+   wget -O - https://get.hacs.xyz | bash -
+   ```
+   (Alternative ohne Terminal-Zugriff: HACS-Ordner manuell nach
+   `<config>/custom_components/hacs/` entpacken, siehe <https://hacs.xyz/docs/use/download/download/>.)
+2. Home Assistant neu starten (`ha core restart`).
+3. **Einstellungen → Geräte & Dienste → Integration hinzufügen** → "HACS" suchen.
+4. Dem Einrichtungsdialog folgen — HACS verlangt eine Anmeldung über ein
+   **GitHub-Konto** (Device-Code-Flow: Code wird angezeigt, auf
+   <https://github.com/login/device> eingeben und den HACS-Zugriff bestätigen).
+5. Nach Abschluss erscheint "HACS" in der Seitenleiste.
+
+Ausführliche, aktuelle Anleitung falls etwas abweicht: <https://hacs.xyz/docs/use/download/download/>.
+
+### Schritt 2 — ASKOHEAT+ als benutzerdefiniertes Repository hinzufügen
+
+HACS kennt dieses Projekt nicht automatisch (kein Eintrag im offiziellen
+HACS-Standard-Store) — es muss einmalig als **Custom Repository** eingetragen
+werden:
+
+1. In der Seitenleiste **HACS** öffnen.
+2. Oben rechts die drei Punkte (⋮) → **Benutzerdefinierte Repositories**
+   ("Custom repositories").
+3. **Repository-URL:** `https://github.com/Andreas8476/AH-HomeAssistent-AddOn`
+4. **Kategorie:** `Integration`
+5. **Hinzufügen** klicken.
+
+### Schritt 3 — Installieren
+
+1. In HACS nach **"ASKOHEAT+"** suchen (jetzt als Ergebnis sichtbar).
+2. Öffnen → **Herunterladen/Download** → aktuellste Version wählen → installieren.
+3. Home Assistant neu starten, wenn HACS danach fragt (`ha core restart`).
+
+### Schritt 4 — Einrichten (gilt für alle Installationsvarianten)
+
+1. **Einstellungen → Geräte & Dienste → Integration hinzufügen**.
+2. **"ASKOHEAT+"** suchen und auswählen.
+3. Formular ausfüllen:
+
+   | Feld | Pflicht | Default | Beispiel |
+   |---|---|---|---|
+   | Host / IP-Adresse | ja | — | `192.168.20.54` |
+   | Port | nein | `80` | |
+   | Abfrageintervall (Sekunden) | nein | `30` | 10–300s |
+
+4. Absenden — die Integration testet die Verbindung (`gethome.json`) sofort.
+   Bei Erfolg wird das Gerät mit Modellname als Titel angelegt, inkl. aller
+   Sensoren/Binary-Sensoren/Number-Entities (siehe [05_entities.md](05_entities.md)).
+
+## Variante B: Manuelle Installation (ohne HACS)
+
+1. Repository herunterladen (GitHub- oder GitLab-Link, z.B. "Download ZIP"
+   bzw. `git clone`).
+2. Den Ordner `custom_components/askoheat_plus/` aus dem Repo nach
+   `<HA-Konfigurationsordner>/custom_components/askoheat_plus/` kopieren.
+3. Home Assistant neu starten.
+4. Weiter wie oben ab "Schritt 4 — Einrichten".
+
+## Variante C: Lokale Entwicklung auf diesem Host (aktueller Stand)
+
+Der Code liegt bereits unter `/homeassistant/askoheat_plus/` und ist per
+Symlink in `custom_components/` eingehängt (siehe [03_architektur.md](03_architektur.md)) —
+für diesen Host ist nichts zu installieren, nur:
 
 1. `ha core check` (Konfiguration validieren)
 2. `ha core restart`
-3. In der HA-Oberfläche: **Einstellungen → Geräte & Dienste → Integration
-   hinzufügen → "ASKOHEAT+"** suchen und die Setup-Maske ausfüllen
-   (Host/IP, optional Port und Abfrageintervall).
-
-## Variante B: Installation via HACS (sobald auf GitHub veröffentlicht)
-
-Sobald `/homeassistant/askoheat_plus/` als eigenes Repository z.B. unter
-`github.com/<user>/ha-askoheat-plus` liegt:
-
-1. HACS → Integrationen → Menü (⋮) → **Benutzerdefinierte Repositories**
-2. Repository-URL eintragen, Kategorie **Integration**
-3. "ASKOHEAT+" installieren, Home Assistant neu starten
-4. Wie oben: Integration über die UI einrichten
-
-## Variante C: Manuelle Installation (ohne HACS)
-
-1. Repository herunterladen/klonen
-2. Den Ordner `custom_components/askoheat_plus/` aus dem Repo nach
-   `<HA-Konfigurationsordner>/custom_components/askoheat_plus/` kopieren
-3. Home Assistant neu starten
-4. Wie oben: Integration über die UI einrichten
+3. Weiter wie oben ab "Schritt 4 — Einrichten"
 
 ## Voraussetzungen
 
@@ -36,15 +89,5 @@ Sobald `/homeassistant/askoheat_plus/` als eigenes Repository z.B. unter
   (Standardport 80), keine Authentifizierung notwendig.
 - Keine zusätzlichen Python-Pakete (`requirements: []` im Manifest) — es wird
   nur die von Home Assistant bereits mitgebrachte `aiohttp`-Bibliothek genutzt.
-
-## Setup-Formular
-
-| Feld | Pflicht | Default | Bemerkung |
-|---|---|---|---|
-| Host / IP-Adresse | ja | — | z.B. `192.168.20.54` |
-| Port | nein | `80` | |
-| Abfrageintervall (Sekunden) | nein | `30` | 10–300s, siehe [02_api-referenz.md](02_api-referenz.md) |
-
-Beim Absenden wird eine Testabfrage (`gethome.json`) durchgeführt. Schlägt sie
-fehl, erscheint ein Fehlerhinweis im Formular statt eines fehlgeschlagenen
-Config-Entry.
+- Für Variante A (HACS): ein GitHub-Konto zur HACS-Anmeldung (unabhängig vom
+  eigenen ASKOHEAT+-Repo).
