@@ -48,3 +48,10 @@ FALLBACK_MAX_LOAD_SETPOINT = 20000
 # SET_LOAD_FEEDIN_INT16 in the device's own JSON implies int16 storage.
 LOAD_FEEDIN_MIN = -32768
 LOAD_FEEDIN_MAX = 32767
+
+# The device auto-reverts a written value ~60s after the last write if
+# nothing resends it. Number entities resend the last value on this interval
+# (safely under 60s) for as long as it's non-zero. Confirmed with the
+# manufacturer-documented behavior that a controlling device is expected to
+# do this — unlike the read-polling caution, periodic resends here are fine.
+NUMBER_KEEPALIVE_INTERVAL = 45

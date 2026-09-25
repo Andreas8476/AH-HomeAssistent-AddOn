@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from typing import Any
 
 from homeassistant.components.number import (
@@ -16,6 +18,7 @@ from homeassistant.const import UnitOfPower
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.event import async_track_time_interval
 
 from . import AskoheatConfigEntry
 from .api import AskoheatApiError, extract_number, get_path
@@ -27,9 +30,11 @@ from .const import (
     FALLBACK_MAX_LOAD_SETPOINT,
     LOAD_FEEDIN_MAX,
     LOAD_FEEDIN_MIN,
+    NUMBER_KEEPALIVE_INTERVAL,
     PATH_MAX_POWER,
     PATH_NUMBER_OF_STEPS,
 )
+from .coordinator import AskoheatDataUpdateCoordinator
 from .entity import AskoheatEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -94,15 +99,32 @@ NUMBER_DESCRIPTIONS: tuple[AskoheatNumberEntityDescription, ...] = (
 class AskoheatNumber(AskoheatEntity, NumberEntity):
     """A settable ASKOHEAT+ value, backed by an inline-command endpoint.
 
-    Note: the device reverts these values on its own ~60s after the last
-    write if nothing resends them — see docs/02_api-referenz.md. This
-    integration does not resend/keep-alive automatically.
+    The device reverts these values on its own ~60s after the last write if
+    nothing resends them (manufacturer-documented behavior — a controlling
+    device is expected to keep sending). This entity resends the last-set
+    value every NUMBER_KEEPALIVE_INTERVAL seconds for as long as it is
+    non-zero, and stops as soon as it's set back to 0 (or the entity is
+    removed). See docs/02_api-referenz.md.
     """
 
     entity_description: AskoheatNumberEntityDescription
 
+    def __init__(
+        self,
+        coordinator: AskoheatDataUpdateCoordinator,
+        description: AskoheatNumberEntityDescription,
+    ) -> None:
+        super().__init__(coordinator, description)
+        self._last_set_value: float | None = None
+        self._unsub_keepalive: Callable[[], None] | None = None
+
     @property
     def native_value(self) -> Any:
+        # Prefer the value we're actively keeping alive over the next poll's
+        # SET_INPUTS.* snapshot — instant UI feedback, and accurate while a
+        # keep-alive is running since we're the one holding the value there.
+        if self._last_set_value is not None:
+            return self._last_set_value
         if self.coordinator.data is None:
             return None
         return extract_number(get_path(self.coordinator.data, self.entity_description.value_path))
@@ -117,6 +139,16 @@ class AskoheatNumber(AskoheatEntity, NumberEntity):
         return self.entity_description.native_max_value
 
     async def async_set_native_value(self, value: float) -> None:
+        await self._async_send(value)
+        self._last_set_value = value
+        self.async_write_ha_state()
+        if value:
+            self._start_keepalive()
+        else:
+            self._stop_keepalive()
+        await self.coordinator.async_request_refresh()
+
+    async def _async_send(self, value: float) -> None:
         try:
             await self.coordinator.client.async_send_command(
                 self.entity_description.command, value
@@ -125,7 +157,34 @@ class AskoheatNumber(AskoheatEntity, NumberEntity):
             raise HomeAssistantError(
                 f"Could not set {self.entity_description.key} on ASKOHEAT+: {err}"
             ) from err
-        await self.coordinator.async_request_refresh()
+
+    def _start_keepalive(self) -> None:
+        self._stop_keepalive()
+        self._unsub_keepalive = async_track_time_interval(
+            self.hass, self._async_keepalive_tick, timedelta(seconds=NUMBER_KEEPALIVE_INTERVAL)
+        )
+
+    def _stop_keepalive(self) -> None:
+        if self._unsub_keepalive is not None:
+            self._unsub_keepalive()
+            self._unsub_keepalive = None
+
+    async def _async_keepalive_tick(self, _now: datetime) -> None:
+        if not self._last_set_value:
+            self._stop_keepalive()
+            return
+        try:
+            await self.coordinator.client.async_send_command(
+                self.entity_description.command, self._last_set_value
+            )
+        except AskoheatApiError as err:
+            _LOGGER.warning(
+                "Keep-alive resend failed for %s: %s", self.entity_description.key, err
+            )
+
+    async def async_will_remove_from_hass(self) -> None:
+        self._stop_keepalive()
+        await super().async_will_remove_from_hass()
 
 
 async def async_setup_entry(

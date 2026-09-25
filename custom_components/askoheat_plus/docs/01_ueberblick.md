@@ -37,7 +37,10 @@ Das Projekt ist bewusst in Schritten angelegt:
 - [x] Phase 1: Integration mit Sensor- und Binary-Sensor-Entities, Config Flow
       über die UI, Polling von `gethome.json`.
 - [x] Phase 2: Steuerung/Schreiben — drei `number`-Entities (Ziel-Heizstufe,
-      Leistungsvorgabe, Einspeisewert), siehe [05_entities.md](05_entities.md).
+      Leistungsvorgabe, Einspeisewert) mit eingebautem Keep-Alive gegen den
+      60s-Verfall, plus Automatisierungs-Blueprint zur Einspeisewert-
+      Verknüpfung mit einem Zähler/Wechselrichter, siehe
+      [05_entities.md](05_entities.md) und [10_automatisierung.md](10_automatisierung.md).
 - [ ] Phase 3: Dashboard.
 
 ## Testumgebung

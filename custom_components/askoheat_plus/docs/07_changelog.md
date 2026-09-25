@@ -55,6 +55,33 @@ kurz auf dieses Projekt).
   Phase 1 widersprechen. Wer dauerhafte Steuerung will, muss selbst periodisch
   erneut setzen (z.B. per HA-Automation).
 
+## 2026-09-25 — Keep-Alive, GitHub-Spiegel, Attribution, Automatisierungs-Blueprint
+
+- **Korrektur zur Keep-Alive-Entscheidung oben:** Andreas hat nach dem Live-
+  Test klargestellt, dass regelmäßiges Neusenden für den ESP32 unproblematisch
+  und vom Hersteller sogar erwartet ist ("kontinuierlich steuerndes Gerät").
+  Jede Number-Entity implementiert jetzt ein eingebautes Keep-Alive: alle
+  `NUMBER_KEEPALIVE_INTERVAL` (45s) wird der zuletzt gesetzte Wert erneut
+  gesendet, solange er `≠ 0` ist; stoppt bei `0` oder Entity-Entfernung.
+  `native_value` zeigt bevorzugt den intern gehaltenen Wert (sofortiges
+  UI-Feedback). Details: [02_api-referenz.md](02_api-referenz.md).
+- Neue Automation-Blueprint [`blueprints/askoheat_plus_feedin_from_meter.yaml`](../../../blueprints/askoheat_plus_feedin_from_meter.yaml)
+  verknüpft einen beliebigen Zähler-/Wechselrichter-Leistungssensor mit dem
+  Einspeisewert (`number.load_feedin`) — Import-Anleitung in neuer
+  [10_automatisierung.md](10_automatisierung.md). Bewusst als Blueprint statt
+  fest verdrahteter Config-Option (flexibler, kein Extra-Setup-Schritt).
+- **GitHub-Spiegel eingerichtet:** `github.com/Andreas8476/AH-HomeAssistent-AddOn`,
+  da HACS ausschließlich öffentliche GitHub-Repos unterstützt (GitLab bleibt
+  Haupt-Repo). **Ab jetzt verbindlich: jeder Commit geht auf beide Remotes**
+  (`origin` + `github`), siehe [06_entwicklung.md](06_entwicklung.md).
+  `manifest.json` `documentation`/`issue_tracker`/`codeowners` zeigen jetzt auf
+  das echte GitHub-Repo.
+- Vollständige HACS-Installationsanleitung inkl. HACS-Ersteinrichtung in
+  [04_installation.md](04_installation.md).
+- Attribution ergänzt (README, `01_ueberblick.md`, `LICENSE`): Andreas
+  Stegemann + Claude (Sonnet 5), Hinweis auf Andreas' Mitarbeit bei der
+  ASKOMA AG (privates Projekt, keine offizielle ASKOMA-Software).
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
@@ -66,8 +93,6 @@ kurz auf dieses Projekt).
   einzelne Sensoren abgebildet — Freitext-Parsing bewusst auf später verschoben.
 - **Phase 3 — Dashboard:** Lovelace-Dashboard mit Heizstab-Bildern je Modell.
   Noch nicht begonnen.
-- **Keep-Alive für gesetzte Werte:** bewusst nicht automatisiert (siehe oben) —
-  falls gewünscht, später als optionale HA-Automation dokumentieren/anbieten.
 - **EW-Sperre (`128`) / direkte Heizstufen-Pfade (`0`–`19`):** nicht als eigene
   Entities abgebildet, nur die reguläre Ziel-Heizstufe.
 - Verwaiste Entity-Registry-Einträge (`sensor..._soll_heizstufe`,

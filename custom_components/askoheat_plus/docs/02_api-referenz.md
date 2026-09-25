@@ -93,14 +93,24 @@ Pfad:
 Implementiert in `api.py` (`AskoheatApiClient.async_send_command`) und
 `number.py` (`AskoheatNumber.async_set_native_value`).
 
-**Wichtig — automatischer Verfall nach 60 Sekunden:** Laut Herstellerdoku
-löscht der Askoheat+ einen so gesetzten Wert nach 60 Sekunden automatisch,
-wenn er nicht von einem (anderen) Steuergerät erneut gesendet wird. Diese
-Integration implementiert **bewusst keinen** automatischen Keep-Alive dafür
-(würde dem ESP32-Schonungsprinzip widersprechen, siehe "Abfrage-Strategie"
-oben) — ein per Home Assistant gesetzter Wert ist also eher ein befristeter
-Override als eine dauerhafte Einstellung. Wer eine dauerhafte Steuerung
-möchte, muss den Wert selbst periodisch erneut setzen (z.B. per HA-Automation).
+**Wichtig — automatischer Verfall nach 60 Sekunden, per Keep-Alive verhindert:**
+Laut Herstellerdoku löscht der Askoheat+ einen so gesetzten Wert nach 60
+Sekunden automatisch, wenn er nicht von einem (anderen) Steuergerät erneut
+gesendet wird — das Gerät **erwartet ausdrücklich** ein kontinuierlich
+steuerndes Gerät. Anders als beim Lese-Polling (siehe "Abfrage-Strategie"
+oben) ist regelmäßiges erneutes Senden hier laut Hersteller vorgesehenes
+Verhalten, kein Zusatzrisiko für den ESP32.
+
+Jede Number-Entity (`number.py`) merkt sich daher den zuletzt gesendeten Wert
+und sendet ihn per `async_track_time_interval` alle
+`NUMBER_KEEPALIVE_INTERVAL` (Default **45 Sekunden**, sicher unter dem
+60s-Fenster) automatisch erneut — solange der Wert `≠ 0` ist. Wird der Wert
+auf `0` gesetzt (oder die Entity entfernt/Integration entladen), stoppt der
+Keep-Alive sofort. Ein per Home Assistant gesetzter Wert bleibt damit aktiv,
+bis er explizit geändert wird — keine manuelle Wiederholung/Automation für
+den reinen Erhalt nötig. Für die automatische **Herkunft** des
+Einspeisewerts (z.B. aus einem Zähler/Wechselrichter) siehe
+[10_automatisierung.md](10_automatisierung.md).
 
 Wertebereiche der Number-Entities: Ziel-Heizstufe `0`–`NUMBER_OF_STEPS`
 (dynamisch vom Gerät, Fallback 19), Leistungsvorgabe `0`–`MAX_POWER`

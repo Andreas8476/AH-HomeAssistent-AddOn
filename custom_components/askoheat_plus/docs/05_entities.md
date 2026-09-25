@@ -44,8 +44,10 @@ Abschnitt unten) sind **schreibbar**.
 
 Zeigen den aktuellen Sollwert (`SET_INPUTS.*` aus `gethome.json`) an **und**
 setzen ihn beim Ändern über die in [02_api-referenz.md](02_api-referenz.md)
-dokumentierten Inline-Command-Endpunkte. **Wichtig:** vom Gerät nach ~60s ohne
-erneutes Senden automatisch zurückgesetzt (siehe dort).
+dokumentierten Inline-Command-Endpunkte. **Keep-Alive eingebaut:** solange der
+gesetzte Wert `≠ 0` ist, wird er automatisch alle 45s erneut gesendet, damit
+er nicht dem geräteseitigen 60s-Verfall zum Opfer fällt — kein manuelles
+Nachsetzen nötig. Bei `0` stoppt das Keep-Alive automatisch.
 
 | Key | Name (DE) | Command-Endpunkt | Bereich | Einheit |
 |---|---|---|---|---|
@@ -76,5 +78,3 @@ jederzeit aktivieren.
 - Direkte Heizstufen-Pfade (`0`–`19`) und `128` (EW-Sperre/Notaus) als separate
   `button`-Entities — die `number`-Entity "Ziel-Heizstufe" deckt den regulären
   Anwendungsfall ab, EW-Sperre ist eine spätere Idee.
-- Automatisches Keep-Alive gegen den 60s-Verfall der gesetzten Werte —
-  bewusste Design-Entscheidung, siehe [02_api-referenz.md](02_api-referenz.md).

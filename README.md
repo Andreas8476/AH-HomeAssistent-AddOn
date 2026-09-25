@@ -4,9 +4,10 @@ Custom Integration für den [ASKOHEAT+](https://www.askoma.com) PV-Heizstab
 (Hersteller Askoma) — liest das Gerät über dessen lokale REST-API aus und
 steuert es.
 
-**Status:** Phase 1 (Lesen) + Phase 2 (Steuern) — Sensoren/Binary-Sensoren
-sowie drei Number-Entities zum Setzen von Heizstufe/Leistungsvorgabe/
-Einspeisewert. Ein Dashboard mit Heizstab-Bildern ist eine spätere Phase.
+**Status:** Phase 1 (Lesen) + Phase 2 (Steuern, inkl. Keep-Alive gegen den
+60s-Verfall gesetzter Werte) — Sensoren/Binary-Sensoren sowie drei
+Number-Entities zum Setzen von Heizstufe/Leistungsvorgabe/Einspeisewert. Ein
+Dashboard mit Heizstab-Bildern ist eine spätere Phase.
 
 ## Dokumentation
 
@@ -18,6 +19,12 @@ Start bei [`01_ueberblick.md`](custom_components/askoheat_plus/docs/01_ueberblic
 
 Siehe [`04_installation.md`](custom_components/askoheat_plus/docs/04_installation.md)
 (HACS, manuell, oder lokale Entwicklung per Symlink).
+
+## Automatisierung
+
+Mitgelieferte Blueprint, um den Einspeisewert automatisch aus einem Zähler-/
+Wechselrichter-Sensor zu befüllen: siehe
+[`10_automatisierung.md`](custom_components/askoheat_plus/docs/10_automatisierung.md).
 
 ## Repositories
 

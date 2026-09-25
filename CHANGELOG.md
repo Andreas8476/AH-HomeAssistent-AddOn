@@ -11,6 +11,25 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-25
+
+### Hinzugefügt
+
+- **Keep-Alive für Number-Entities:** gesetzte Werte werden alle 45s
+  automatisch erneut gesendet, solange sie `≠ 0` sind — verhindert den
+  geräteseitigen 60s-Auto-Verfall, ohne dass man selbst nachsetzen muss.
+  Korrigiert die ursprüngliche 0.2.0-Design-Entscheidung nach Rückmeldung von
+  Andreas (Hersteller erwartet ein kontinuierlich steuerndes Gerät).
+- Automation-Blueprint `blueprints/askoheat_plus_feedin_from_meter.yaml`, um
+  den Einspeisewert automatisch aus einem Zähler-/Wechselrichter-Sensor zu
+  befüllen. Anleitung: `docs/10_automatisierung.md`.
+- GitHub-Spiegel (`github.com/Andreas8476/AH-HomeAssistent-AddOn`) für die
+  HACS-Installation (HACS unterstützt nur GitHub). Ab jetzt wird jeder Commit
+  auf beide Remotes gepusht.
+- Vollständige HACS-Installationsanleitung inkl. HACS-Ersteinrichtung.
+- Attribution: Andreas Stegemann + Claude (Sonnet 5) als Autoren, Hinweis auf
+  ASKOMA-AG-Zugehörigkeit (privates Projekt).
+
 ## [0.2.0] - 2026-09-25
 
 ### Hinzugefügt
@@ -56,6 +75,7 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Phase 2: Steuerung/Schreiben (Heizstufe, Leistungsvorgabe, Einspeisewert).
 - Phase 3: Lovelace-Dashboard mit Heizstab-Bildern.
 
-[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.2.0...main
+[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.3.0...main
+[0.3.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.2.0...v0.3.0
 [0.2.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.1.0...v0.2.0
 [0.1.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/tags/v0.1.0

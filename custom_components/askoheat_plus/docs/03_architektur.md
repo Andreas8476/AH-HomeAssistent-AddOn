@@ -76,6 +76,13 @@ Kein separater Schreib-Coordinator, keine Bestätigungsabfrage — der reguläre
 Zyklus. Fehler beim Schreiben werden als `HomeAssistantError` an die UI
 durchgereicht (z.B. Gerät nicht erreichbar).
 
+**Keep-Alive:** solange ein gesetzter Wert `≠ 0` ist, hält jede Number-Entity
+zusätzlich einen eigenen `async_track_time_interval`-Timer (alle 45s), der
+denselben Befehl erneut sendet — verhindert den vom Hersteller dokumentierten
+60s-Auto-Verfall. Timer lebt pro Entity-Instanz (`_unsub_keepalive`), wird bei
+`0` oder `async_will_remove_from_hass` gestoppt. Details:
+[02_api-referenz.md](02_api-referenz.md).
+
 ## HA-Konventionen, die bewusst verwendet werden
 
 - **`entry.runtime_data`** (statt `hass.data[DOMAIN][entry_id]`) — aktuelle

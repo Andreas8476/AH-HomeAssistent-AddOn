@@ -1,0 +1,47 @@
+blueprint:
+  name: ASKOHEAT+ Einspeisewert aus Zähler/Wechselrichter
+  description: >
+    Überträgt den aktuellen Wert eines Netz-/Wechselrichter-Leistungssensors
+    (z.B. Einspeise-/Bezugsleistung in Watt) automatisch auf die
+    "Einspeisewert"-Number-Entity der ASKOHEAT+ Integration, sobald sich der
+    Sensor ändert. Negative Werte = Einspeisung/Überschuss, positive Werte =
+    Bezug (siehe custom_components/askoheat_plus/docs/02_api-referenz.md).
+
+    Das eingebaute Keep-Alive der ASKOHEAT+ Integration hält den zuletzt
+    gesetzten Wert danach automatisch alle 45 Sekunden aufrecht, auch wenn
+    sich der Zähler länger nicht ändert — diese Automation muss sich darum
+    nicht selbst kümmern.
+  domain: automation
+  input:
+    feedin_source:
+      name: Zähler-/Wechselrichter-Sensor
+      description: >
+        Sensor mit der aktuellen Einspeise-/Bezugsleistung in Watt
+        (negativ = Überschuss/Einspeisung, positiv = Bezug).
+      selector:
+        entity:
+          domain: sensor
+    askoheat_feedin_number:
+      name: ASKOHEAT+ Einspeisewert-Entity
+      description: Die "Einspeisewert"-Number-Entity der ASKOHEAT+ Integration.
+      selector:
+        entity:
+          domain: number
+
+trigger:
+  - trigger: state
+    entity_id: !input feedin_source
+
+condition:
+  - condition: template
+    value_template: "{{ states(trigger.entity_id) not in ['unknown', 'unavailable'] }}"
+
+action:
+  - action: number.set_value
+    target:
+      entity_id: !input askoheat_feedin_number
+    data:
+      value: "{{ states(trigger.entity_id) | float(0) | round(0) }}"
+
+mode: single
+max_exceeded: silent
