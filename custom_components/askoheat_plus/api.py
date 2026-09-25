@@ -58,10 +58,13 @@ class AskoheatApiClient:
                 # The device does not always send a proper JSON content-type
                 # header, so parse the body manually instead of relying on it.
                 text = await response.text()
-        except aiohttp.ClientError as err:
-            raise AskoheatApiError(f"Error requesting {url}: {err}") from err
         except TimeoutError as err:
             raise AskoheatApiError(f"Timeout requesting {url}") from err
+        except (aiohttp.ClientError, RuntimeError) as err:
+            # RuntimeError covers "Session is closed", which aiohttp raises
+            # (not a ClientError) if a request is in flight while HA's
+            # shared session is torn down during shutdown/restart.
+            raise AskoheatApiError(f"Error requesting {url}: {err}") from err
 
         try:
             data = json.loads(text)
@@ -105,10 +108,10 @@ class AskoheatApiClient:
         try:
             async with self._session.get(url) as response:
                 response.raise_for_status()
-        except aiohttp.ClientError as err:
-            raise AskoheatApiError(f"Error sending command to {url}: {err}") from err
         except TimeoutError as err:
             raise AskoheatApiError(f"Timeout sending command to {url}") from err
+        except (aiohttp.ClientError, RuntimeError) as err:
+            raise AskoheatApiError(f"Error sending command to {url}: {err}") from err
 
     async def async_send_bare_command(self, path: str) -> None:
         """Send a parameter-less command, e.g. path="on" for Emergency Mode.
@@ -120,10 +123,10 @@ class AskoheatApiClient:
         try:
             async with self._session.get(url) as response:
                 response.raise_for_status()
-        except aiohttp.ClientError as err:
-            raise AskoheatApiError(f"Error sending command to {url}: {err}") from err
         except TimeoutError as err:
             raise AskoheatApiError(f"Timeout sending command to {url}") from err
+        except (aiohttp.ClientError, RuntimeError) as err:
+            raise AskoheatApiError(f"Error sending command to {url}: {err}") from err
 
 
 def get_path(data: dict[str, Any], path: str) -> Any | None:

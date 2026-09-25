@@ -128,7 +128,27 @@ ohne die Integration zu entfernen und neu einzurichten:
 **Wichtig:** Beim Neu-Konfigurieren muss unter der neuen Adresse dasselbe
 physische Gerät antworten (gleiche Geräte-ID) wie beim ursprünglichen Setup —
 sonst bricht der Dialog mit einer Fehlermeldung ab. Für ein komplett anderes
-Gerät stattdessen eine zweite, separate Integration einrichten.
+Gerät stattdessen eine zweite, separate Integration einrichten (siehe
+"Mehrere Heizstäbe" unten).
+
+### Mehrere Heizstäbe einbinden
+
+Jeder ASKOHEAT+ wird als eigene Integrationsinstanz eingerichtet — einfach
+**Einstellungen → Geräte & Dienste → Integration hinzufügen → "ASKOHEAT+"**
+erneut durchlaufen (Schritt 5) mit der Adresse des zweiten Geräts. Danach für
+eine eigene Dashboard-Ansicht je Gerät:
+[`dashboard/generate_dashboard.py`](../../../dashboard/generate_dashboard.py)
+ausführen, siehe [11_dashboard.md](11_dashboard.md).
+
+### Ein Gerät entfernen
+
+**Einstellungen → Geräte & Dienste → ASKOHEAT+** → betroffenes Gerät → ⋮ →
+**Löschen**. Home Assistant entfernt dabei automatisch das Gerät und alle
+zugehörigen Entitäten aus der Registry — kein manuelles Aufräumen nötig.
+(Reine Verlaufsdaten in der Recorder-Datenbank bleiben bewusst erhalten,
+das ist normales Home-Assistant-Verhalten.) Danach ggf.
+`generate_dashboard.py` erneut laufen lassen, damit die Ansicht des
+entfernten Geräts auch aus dem Dashboard verschwindet.
 
 ## Variante B: Manuelle Installation (ohne HACS)
 

@@ -11,6 +11,26 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-09-25
+
+### Hinzugefügt
+
+- `dashboard/generate_dashboard.py`: erzeugt das Dashboard automatisch aus
+  der aktuellen Geräte-Registry — eine Ansicht pro eingerichtetem
+  ASKOHEAT+-Gerät, unterstützt beliebig viele Geräte.
+
+### Geändert
+
+- `api.py`: robustere Fehlerbehandlung (`RuntimeError` bei geschlossener
+  Session während Neustart wird jetzt sauber als `AskoheatApiError`
+  behandelt statt ungefangen durchzuschlagen).
+
+### Bekannt
+
+- Home Assistant entfernt Geräte/Entities beim Löschen eines Config-Entry
+  bereits automatisch (Kernverhalten) — keine Änderung an dieser Integration
+  nötig. Recorder-Verlaufsdaten bleiben bewusst erhalten.
+
 ## [0.6.0] - 2026-09-25
 
 ### Hinzugefügt
@@ -123,7 +143,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Phase 2: Steuerung/Schreiben (Heizstufe, Leistungsvorgabe, Einspeisewert).
 - Phase 3: Lovelace-Dashboard mit Heizstab-Bildern.
 
-[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.6.0...main
+[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.7.0...main
+[0.7.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.6.0...v0.7.0
 [0.6.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.5.0...v0.6.0
 [0.5.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.4.0...v0.5.0
 [0.4.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.3.0...v0.4.0

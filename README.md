@@ -23,8 +23,10 @@ Siehe [`04_installation.md`](custom_components/askoheat_plus/docs/04_installatio
 
 ## Dashboard
 
-Eigenes Lovelace-Dashboard mit Bild-Overlays (Andreas' Askoma-Renderbilder):
-siehe [`11_dashboard.md`](custom_components/askoheat_plus/docs/11_dashboard.md).
+Eigenes Lovelace-Dashboard mit Bild-Overlays (Andreas' Askoma-Renderbilder),
+unterstützt beliebig viele Geräte (eine Ansicht pro Heizstab, automatisch
+generiert aus `dashboard/generate_dashboard.py`): siehe
+[`11_dashboard.md`](custom_components/askoheat_plus/docs/11_dashboard.md).
 
 ## Automatisierung
 

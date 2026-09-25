@@ -167,6 +167,34 @@ kurz auf dieses Projekt).
   `docker exec homeassistant` (Container-Zugriff diese Session neu entdeckt) —
   zuverlässiger als die vorherige reine `py_compile`-Prüfung.
 
+## 2026-09-25 — Mehrgeräte-Test: Dashboard-Generator, robustere Fehlerbehandlung
+
+- Andreas hat ein zweites Gerät ("SONNENBOOSTER 5,2 kW") probeweise
+  eingerichtet. Dabei aufgefallen: Temperatursensoren 1–4 fehlten scheinbar
+  — tatsächlich nur wie designed standardmäßig deaktiviert (kein Bug),
+  gegengeprüft direkt in der Entity-Registry des zweiten Geräts.
+- **Geklärt (kein Code nötig):** Home Assistant entfernt beim Löschen eines
+  Config-Entry automatisch Gerät + alle zugehörigen Entities aus der
+  Registry (`async_clear_config_entry`, Kernverhalten, im tatsächlichen
+  HA-Quellcode via `docker exec` verifiziert). Recorder-Verlaufsdaten bleiben
+  bewusst erhalten (HA-Design), keine Sonderbehandlung für uns nötig.
+- **Neu: `dashboard/generate_dashboard.py`.** Erzeugt
+  `askoheat_plus_dashboard.yaml` automatisch aus der aktuellen
+  Geräte-/Entity-Registry — eine Ansicht pro eingerichtetem ASKOHEAT+-Gerät,
+  beliebig viele. Löst das Problem, dass Lovelace-YAML keine generische
+  "pro Gerät eine Karte"-Logik kennt und Entity-IDs sich je Gerät
+  unterscheiden (teils mit, teils ohne Bereichs-Präfix). Details:
+  [11_dashboard.md](11_dashboard.md).
+- `api.py`: Ausnahmebehandlung um `RuntimeError` erweitert (fing zuvor nur
+  `aiohttp.ClientError`/`TimeoutError` ab) — beim zweiten Testgerät
+  aufgefallen, dass aiohttps "Session is closed" beim Neustart mitten in
+  einem laufenden Request als unbehandelter Fehler im Log landete (kosmetisch,
+  kein Funktionsfehler, trat nur während des Herunterfahrens auf).
+- Am zweiten Testgerät fehlen `gettemperature_calibration.json` und
+  `getreg.json` (HTTP 404, vermutlich andere Firmware-Version) — vom
+  bestehenden Try/Except pro Sekundär-Endpunkt bereits korrekt als Warnung
+  statt Fehler behandelt, keine Änderung nötig.
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
