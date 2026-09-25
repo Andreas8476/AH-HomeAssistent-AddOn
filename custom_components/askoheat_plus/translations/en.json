@@ -1,0 +1,53 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect ASKOHEAT+",
+        "description": "Enter the local network address of your ASKOHEAT+ device.",
+        "data": {
+          "host": "Host / IP address",
+          "port": "Port",
+          "scan_interval": "Polling interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect to the device. Check the host/IP and make sure it is reachable on your local network."
+    },
+    "abort": {
+      "already_configured": "This device is already configured."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "heater_step": { "name": "Heater step" },
+      "heater_load": { "name": "Heater load" },
+      "temperature_sensor_0": { "name": "Temperature" },
+      "temperature_limit_info": { "name": "Temperature limit" },
+      "set_heater_step": { "name": "Set heater step" },
+      "set_load_feedin": { "name": "Set feed-in value" },
+      "error_status": { "name": "Error status" },
+      "legio_info": { "name": "Legionella protection" },
+      "article_name": { "name": "Article name" },
+      "article_number": { "name": "Article number" },
+      "serial_number": { "name": "Serial number" },
+      "software_version": { "name": "Software version" },
+      "hardware_version": { "name": "Hardware version" },
+      "max_power": { "name": "Max. power" },
+      "number_of_heater": { "name": "Number of heating elements" },
+      "number_of_steps": { "name": "Number of steps" },
+      "temperature_precise": { "name": "Temperature (precise)" },
+      "tcp_connection": { "name": "Modbus TCP connection" },
+      "rtu_connection": { "name": "Modbus RTU connection" },
+      "pv_peak": { "name": "PV peak power" },
+      "battery_size": { "name": "Battery size" }
+    },
+    "binary_sensor": {
+      "pump_output": { "name": "Pump" },
+      "emergency_mode": { "name": "Emergency mode" },
+      "heater_disabled": { "name": "Heater disabled" },
+      "relayboard_connected": { "name": "Relay board connected" },
+      "current_flow": { "name": "Current flow" }
+    }
+  }
+}

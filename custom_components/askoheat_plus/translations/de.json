@@ -1,0 +1,53 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ASKOHEAT+ verbinden",
+        "description": "Gib die lokale Netzwerkadresse deines ASKOHEAT+ Geräts ein.",
+        "data": {
+          "host": "Host / IP-Adresse",
+          "port": "Port",
+          "scan_interval": "Abfrageintervall (Sekunden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum Gerät fehlgeschlagen. Bitte Host/IP prüfen und sicherstellen, dass es im lokalen Netzwerk erreichbar ist."
+    },
+    "abort": {
+      "already_configured": "Dieses Gerät ist bereits eingerichtet."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "heater_step": { "name": "Heizstufe" },
+      "heater_load": { "name": "Heizleistung" },
+      "temperature_sensor_0": { "name": "Temperatur" },
+      "temperature_limit_info": { "name": "Temperaturlimit" },
+      "set_heater_step": { "name": "Soll-Heizstufe" },
+      "set_load_feedin": { "name": "Soll-Einspeisewert" },
+      "error_status": { "name": "Gerätestatus" },
+      "legio_info": { "name": "Legionellenschutz" },
+      "article_name": { "name": "Artikelname" },
+      "article_number": { "name": "Artikelnummer" },
+      "serial_number": { "name": "Seriennummer" },
+      "software_version": { "name": "Software-Version" },
+      "hardware_version": { "name": "Hardware-Version" },
+      "max_power": { "name": "Max. Leistung" },
+      "number_of_heater": { "name": "Anzahl Heizstäbe" },
+      "number_of_steps": { "name": "Anzahl Heizstufen" },
+      "temperature_precise": { "name": "Temperatur (präzise)" },
+      "tcp_connection": { "name": "Modbus TCP Verbindung" },
+      "rtu_connection": { "name": "Modbus RTU Verbindung" },
+      "pv_peak": { "name": "PV-Spitzenleistung" },
+      "battery_size": { "name": "Batteriegröße" }
+    },
+    "binary_sensor": {
+      "pump_output": { "name": "Pumpe" },
+      "emergency_mode": { "name": "Notbetrieb" },
+      "heater_disabled": { "name": "Heizstab gesperrt" },
+      "relayboard_connected": { "name": "Relayboard verbunden" },
+      "current_flow": { "name": "Stromfluss" }
+    }
+  }
+}
