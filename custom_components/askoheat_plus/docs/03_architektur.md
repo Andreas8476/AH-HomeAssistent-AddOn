@@ -44,6 +44,7 @@ Ordner `/homeassistant/askoheat_plus/` initialisiert.
 | `entity.py` | `AskoheatEntity` — gemeinsame Basisklasse (unique_id, device_info) |
 | `config_flow.py` | UI-Setup: Host/Port/Intervall abfragen, Verbindung testen, `unique_id` = `DEVICEID` |
 | `sensor.py` / `binary_sensor.py` | Deklarative Entity-Beschreibungen (`AskoheatSensorEntityDescription` mit `value_fn` + `source`) |
+| `number.py` | Steuerbare Werte (Phase 2): liest `SET_INPUTS.*` zur Anzeige, schreibt über `AskoheatApiClient.async_send_command` |
 | `__init__.py` | `async_setup_entry`/`async_unload_entry`, verdrahtet Client → Coordinator → `entry.runtime_data` → Plattformen |
 
 ## Datenfluss
@@ -59,6 +60,21 @@ Sekundär-Endp. ┘         (aiohttp,                  (Polling alle 30s,       
                                                            per Pfad aus coordinator.data /
                                                            coordinator.secondary.*)
 ```
+
+## Schreib-Datenfluss (Phase 2)
+
+```
+number.py: async_set_native_value(value)
+    └─► coordinator.client.async_send_command(command, value)
+            └─► GET http://<host>/<command>?value=<value>   (z.B. "heater%20step")
+                    └─► bei Erfolg: coordinator.async_request_refresh()
+                            └─► nächster gethome.json-Poll zeigt den neuen Ist-Zustand
+```
+
+Kein separater Schreib-Coordinator, keine Bestätigungsabfrage — der reguläre
+`gethome.json`-Poll (siehe Datenfluss oben) zeigt den Effekt beim nächsten
+Zyklus. Fehler beim Schreiben werden als `HomeAssistantError` an die UI
+durchgereicht (z.B. Gerät nicht erreichbar).
 
 ## HA-Konventionen, die bewusst verwendet werden
 

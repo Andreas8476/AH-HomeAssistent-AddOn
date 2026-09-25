@@ -24,8 +24,6 @@
       "heater_load": { "name": "Heizleistung" },
       "temperature_sensor_0": { "name": "Temperatur" },
       "temperature_limit_info": { "name": "Temperaturlimit" },
-      "set_heater_step": { "name": "Soll-Heizstufe" },
-      "set_load_feedin": { "name": "Soll-Einspeisewert" },
       "error_status": { "name": "Gerätestatus" },
       "legio_info": { "name": "Legionellenschutz" },
       "article_name": { "name": "Artikelname" },
@@ -48,6 +46,11 @@
       "heater_disabled": { "name": "Heizstab gesperrt" },
       "relayboard_connected": { "name": "Relayboard verbunden" },
       "current_flow": { "name": "Stromfluss" }
+    },
+    "number": {
+      "heater_step_target": { "name": "Ziel-Heizstufe" },
+      "load_setpoint": { "name": "Leistungsvorgabe" },
+      "load_feedin": { "name": "Einspeisewert" }
     }
   }
 }

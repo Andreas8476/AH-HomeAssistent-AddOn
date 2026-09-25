@@ -93,6 +93,23 @@ class AskoheatApiClient:
         """Fetch getreg.json — installation metadata, fetched once at startup."""
         return await self.async_get_endpoint("getreg.json")
 
+    async def async_send_command(self, command: str, value: float | int) -> None:
+        """Send a write ("inline command") request, e.g. command="heater%20step".
+
+        ``command`` must already be URL-encoded (spaces as %20), matching the
+        endpoints documented in docs/02_api-referenz.md.
+        """
+        if isinstance(value, float) and value.is_integer():
+            value = int(value)
+        url = f"{self.base_url}/{command}?value={value}"
+        try:
+            async with self._session.get(url) as response:
+                response.raise_for_status()
+        except aiohttp.ClientError as err:
+            raise AskoheatApiError(f"Error sending command to {url}: {err}") from err
+        except TimeoutError as err:
+            raise AskoheatApiError(f"Timeout sending command to {url}") from err
+
 
 def get_path(data: dict[str, Any], path: str) -> Any | None:
     """Look up a dotted path (e.g. "ACTUAL_VALUES.ACTUAL_HEATER_STEP") in a nested dict."""

@@ -1,8 +1,10 @@
-# 05 — Entity-Referenz (Phase 1)
+# 05 — Entity-Referenz
 
-Alle Entities sind reine Anzeige-Entities (read-only). `source` gibt an, aus
-welchem Endpunkt der Wert stammt — `home` wird regelmäßig gepollt, alle anderen
-einmalig beim Start (siehe [02_api-referenz.md](02_api-referenz.md)).
+Sensoren und Binary-Sensoren (Phase 1) sind reine Anzeige-Entities (read-only).
+`source` gibt an, aus welchem Endpunkt der Wert stammt — `home` wird
+regelmäßig gepollt, alle anderen einmalig beim Start (siehe
+[02_api-referenz.md](02_api-referenz.md)). Number-Entities (Phase 2, eigener
+Abschnitt unten) sind **schreibbar**.
 
 ## Sensoren (`sensor.py`)
 
@@ -12,8 +14,6 @@ einmalig beim Start (siehe [02_api-referenz.md](02_api-referenz.md)).
 | `heater_load` | Heizleistung | home | `ACTUAL_VALUES.ACTUAL_HEATER_LOAD` | W, power | ja |
 | `temperature_sensor_0` | Temperatur | home | `ACTUAL_VALUES.TEMP_SENSOR_0` | °C, temperature | ja |
 | `temperature_limit_info` | Temperaturlimit | home | `ACTUAL_VALUES.ACTUAL_TEMPERATURE_LIMIT` | Text | ja |
-| `set_heater_step` | Soll-Heizstufe | home | `SET_INPUTS.SET_HEATER_STEP` | Zahl, diagnostic | ja |
-| `set_load_feedin` | Soll-Einspeisewert | home | `SET_INPUTS.SET_LOAD_FEEDIN` | W, diagnostic | ja |
 | `error_status` | Gerätestatus | home | `ASKOHEAT_PLUS_INFO.ERROR_STATUS` | Text | ja |
 | `legio_info` | Legionellenschutz | home | `ASKOHEAT_PLUS_INFO.LEGIO_INFO` | Text, diagnostic | ja |
 | `article_name` | Artikelname | home | `ASKOHEAT_PLUS_INFO.ARTICLE_NAME` | Text, diagnostic | nein |
@@ -40,6 +40,23 @@ einmalig beim Start (siehe [02_api-referenz.md](02_api-referenz.md)).
 | `relayboard_connected` | Relayboard verbunden | `STATUS_FLAGS.RELAYBOARD_CONNECTED` | connectivity, diagnostic | Relayboard verbunden |
 | `current_flow` | Stromfluss | `STATUS_FLAGS.CURRENT_FLOW` | —, diagnostic | Stromfluss erkannt |
 
+## Number-Entities (`number.py`, Phase 2 — schreibbar)
+
+Zeigen den aktuellen Sollwert (`SET_INPUTS.*` aus `gethome.json`) an **und**
+setzen ihn beim Ändern über die in [02_api-referenz.md](02_api-referenz.md)
+dokumentierten Inline-Command-Endpunkte. **Wichtig:** vom Gerät nach ~60s ohne
+erneutes Senden automatisch zurückgesetzt (siehe dort).
+
+| Key | Name (DE) | Command-Endpunkt | Bereich | Einheit |
+|---|---|---|---|---|
+| `heater_step_target` | Ziel-Heizstufe | `heater%20step` | `0`–`NUMBER_OF_STEPS` (dynamisch) | — |
+| `load_setpoint` | Leistungsvorgabe | `load%20setpoint` | `0`–`MAX_POWER` (dynamisch) | W |
+| `load_feedin` | Einspeisewert | `load%20feedin` | `-32768`–`32767` | W |
+
+Ersetzen die früheren, rein lesenden Diagnose-Sensoren `set_heater_step` und
+`set_load_feedin` aus Phase 1 (entfernt, um doppelte Entities für denselben
+Wert zu vermeiden — siehe [07_changelog.md](07_changelog.md)).
+
 ## Diagnose-/Konfigurations-Entities standardmäßig deaktiviert
 
 Reine Stammdaten (Artikelnummer, Seriennummer, Versionsnummern, PV-Peak,
@@ -56,3 +73,8 @@ jederzeit aktivieren.
   Daten, bewusst nicht als Entity/Recorder-Historie abgebildet.
 - Voller `getwizard.json`-Dump — nur als Referenz in
   [02_api-referenz.md](02_api-referenz.md) dokumentiert.
+- Direkte Heizstufen-Pfade (`0`–`19`) und `128` (EW-Sperre/Notaus) als separate
+  `button`-Entities — die `number`-Entity "Ziel-Heizstufe" deckt den regulären
+  Anwendungsfall ab, EW-Sperre ist eine spätere Idee.
+- Automatisches Keep-Alive gegen den 60s-Verfall der gesetzten Werte —
+  bewusste Design-Entscheidung, siehe [02_api-referenz.md](02_api-referenz.md).

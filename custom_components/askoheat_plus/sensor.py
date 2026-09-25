@@ -75,21 +75,9 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         icon="mdi:thermometer-alert",
         value_fn=_text("ACTUAL_VALUES.ACTUAL_TEMPERATURE_LIMIT"),
     ),
-    AskoheatSensorEntityDescription(
-        key="set_heater_step",
-        translation_key="set_heater_step",
-        icon="mdi:radiator",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=_number("SET_INPUTS.SET_HEATER_STEP"),
-    ),
-    AskoheatSensorEntityDescription(
-        key="set_load_feedin",
-        translation_key="set_load_feedin",
-        device_class=SensorDeviceClass.POWER,
-        native_unit_of_measurement=UnitOfPower.WATT,
-        entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=_number("SET_INPUTS.SET_LOAD_FEEDIN"),
-    ),
+    # Note: SET_INPUTS.SET_HEATER_STEP / SET_LOAD_FEEDIN are no longer shown
+    # as separate read-only sensors here — the Phase 2 number entities
+    # (number.py) display and set the same values in one place.
     AskoheatSensorEntityDescription(
         key="error_status",
         translation_key="error_status",

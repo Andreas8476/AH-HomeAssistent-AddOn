@@ -24,8 +24,6 @@
       "heater_load": { "name": "Heater load" },
       "temperature_sensor_0": { "name": "Temperature" },
       "temperature_limit_info": { "name": "Temperature limit" },
-      "set_heater_step": { "name": "Set heater step" },
-      "set_load_feedin": { "name": "Set feed-in value" },
       "error_status": { "name": "Error status" },
       "legio_info": { "name": "Legionella protection" },
       "article_name": { "name": "Article name" },
@@ -48,6 +46,11 @@
       "heater_disabled": { "name": "Heater disabled" },
       "relayboard_connected": { "name": "Relay board connected" },
       "current_flow": { "name": "Current flow" }
+    },
+    "number": {
+      "heater_step_target": { "name": "Target heater step" },
+      "load_setpoint": { "name": "Load setpoint" },
+      "load_feedin": { "name": "Feed-in value" }
     }
   }
 }

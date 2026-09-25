@@ -35,6 +35,26 @@ kurz auf dieses Projekt).
   Tag `v0.1.0`. Zusätzliches Root-`CHANGELOG.md` (Keep a Changelog/SemVer)
   ergänzt dieses Dokument für eine saubere Release-Historie auf GitLab.
 
+## 2026-09-25 — Phase 2: Steuern
+
+- Drei `number`-Entities (`number.py`): Ziel-Heizstufe, Leistungsvorgabe,
+  Einspeisewert. Schreiben über die dokumentierten Inline-Command-Endpunkte
+  (`heater%20step`, `load%20setpoint`, `load%20feedin`), Bereiche dynamisch
+  aus `ASKOHEAT_PLUS_INFO.NUMBER_OF_STEPS`/`MAX_POWER` bzw. statisch
+  (int16-Bereich) für den Einspeisewert.
+- `api.py`: neue Methode `async_send_command`, nutzt denselben Client wie das
+  Lesen, kein zusätzlicher Coordinator/Polling.
+- **Aufräumen:** die Phase-1-Diagnose-Sensoren `set_heater_step` und
+  `set_load_feedin` entfernt (redundant zu den neuen Number-Entities, die
+  denselben Wert anzeigen und zusätzlich setzen können). Die zugehörigen
+  Entity-Registry-Einträge werden von Home Assistant nicht automatisch
+  gelöscht, sondern zeigen `unavailable` — manuell in den Einstellungen
+  entfernbar.
+- Bewusst **kein** automatischer Keep-Alive gegen den 60s-Verfall gesetzter
+  Werte (Herstellerdoku) implementiert — würde dem ESP32-Schonungsprinzip aus
+  Phase 1 widersprechen. Wer dauerhafte Steuerung will, muss selbst periodisch
+  erneut setzen (z.B. per HA-Automation).
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
@@ -44,11 +64,12 @@ kurz auf dieses Projekt).
   Trigger?).
 - **Relais-Zähler/Saldo** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) noch nicht als
   einzelne Sensoren abgebildet — Freitext-Parsing bewusst auf später verschoben.
-- **Phase 2 — Schreiben:** Heizstufe/Leistungsvorgabe/Einspeisewert setzen, über
-  die in [02_api-referenz.md](02_api-referenz.md) referenzierten Inline-Commands.
-  Noch nicht begonnen.
 - **Phase 3 — Dashboard:** Lovelace-Dashboard mit Heizstab-Bildern je Modell.
   Noch nicht begonnen.
-- `manifest.json`: `codeowners`/`documentation`/`issue_tracker` verweisen auf
-  einen Platzhalter-GitHub-Namen (`stegemann-andreas/ha-askoheat-plus`) —
-  anpassen, sobald das echte Repository existiert.
+- **Keep-Alive für gesetzte Werte:** bewusst nicht automatisiert (siehe oben) —
+  falls gewünscht, später als optionale HA-Automation dokumentieren/anbieten.
+- **EW-Sperre (`128`) / direkte Heizstufen-Pfade (`0`–`19`):** nicht als eigene
+  Entities abgebildet, nur die reguläre Ziel-Heizstufe.
+- Verwaiste Entity-Registry-Einträge (`sensor..._soll_heizstufe`,
+  `sensor..._soll_einspeisewert`, Status `unavailable`) noch manuell zu
+  entfernen.

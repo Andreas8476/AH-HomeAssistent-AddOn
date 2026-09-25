@@ -29,3 +29,22 @@ ENDPOINT_REGISTRATION = "getreg.json"
 
 # Path (within gethome.json) used as the unique_id for the config entry.
 PATH_DEVICE_ID = "ASKOHEAT_PLUS_INFO.DEVICEID"
+
+# Write ("inline command") endpoints, see docs/02_api-referenz.md. Values set
+# through these revert on the device after ~60s if not resent by a
+# controller — this integration does not implement a keep-alive for that,
+# see docs/02_api-referenz.md.
+CMD_HEATER_STEP = "heater%20step"
+CMD_LOAD_SETPOINT = "load%20setpoint"
+CMD_LOAD_FEEDIN = "load%20feedin"
+
+PATH_NUMBER_OF_STEPS = "ASKOHEAT_PLUS_INFO.NUMBER_OF_STEPS"
+PATH_MAX_POWER = "ASKOHEAT_PLUS_INFO.MAX_POWER"
+
+# Fallback bounds used only if the dynamic path above is unavailable.
+FALLBACK_MAX_HEATER_STEP = 19  # documented max for booster models
+FALLBACK_MAX_LOAD_SETPOINT = 20000
+
+# SET_LOAD_FEEDIN_INT16 in the device's own JSON implies int16 storage.
+LOAD_FEEDIN_MIN = -32768
+LOAD_FEEDIN_MAX = 32767

@@ -1,10 +1,12 @@
 # ASKOHEAT+ für Home Assistant
 
 Custom Integration für den [ASKOHEAT+](https://www.askoma.com) PV-Heizstab
-(Hersteller Askoma) — liest das Gerät über dessen lokale REST-API aus.
+(Hersteller Askoma) — liest das Gerät über dessen lokale REST-API aus und
+steuert es.
 
-**Status:** Phase 1 (Lesen) — Sensoren/Binary-Sensoren, read-only. Steuerung
-und ein Dashboard mit Heizstab-Bildern sind spätere Phasen.
+**Status:** Phase 1 (Lesen) + Phase 2 (Steuern) — Sensoren/Binary-Sensoren
+sowie drei Number-Entities zum Setzen von Heizstufe/Leistungsvorgabe/
+Einspeisewert. Ein Dashboard mit Heizstab-Bildern ist eine spätere Phase.
 
 ## Dokumentation
 

@@ -74,19 +74,38 @@ Felder wie `"0 watts"`, `"25 °C"` sind **Text mit angehängter Einheit** — di
 Integration liest sie über einen generischen Zahlen-Extraktor
 (`api.extract_number`, Regex `-?\d+(?:[.,]\d+)?`), nicht über String-Split.
 
-## Setzen von Werten (Inline-Commands, Referenz für Phase 2)
+## Setzen von Werten (Inline-Commands, seit Phase 2 implementiert)
 
 Ab Firmware 4.6.2 lassen sich Werte per GET auf eine URL-kodierte JSON-Struktur
-setzen, z.B.:
+setzen, z.B. `curl 'http://askoheat.local/%7B%22MODBUS_CMD_SET_HEATER_STEP%22:%223%22%7D'`
+(entspricht `{"MODBUS_CMD_SET_HEATER_STEP":"3"}`). Diese Integration nutzt
+stattdessen die sprechenderen, in der Herstellerdoku ("Askoheat+ Steuerung via
+REST API", Abschnitt "Hilfsmittel zur Installation") empfohlenen
+Pfad-Endpunkte mit Query-Parameter — weniger fragil als URL-kodiertes JSON im
+Pfad:
 
-```
-curl 'http://askoheat.local/%7B%22MODBUS_CMD_SET_HEATER_STEP%22:%223%22%7D'
-```
+| Number-Entity | Endpunkt | Entspricht |
+|---|---|---|
+| Ziel-Heizstufe | `heater%20step?value=x` | `MODBUS_CMD_SET_HEATER_STEP` |
+| Leistungsvorgabe | `load%20setpoint?value=nnn` | `MODBUS_CMD_LOAD_SETPOINT_VALUE` |
+| Einspeisewert | `load%20feedin?value=nnn` | `MODBUS_CMD_LOAD_FEEDIN_VALUE` |
 
-entspricht dem Klartext-JSON `{"MODBUS_CMD_SET_HEATER_STEP":"3"}`. Es gibt außerdem
-sprechendere Pfade wie `heater%20step?value=x` oder `load%20setpoint?value=nnn`
-(siehe Herstellerdoku "Askoheat+ Steuerung via REST API", Abschnitt "Hilfsmittel
-zur Installation"). Wird in Phase 2 aufgegriffen — **nicht Teil dieser Version.**
+Implementiert in `api.py` (`AskoheatApiClient.async_send_command`) und
+`number.py` (`AskoheatNumber.async_set_native_value`).
+
+**Wichtig — automatischer Verfall nach 60 Sekunden:** Laut Herstellerdoku
+löscht der Askoheat+ einen so gesetzten Wert nach 60 Sekunden automatisch,
+wenn er nicht von einem (anderen) Steuergerät erneut gesendet wird. Diese
+Integration implementiert **bewusst keinen** automatischen Keep-Alive dafür
+(würde dem ESP32-Schonungsprinzip widersprechen, siehe "Abfrage-Strategie"
+oben) — ein per Home Assistant gesetzter Wert ist also eher ein befristeter
+Override als eine dauerhafte Einstellung. Wer eine dauerhafte Steuerung
+möchte, muss den Wert selbst periodisch erneut setzen (z.B. per HA-Automation).
+
+Wertebereiche der Number-Entities: Ziel-Heizstufe `0`–`NUMBER_OF_STEPS`
+(dynamisch vom Gerät, Fallback 19), Leistungsvorgabe `0`–`MAX_POWER`
+(dynamisch, Fallback 20000 W), Einspeisewert `-32768`–`32767` (int16-Bereich,
+negativ = Einspeisung/Überschuss, positiv = Bezug).
 
 ## Datenschutz-Hinweis zu `getreg.json`
 
