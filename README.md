@@ -5,9 +5,10 @@ Custom Integration für den [ASKOHEAT+](https://www.askoma.com) PV-Heizstab
 steuert es.
 
 **Status:** Phase 1 (Lesen) + Phase 2 (Steuern, inkl. Keep-Alive gegen den
-60s-Verfall gesetzter Werte) — Sensoren/Binary-Sensoren sowie drei
-Number-Entities zum Setzen von Heizstufe/Leistungsvorgabe/Einspeisewert. Ein
-Dashboard mit Heizstab-Bildern ist eine spätere Phase.
+60s-Verfall gesetzter Werte) + Phase 3 (Dashboard) — Sensoren/Binary-Sensoren,
+Number-/Switch-Entities zum Setzen von Heizstufe/Leistungsvorgabe/
+Einspeisewert/Notbetrieb, sowie ein eigenes Lovelace-Dashboard mit
+Heizstab-Bildern und Live-Werten als Overlay.
 
 ## Dokumentation
 
@@ -19,6 +20,11 @@ Start bei [`01_ueberblick.md`](custom_components/askoheat_plus/docs/01_ueberblic
 
 Siehe [`04_installation.md`](custom_components/askoheat_plus/docs/04_installation.md)
 (HACS, manuell, oder lokale Entwicklung per Symlink).
+
+## Dashboard
+
+Eigenes Lovelace-Dashboard mit Bild-Overlays (Andreas' Askoma-Renderbilder):
+siehe [`11_dashboard.md`](custom_components/askoheat_plus/docs/11_dashboard.md).
 
 ## Automatisierung
 

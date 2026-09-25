@@ -11,6 +11,22 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-09-25
+
+### Hinzugefügt
+
+- Phase 3 (Dashboard): eigenes YAML-Mode-Lovelace-Dashboard "ASKOHEAT+" mit
+  zwei Bild-Karten (Temperatursensoren 0–4 + Heizleistung am Tank;
+  Ziel-Heizstufe/Leistungsvorgabe/Einspeisewert am Zählerschrank), auf Basis
+  der vom Nutzer bereitgestellten Askoma-Renderbilder.
+- `temperature_sensor_1`..`4`-Sensoren (bisher nur Sensor 0).
+
+### Bekannt
+
+- Dashboard-Bilder müssen manuell nach `www/askoheat_plus/` kopiert werden
+  (kein Symlink möglich, siehe `docs/11_dashboard.md`).
+- Label-Positionen sind ein Startpunkt, nicht final feinjustiert.
+
 ## [0.4.0] - 2026-09-25
 
 ### Hinzugefügt
@@ -90,7 +106,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Phase 2: Steuerung/Schreiben (Heizstufe, Leistungsvorgabe, Einspeisewert).
 - Phase 3: Lovelace-Dashboard mit Heizstab-Bildern.
 
-[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.4.0...main
+[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.5.0...main
+[0.5.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.4.0...v0.5.0
 [0.4.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.3.0...v0.4.0
 [0.3.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.2.0...v0.3.0
 [0.2.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.1.0...v0.2.0

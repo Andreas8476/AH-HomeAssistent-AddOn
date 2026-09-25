@@ -29,8 +29,8 @@ Das Projekt ist bewusst in Schritten angelegt:
 2. **Phase 2 — Schreiben** *(umgesetzt)*: Heizstufe, Leistungsvorgabe und
    Einspeisewert setzen — über die vom Hersteller dokumentierten
    Inline-Commands, als `number`-Entities.
-3. **Phase 3 — Dashboard** *(noch nicht umgesetzt)*: Ein Lovelace-Dashboard mit
-   Bildern passend zum jeweiligen Heizstab-Modell.
+3. **Phase 3 — Dashboard** *(umgesetzt)*: Ein eigenes Lovelace-Dashboard mit
+   Andreas' Askoma-Renderbildern als Hintergrund und Live-Werten als Overlay.
 
 ## Aktueller Stand
 
@@ -41,7 +41,9 @@ Das Projekt ist bewusst in Schritten angelegt:
       60s-Verfall, plus Automatisierungs-Blueprint zur Einspeisewert-
       Verknüpfung mit einem Zähler/Wechselrichter, siehe
       [05_entities.md](05_entities.md) und [10_automatisierung.md](10_automatisierung.md).
-- [ ] Phase 3: Dashboard.
+- [x] Phase 3: Dashboard — eigenes YAML-Lovelace-Dashboard mit zwei
+      Bild-Karten (Temperatursensoren + Heizleistung am Tank, Einspeisewert/
+      Leistungsvorgabe am Zählerschrank), siehe [11_dashboard.md](11_dashboard.md).
 
 ## Testumgebung
 

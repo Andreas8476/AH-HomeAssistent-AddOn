@@ -100,6 +100,32 @@ kurz auf dieses Projekt).
   Leistungsvorgabe, Einspeisewert) funktioniert bereits ohne weiteres Zutun,
   unabhängig von einer zusätzlichen Automation-Verknüpfung.
 
+## 2026-09-25 — Phase 3: Dashboard
+
+- `sensor.py`: `temperature_sensor_1`..`4` ergänzt (bisher nur Sensor 0) —
+  Voraussetzung für die im Dashboard gewünschten 4 Temperaturanzeigen.
+  Standardmäßig deaktiviert, falls am Gerät nicht angeschlossen.
+- Neues, eigenes YAML-Mode-Lovelace-Dashboard "ASKOHEAT+"
+  (`dashboard/askoheat_plus_dashboard.yaml`), registriert über einen neuen
+  `lovelace:`-Block in `configuration.yaml` (bisher gab es in diesem Setup
+  nur UI-verwaltete Dashboards). Zwei `picture-elements`-Karten mit Andreas'
+  eigenen Askoma-Renderbildern (`dashboard/images/`) als Hintergrund und
+  Live-Werten als Overlay-Labels (Temperatursensoren 0–4 + Heizleistung am
+  Tank; Ziel-Heizstufe, Leistungsvorgabe, Einspeisewert am Zählerschrank).
+  Details inkl. Anpassungshinweise für andere Nutzer: [11_dashboard.md](11_dashboard.md).
+- **Wichtige technische Erkenntnis:** der bisherige Symlink-Trick
+  (`custom_components/`) funktioniert **nicht** für Dashboard-Bilder — Home
+  Assistants `/local/`-Server folgt keinen aus `www/` herauszeigenden
+  Symlinks (404). Bilder liegen daher zusätzlich als echte Kopie in
+  `www/askoheat_plus/`, synchron zu `dashboard/images/` zu halten.
+- YAML-Stolperstein: Home Assistants eigener YAML-Loader (`annotatedyaml`)
+  behandelt `<<: *anchor` + zusätzliche Keys in derselben Mapping als
+  Duplicate-Key-Warnung statt sauber zu mergen (anders als reines PyYAML) —
+  Dashboard-YAML daher bewusst ohne Anker/Merge-Keys geschrieben.
+- Live verifiziert: beide Bilder unter `/local/askoheat_plus/*.png` liefern
+  HTTP 200, `ha core check`/Neustart fehlerfrei, keine Duplicate-Key-Warnungen
+  mehr im Log.
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
@@ -109,8 +135,14 @@ kurz auf dieses Projekt).
   Trigger?).
 - **Relais-Zähler/Saldo** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) noch nicht als
   einzelne Sensoren abgebildet — Freitext-Parsing bewusst auf später verschoben.
-- **Phase 3 — Dashboard:** Lovelace-Dashboard mit Heizstab-Bildern je Modell.
-  Noch nicht begonnen.
+- **Dashboard-Feinjustierung:** Label-Positionen sind ein Startpunkt, von
+  Andreas noch visuell zu prüfen/per Drag&Drop nachzuziehen.
+- **ASKOMA-Logo:** von Andreas als Inline-Bild geschickt, konnte aber nicht
+  als Datei extrahiert werden (kein Bildgenerierungs-/Extraktions-Tool
+  verfügbar) — wartet auf erneuten Versand als Datei-Anhang, dann Einbau nach
+  `custom_components/askoheat_plus/brand/icon.png` (Muster wie bei
+  `froeling_lambdatronic_modbus/brand/icon.png`, HA 2026.3+ liest
+  Custom-Integration-Icons direkt aus dem Komponentenordner).
 - **EW-Sperre (`128`) / direkte Heizstufen-Pfade (`0`–`19`):** nicht als eigene
   Entities abgebildet, nur die reguläre Ziel-Heizstufe.
 - Verwaiste Entity-Registry-Einträge (`sensor..._soll_heizstufe`,

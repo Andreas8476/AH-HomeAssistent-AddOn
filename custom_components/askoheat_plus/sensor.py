@@ -69,6 +69,46 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=_number("ACTUAL_VALUES.TEMP_SENSOR_0"),
     ),
+    # Sensor 0 is always the one at the heating element itself; 1-4 are
+    # additional probes along the tank, not present on every installation
+    # (extract_number("not connected") -> None -> shows as unavailable,
+    # not an error). Added for the Phase 3 dashboard.
+    AskoheatSensorEntityDescription(
+        key="temperature_sensor_1",
+        translation_key="temperature_sensor_1",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
+        value_fn=_number("ACTUAL_VALUES.TEMP_SENSOR_1"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="temperature_sensor_2",
+        translation_key="temperature_sensor_2",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
+        value_fn=_number("ACTUAL_VALUES.TEMP_SENSOR_2"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="temperature_sensor_3",
+        translation_key="temperature_sensor_3",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
+        value_fn=_number("ACTUAL_VALUES.TEMP_SENSOR_3"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="temperature_sensor_4",
+        translation_key="temperature_sensor_4",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
+        value_fn=_number("ACTUAL_VALUES.TEMP_SENSOR_4"),
+    ),
     AskoheatSensorEntityDescription(
         key="temperature_limit_info",
         translation_key="temperature_limit_info",

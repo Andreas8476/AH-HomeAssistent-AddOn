@@ -23,8 +23,14 @@
       switch.py
       translations/{de,en}.json
       docs/                                          # <- diese Dokumentation
+  dashboard/
+    askoheat_plus_dashboard.yaml                      # YAML-Mode Lovelace-Dashboard (Phase 3)
+    images/
+      boiler-sensors.png                                # Andreas' Originalbilder
+      boiler-meter.png
 
 /homeassistant/custom_components/askoheat_plus       # Symlink -> ../askoheat_plus/custom_components/askoheat_plus
+/homeassistant/www/askoheat_plus                     # ECHTE Kopie der Bilder (kein Symlink möglich, siehe 11_dashboard.md)
 ```
 
 **Warum der Symlink:** Home Assistant lädt Custom Integrations ausschließlich aus
@@ -35,6 +41,12 @@ der tatsächliche Code unter `/homeassistant/askoheat_plus/custom_components/ask
 und wird per Symlink nach `/homeassistant/custom_components/askoheat_plus`
 eingehängt. Kein Datei-Duplikat, eine Quelle der Wahrheit. Git wird nur im
 Ordner `/homeassistant/askoheat_plus/` initialisiert.
+
+**Ausnahme Dashboard-Bilder:** Für `www/askoheat_plus` funktioniert derselbe
+Symlink-Trick **nicht** — Home Assistants `/local/`-Datei-Server folgt keinen
+Symlinks, die aus `www/` herauszeigen (Sicherheitsmaßnahme). Die Bilder
+liegen dort deshalb als echte, manuell synchronisierte Kopie. Details:
+[11_dashboard.md](11_dashboard.md).
 
 ## Modul-Verantwortlichkeiten
 

@@ -1,0 +1,163 @@
+# ASKOHEAT+ Dashboard — Phase 3
+#
+# WICHTIG für andere Nutzer: die Entity-IDs unten (z.B.
+# "sensor.ahf280_ti_plus_15_8_temperatur") sind Andreas' echte IDs für sein
+# konkretes Gerätemodell (AHF280-TI-plus-15.8). Sie hängen vom jeweiligen
+# Artikelnamen deines eigenen Geräts ab (Settings -> Geräte & Dienste ->
+# ASKOHEAT+ -> Entitäten, oder einfach "askoheat" in der Entity-Suche).
+# Bitte vor der Nutzung auf die eigenen Entity-IDs anpassen.
+#
+# Positionen (top/left in %) sind ein Startpunkt, keine Präzisionsmessung —
+# im Lovelace-UI-Editor (Karte bearbeiten -> Elemente) bequem per Drag&Drop
+# nachjustierbar. Details: custom_components/askoheat_plus/docs/11_dashboard.md
+#
+# Hinweis: bewusst OHNE YAML-Anker/Merge-Keys (&/*'/<<) geschrieben — Home
+# Assistants eigener YAML-Loader (annotatedyaml) behandelt "<<: *anchor" +
+# zusätzliche Keys in derselben Mapping als Duplicate-Key-Warnung statt sie
+# sauber zu mergen. Jedes style-Element ist daher vollständig ausgeschrieben.
+
+title: ASKOHEAT+
+views:
+  - title: Übersicht
+    path: askoheat-plus
+    icon: mdi:radiator
+    cards:
+      - type: markdown
+        content: >
+          ## Heizstab — Temperaturen & Leistung
+
+          Sensor 0 sitzt direkt am Heizstab, Sensor 1–4 sind zusätzliche
+          Messpunkte am Tank (falls am Gerät nicht angeschlossen: "nicht
+          verfügbar" — siehe `docs/11_dashboard.md` im Repo für Details).
+
+      - type: picture-elements
+        image: /local/askoheat_plus/boiler-sensors.png
+        elements:
+          - type: state-label
+            entity: sensor.ahf280_ti_plus_15_8_temperatur
+            prefix: "T0: "
+            style:
+              top: 76%
+              left: 61%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_1
+            prefix: "T1: "
+            style:
+              top: 60%
+              left: 38%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_2
+            prefix: "T2: "
+            style:
+              top: 45%
+              left: 38%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_3
+            prefix: "T3: "
+            style:
+              top: 30%
+              left: 42%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_4
+            prefix: "T4: "
+            style:
+              top: 18%
+              left: 46%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.ahf280_ti_plus_15_8_heizleistung
+            prefix: "⚡ "
+            style:
+              top: 88%
+              left: 61%
+              color: white
+              background-color: rgba(120, 20, 20, 0.75)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+
+      - type: markdown
+        content: >
+          ## Einspeisewert & Leistungsvorgabe am Zählerschrank
+
+      - type: picture-elements
+        image: /local/askoheat_plus/boiler-meter.png
+        elements:
+          - type: state-label
+            entity: number.arbeitszimmer_ahf280_ti_plus_15_8_ziel_heizstufe
+            prefix: "Stufe: "
+            style:
+              top: 76%
+              left: 25%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
+            prefix: "Vorgabe: "
+            style:
+              top: 46%
+              left: 66%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
+            prefix: "Einspeisung: "
+            style:
+              top: 58%
+              left: 66%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+
+      - type: entities
+        title: Alle Werte (Fallback / Details)
+        entities:
+          - sensor.ahf280_ti_plus_15_8_geratestatus
+          - sensor.ahf280_ti_plus_15_8_heizstufe
+          - sensor.ahf280_ti_plus_15_8_heizleistung
+          - sensor.ahf280_ti_plus_15_8_temperatur
+          - number.arbeitszimmer_ahf280_ti_plus_15_8_ziel_heizstufe
+          - number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
+          - number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
+          - switch.arbeitszimmer_ahf280_ti_plus_15_8_notbetrieb
