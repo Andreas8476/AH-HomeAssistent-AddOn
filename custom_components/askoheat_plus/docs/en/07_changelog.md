@@ -407,6 +407,13 @@ project).
 
 ## Open points (TODO)
 
+- **Listing in the official HACS default store:** currently only
+  installable as a HACS custom repository (fully set up). The default
+  store would additionally need a `hacs/action` validation workflow, a PR
+  against `hacs/default` (+ optionally one against `home-assistant/brands`
+  for the icon), then a review by the HACS maintainers (turnaround not
+  predictable). Deliberately deferred by Andreas — plain custom-repository
+  installation is enough for now.
 - **Polling frequency of the secondary endpoints** (`getwizard_status.json`,
   `gettemperature_calibration.json`, `getreg.json`): currently loaded only
   once at startup, no refresh afterward. Needs a closer look later per

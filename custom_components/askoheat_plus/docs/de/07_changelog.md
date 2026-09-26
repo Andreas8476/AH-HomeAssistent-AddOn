@@ -410,6 +410,13 @@ kurz auf dieses Projekt).
 
 ## Offene Punkte (ToDo)
 
+- **Aufnahme in den offiziellen HACS-Standard-Store:** aktuell nur als
+  HACS-Custom-Repository installierbar (fertig eingerichtet). Für den
+  Standard-Store bräuchte es zusätzlich einen `hacs/action`-Validierungs-
+  Workflow, eine PR bei `hacs/default` (+ optional eine bei
+  `home-assistant/brands` fürs Icon) und danach eine Review durch die
+  HACS-Maintainer (Dauer nicht planbar). Von Andreas bewusst zurückgestellt
+  — reine Custom-Repository-Installation reicht erstmal.
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
   `gettemperature_calibration.json`, `getreg.json`): aktuell nur einmalig beim
   Start, kein Refresh danach. Muss laut Andreas später genauer betrachtet
