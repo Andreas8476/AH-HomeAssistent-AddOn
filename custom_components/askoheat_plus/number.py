@@ -14,9 +14,10 @@ from homeassistant.components.number import (
     NumberEntityDescription,
     NumberMode,
 )
-from homeassistant.const import UnitOfPower
+from homeassistant.const import UnitOfPower, UnitOfTemperature, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_track_time_interval
 
@@ -187,6 +188,138 @@ class AskoheatNumber(AskoheatEntity, NumberEntity):
         await super().async_will_remove_from_hass()
 
 
+@dataclass(frozen=True, kw_only=True)
+class AskoheatWizardNumberEntityDescription(NumberEntityDescription):
+    """Beschreibt eine schreibbare Installer-Einstellung aus getwizard.json.
+
+    Anders als AskoheatNumberEntityDescription: liest/schreibt direkt einen
+    flachen Schlüssel aus getwizard.json über den POST-Endpunkt server1/
+    (siehe api.py, async_write_wizard) statt einen Inline-Command mit
+    ?value=. Live gegen das Testgerät verifiziert: diese Werte verfallen
+    nicht nach 60s, also kein Keep-Alive nötig (anders als bei
+    AskoheatNumber oben).
+    """
+
+    wizard_key: str
+    max_value_path: str | None = None
+
+
+WIZARD_NUMBER_DESCRIPTIONS: tuple[AskoheatWizardNumberEntityDescription, ...] = (
+    AskoheatWizardNumberEntityDescription(
+        key="legio_target_temperature_set",
+        translation_key="legio_target_temperature_set",
+        icon="mdi:bacteria-outline",
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        native_min_value=20,
+        native_max_value=95,
+        native_step=1,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_LEGIO_TEMPERATURE",
+    ),
+    AskoheatWizardNumberEntityDescription(
+        key="low_tariff_target_temperature_set",
+        translation_key="low_tariff_target_temperature_set",
+        icon="mdi:cash-clock",
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        native_min_value=20,
+        native_max_value=95,
+        native_step=1,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_TEMPERATURE_LOW_TARIFF",
+    ),
+    AskoheatWizardNumberEntityDescription(
+        key="heat_pump_request_on_step_set",
+        translation_key="heat_pump_request_on_step_set",
+        icon="mdi:heat-pump",
+        native_min_value=0,
+        native_max_value=FALLBACK_MAX_HEATER_STEP,
+        native_step=1,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_HEAT_PUMP_REQUEST_ON_STEP",
+        max_value_path=PATH_NUMBER_OF_STEPS,
+    ),
+    AskoheatWizardNumberEntityDescription(
+        key="heat_pump_request_off_step_set",
+        translation_key="heat_pump_request_off_step_set",
+        icon="mdi:heat-pump-outline",
+        native_min_value=0,
+        native_max_value=FALLBACK_MAX_HEATER_STEP,
+        native_step=1,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_HEAT_PUMP_REQUEST_OFF_STEP",
+        max_value_path=PATH_NUMBER_OF_STEPS,
+    ),
+    AskoheatWizardNumberEntityDescription(
+        key="heat_pump_request_target_temperature_set",
+        translation_key="heat_pump_request_target_temperature_set",
+        icon="mdi:heat-pump",
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        native_min_value=20,
+        native_max_value=95,
+        native_step=1,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST",
+    ),
+    AskoheatWizardNumberEntityDescription(
+        key="auto_heater_off_timeout_set",
+        translation_key="auto_heater_off_timeout_set",
+        icon="mdi:timer-off-outline",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        native_min_value=0,
+        native_max_value=1440,
+        native_step=10,
+        mode=NumberMode.BOX,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_AUTO_HEATER_OFF_MINUTES",
+    ),
+)
+
+
+class AskoheatWizardNumber(AskoheatEntity, NumberEntity):
+    """Eine schreibbare Installer-Einstellung aus getwizard.json.
+
+    Liest/schreibt coordinator.secondary.wizard direkt (Sekundär-Endpunkt,
+    nur einmalig beim Start automatisch abgefragt) — nach einem Schreiben
+    wird der lokale Cache sofort mit aktualisiert, damit die UI ohne
+    Wartezeit auf den nächsten Poll den neuen Wert zeigt.
+    """
+
+    entity_description: AskoheatWizardNumberEntityDescription
+
+    @property
+    def native_value(self) -> Any:
+        return extract_number(
+            self.coordinator.secondary.wizard.get(self.entity_description.wizard_key)
+        )
+
+    @property
+    def native_max_value(self) -> float:
+        max_path = self.entity_description.max_value_path
+        if max_path and self.coordinator.data:
+            dynamic_max = extract_number(get_path(self.coordinator.data, max_path))
+            if dynamic_max is not None:
+                return dynamic_max
+        return self.entity_description.native_max_value
+
+    async def async_set_native_value(self, value: float) -> None:
+        wizard_key = self.entity_description.wizard_key
+        if isinstance(value, float) and value.is_integer():
+            value = int(value)
+        try:
+            updated = await self.coordinator.client.async_write_wizard(
+                {wizard_key: str(value)}
+            )
+        except AskoheatApiError as err:
+            raise HomeAssistantError(
+                f"Could not set {self.entity_description.key} on ASKOHEAT+: {err}"
+            ) from err
+        self.coordinator.secondary.wizard = updated
+        self.async_write_ha_state()
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: AskoheatConfigEntry,
@@ -195,5 +328,11 @@ async def async_setup_entry(
     """ASKOHEAT+-Number-Entities aus einem Config-Entry einrichten."""
     coordinator = entry.runtime_data
     async_add_entities(
-        AskoheatNumber(coordinator, description) for description in NUMBER_DESCRIPTIONS
+        [
+            *(AskoheatNumber(coordinator, description) for description in NUMBER_DESCRIPTIONS),
+            *(
+                AskoheatWizardNumber(coordinator, description)
+                for description in WIZARD_NUMBER_DESCRIPTIONS
+            ),
+        ]
     )

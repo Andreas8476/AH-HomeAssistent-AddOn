@@ -34,24 +34,22 @@ section below) are **writable**.
 | `rtu_connection` | Modbus RTU connection | wizard_status | `MODBUS_INFO.RTU_CONNECTION` | text, diagnostic | no |
 | `pv_peak` | PV peak power | registration | `EXTRA.PV_PEAK` | number, diagnostic | no |
 | `battery_size` | Battery size | registration | `EXTRA.BATTERY` | number, diagnostic | no |
-| `legio_target_temperature` | Legionella protection target temperature | wizard | `MODBUS_CON_LEGIO_TEMPERATURE` | °C, diagnostic | no |
-| `legio_activation_time` | Legionella protection start time | wizard | `MODBUS_CON_LEGIO_ACTIV_TIME_HOUR`/`_MINUTE` (as "HH:MM") | text, diagnostic | no |
-| `low_tariff_start_time` / `low_tariff_end_time` | Low tariff start/end | wizard | `MODBUS_CON_LOW_TARIFF_START/END_TIME_HOUR`/`_MINUTE` (as "HH:MM") | text, diagnostic | no |
-| `low_tariff_target_temperature` | Low tariff target temperature | wizard | `MODBUS_CON_TEMPERATURE_LOW_TARIFF` | °C, diagnostic | no |
-| `feedin_window_start_time` / `feedin_window_end_time` | Feed-in window start/end | wizard | `MODBUS_CON_USE_FEEDIN_START/END_TIME_HOUR`/`_MINUTE` (as "HH:MM") | text, diagnostic | no |
-| `heat_pump_request_on_step` / `heat_pump_request_off_step` | Heat pump request on/off step | wizard | `MODBUS_CON_HEAT_PUMP_REQUEST_ON/OFF_STEP` | number, diagnostic | no |
-| `heat_pump_request_target_temperature` | Heat pump request target temperature | wizard | `MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST` | °C, diagnostic | no |
-| `auto_heater_off_timeout` | Auto heater-off timeout | wizard | `MODBUS_CON_AUTO_HEATER_OFF_MINUTES` | min, diagnostic | no |
-| `auto_reboot_time` | Auto reboot time | wizard | `AUTO_REBOOT_HOUR`/`AUTO_REBOOT_MINUTE` (as "HH:MM") | text, diagnostic | no |
 | `communication_timeout_heater_off` / `communication_timeout_reset` | Communication timeout (heater off/reset) | wizard | `COMMUNICATION_TIMEOUT_HEATER_OFF`/`_RESET` | number (unit unconfirmed), diagnostic | no |
 
-**Note on the `wizard` sensors above:** `getwizard.json` (the full installer
-config dump) is, like the other secondary endpoints, only loaded once when
-the integration starts — the values reflect the state at startup, not
-later changes made via the device's own web UI (`extended.html`) in real
-time. Currently deliberately read-only; write access from Home Assistant is
-planned as a next step, see [07_changelog.md](07_changelog.md) for the
-current status/open safety question.
+**Note on the `communication_timeout_*` sensors:** deliberately kept
+read-only (Andreas' explicit request) — a wrong value here could break
+device communication. All other installer settings originally listed here
+(legionella protection, low tariff, feed-in window, heat pump request, auto
+heater-off, auto reboot) are now writable `number`/`time` entities, see the
+corresponding sections below.
+
+`getwizard.json` (the full installer config dump, source for `source:
+wizard`) is, like the other secondary endpoints, only loaded once when the
+integration starts. After a write through one of the `number`/`time`
+entities documented below, though, the local cache is updated immediately
+with the device's full response — so the values are only stale if the
+setting was instead changed directly via the device's own web UI
+(`extended.html`) without going through Home Assistant.
 
 ## Binary sensors (`binary_sensor.py`)
 
@@ -87,6 +85,39 @@ uses the same `number.set_value` service, there's no separate "automatic
 mode". `load_feedin` and `load_setpoint` can also be linked directly to
 any other entity via the integration's options flow ("⋮ → Configure"), see
 [10_automation.md](10_automation.md).
+
+## Number entities: installer settings (`number.py`, writable)
+
+In addition to the three control entities above: writable installer
+settings from `getwizard.json`, written via `POST /server1/` (see
+[02_api-reference.md](02_api-reference.md), "Writing installer settings").
+**No keep-alive needed** — unlike the SET_INPUTS values above, these values
+don't revert after 60s (verified live against the test device, see
+[07_changelog.md](07_changelog.md)).
+
+| Key | Name (EN) | Wizard key | Range | Unit |
+|---|---|---|---|---|
+| `legio_target_temperature_set` | Legionella protection target temperature | `MODBUS_CON_LEGIO_TEMPERATURE` | 20–95 | °C |
+| `low_tariff_target_temperature_set` | Low tariff target temperature | `MODBUS_CON_TEMPERATURE_LOW_TARIFF` | 20–95 | °C |
+| `heat_pump_request_on_step_set` / `heat_pump_request_off_step_set` | Heat pump request on/off step | `MODBUS_CON_HEAT_PUMP_REQUEST_ON/OFF_STEP` | `0`–`NUMBER_OF_STEPS` (dynamic) | — |
+| `heat_pump_request_target_temperature_set` | Heat pump request target temperature | `MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST` | 20–95 | °C |
+| `auto_heater_off_timeout_set` | Auto heater-off timeout | `MODBUS_CON_AUTO_HEATER_OFF_MINUTES` | 0–1440 | min |
+
+All classified as `entity_category: config` (shown under "Configuration" in
+the UI, not in the regular entity list).
+
+## Time entities: installer time windows (`time.py`, writable)
+
+Time-of-day installer settings, also written via `POST /server1/`. The
+device stores times internally as separate hour/minute fields — the entity
+transparently combines/splits these into a single `time` value.
+
+| Key | Name (EN) | Wizard key (hour/minute) |
+|---|---|---|
+| `legio_activation_time_set` | Legionella protection start time | `MODBUS_CON_LEGIO_ACTIV_TIME_HOUR`/`_MINUTE` |
+| `low_tariff_start_time_set` / `low_tariff_end_time_set` | Low tariff start/end | `MODBUS_CON_LOW_TARIFF_START/END_TIME_HOUR`/`_MINUTE` |
+| `feedin_window_start_time_set` / `feedin_window_end_time_set` | Feed-in window start/end | `MODBUS_CON_USE_FEEDIN_START/END_TIME_HOUR`/`_MINUTE` |
+| `auto_reboot_time_set` | Auto reboot time | `AUTO_REBOOT_HOUR`/`AUTO_REBOOT_MINUTE` |
 
 ## Switch entity (`switch.py`)
 

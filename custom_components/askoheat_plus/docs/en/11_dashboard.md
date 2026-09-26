@@ -12,10 +12,13 @@ positioning live values as overlay labels directly on the image:
 
 - **Card 1** (`dashboard/images/boiler-sensors.png`): temperature sensors
   0–4 (sensor 0 = always at the heating element) plus the current heater
-  load, plus a line with the time of the last update (a "heartbeat").
+  load, plus a line with the time of the last update (a "heartbeat") and
+  the device's IP address.
 - **Card 2** (`dashboard/images/boiler-meter.png`): target heater step at
   the tank, load setpoint and feed-in value at the meter cabinet in the
   image.
+- Two **history graphs** (`history-graph`): temperature history (sensors
+  0–4) and heater load history, both defaulting to `hours_to_show: 24`.
 - An additional **fallback table card** with the same values as a plain
   list (in case the image overlays fail to load, or you just prefer a
   table).
@@ -34,7 +37,19 @@ visible there too.
 `Zuletzt aktualisiert: vor …` ("last updated: … ago") as a Jinja template,
 read from the `last_update` diagnostic entity's timestamp (tracked by the
 coordinator on every successful poll — so it reflects the last successful
-poll cycle, not just "the integration is running").
+poll cycle, not just "the integration is running"). Right below it: the
+device's IP (`📡 Gerät: ...`), read from the `host` field of that device's
+config entry (`.storage/core.config_entries`), not from an entity.
+
+**History graphs:** Andreas wanted a quick look at the temperature/load
+history without switching to the entity history view separately.
+`history-graph` is the fitting built-in Lovelace card for that — needs no
+extra recorder configuration, since Home Assistant records sensor history
+by default anyway. `hours_to_show: 24` is the default range Andreas asked
+for, changeable any time in the UI card editor (but like the label
+positions, gets overwritten on the next script run — for a permanent change,
+adjust `HISTORY_TEMPERATURE_KEYS`/`HISTORY_LOAD_KEY` or the `hours_to_show`
+value directly in `generate_dashboard.py`).
 
 **Important note about the images:** these are Andreas' own, unmodified
 original Askoma render images — I have no way to generate new images. The

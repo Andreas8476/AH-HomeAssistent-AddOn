@@ -70,6 +70,11 @@ METER_ELEMENTS = [
     ("load_feedin", "Einspeisung: ", 60, 68),
 ]
 
+# Entities für die beiden Verlaufs-Grafen am Ende jeder Ansicht (Wunsch von
+# Andreas: Temperaturverlauf Sensor 0-4 + Heizleistungsverlauf, Standard 24h).
+HISTORY_TEMPERATURE_KEYS = [f"temperature_sensor_{i}" for i in range(5)]
+HISTORY_LOAD_KEY = "heater_load"
+
 # (unique_id-Suffix, Kurzname) für die Fallback-Entities-Karte
 FALLBACK_ENTITIES = [
     ("error_status", "Gerätestatus"),
@@ -118,6 +123,7 @@ def load_devices() -> list[dict]:
                 "entry_id": entry["entry_id"],
                 "title": entry.get("title") or "ASKOHEAT+",
                 "entities": entities_by_suffix,
+                "host": entry.get("data", {}).get("host"),
             }
         )
     return devices
@@ -171,13 +177,37 @@ def render_view(device: dict) -> str:
         else ""
     )
 
+    host = device.get("host")
+    ip_line = f"\n\n          📡 Gerät: `{host}`" if host else ""
+
+    temperature_history_entities = [
+        ents[key] for key in HISTORY_TEMPERATURE_KEYS if key in ents
+    ]
+    load_history_entities = [ents[HISTORY_LOAD_KEY]] if HISTORY_LOAD_KEY in ents else []
+
+    history_cards = ""
+    if temperature_history_entities:
+        entity_rows = "".join(f"          - {e}\n" for e in temperature_history_entities)
+        history_cards += f"""      - type: history-graph
+        title: Temperaturverlauf (Sensor 0-4)
+        hours_to_show: 24
+        entities:
+{entity_rows}"""
+    if load_history_entities:
+        entity_rows = "".join(f"          - {e}\n" for e in load_history_entities)
+        history_cards += f"""      - type: history-graph
+        title: Heizleistungsverlauf
+        hours_to_show: 24
+        entities:
+{entity_rows}"""
+
     return f"""  - title: {device["title"]}
     path: {path}
     icon: mdi:radiator
     cards:
       - type: markdown
         content: >
-          ## {device["title"]} — Temperaturen & Leistung{heartbeat_line}
+          ## {device["title"]} — Temperaturen & Leistung{heartbeat_line}{ip_line}
 
       - type: picture-elements
         image: /local/askoheat_plus/boiler-sensors.png
@@ -191,7 +221,7 @@ def render_view(device: dict) -> str:
         image: /local/askoheat_plus/boiler-meter.png
         elements:
 {meter_labels}
-      - type: entities
+{history_cards}      - type: entities
         title: Alle Werte (Fallback / Details)
         entities:
 {fallback_rows}"""

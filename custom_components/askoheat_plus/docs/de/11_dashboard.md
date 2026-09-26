@@ -12,9 +12,12 @@ zeigen und Live-Werte als Overlay-Labels direkt auf dem Bild positionieren:
 
 - **Karte 1** (`dashboard/images/boiler-sensors.png`): Temperatursensoren
   0–4 (Sensor 0 = immer am Heizstab) sowie die aktuelle Heizleistung, plus
-  eine Zeile mit dem Zeitpunkt der letzten Aktualisierung ("Herzschlag").
+  eine Zeile mit dem Zeitpunkt der letzten Aktualisierung ("Herzschlag") und
+  der Geräte-IP-Adresse.
 - **Karte 2** (`dashboard/images/boiler-meter.png`): Ziel-Heizstufe am Tank,
   Leistungsvorgabe und Einspeisewert am Zählerschrank im Bild.
+- Zwei **Verlaufs-Grafen** (`history-graph`): Temperaturverlauf (Sensor 0–4)
+  und Heizleistungsverlauf, beide standardmäßig mit `hours_to_show: 24`.
 - Zusätzliche **Fallback-Tabellenkarte** mit denselben Werten als normale
   Liste (falls die Bild-Overlays mal nicht laden oder man es lieber tabellarisch mag).
 
@@ -29,10 +32,22 @@ auf die freie Wand-/Bodenfläche verschoben, damit das Heizelement dort
 ebenfalls sichtbar bleibt.
 
 **Herzschlag/Zeitstempel:** Die Markdown-Karte über Bild 1 zeigt
-`Zuletzt aktualisiert: vor …` als Jinja-Template, ausgelesen aus dem
-`last_updated`-Zeitstempel der Heizleistungs-Entity (Teil des regulär
-gepollten `gethome.json` — spiegelt also den letzten erfolgreichen
-Poll-Zyklus wider, nicht nur "Integration läuft").
+`Zuletzt aktualisiert: vor …` als Jinja-Template, ausgelesen aus der eigenen
+`last_update`-Diagnose-Entity (siehe `coordinator.py`/`sensor.py`) statt aus
+`last_updated` eines gewöhnlichen Sensors — letzteres ändert sich nur bei
+echter Wertänderung, nicht bei jedem Poll. Direkt darunter: die Geräte-IP
+(`📡 Gerät: ...`), gelesen aus dem `host`-Feld des jeweiligen Config-Entry
+(`.storage/core.config_entries`), nicht aus einer Entity.
+
+**Verlaufs-Grafen:** Andreas' Wunsch war ein schneller Blick auf den
+Temperatur-/Leistungsverlauf, ohne extra in die Entity-Historie zu wechseln.
+`history-graph` ist die passende Standard-Lovelace-Karte dafür — braucht
+keine eigene Recorder-Konfiguration, da Home Assistant Sensor-Historie
+ohnehin standardmäßig aufzeichnet. `hours_to_show: 24` ist der von Andreas
+gewünschte Standard-Zeitraum, im UI-Karteneditor jederzeit änderbar (wird
+aber wie die Label-Positionen bei einem erneuten Skript-Lauf überschrieben —
+für eine dauerhafte Änderung `HISTORY_TEMPERATURE_KEYS`/`HISTORY_LOAD_KEY`
+bzw. den `hours_to_show`-Wert direkt in `generate_dashboard.py` anpassen).
 
 **Wichtiger Hinweis zu den Bildern:** Es sind Andreas' eigene, unveränderte
 Original-Renderbilder von Askoma — ich habe keine Möglichkeit, neue Bilder zu

@@ -327,15 +327,55 @@ project).
   resolved (best approach: Andreas changes an uncritical value himself via
   `extended.html` as a test, and we diff `getwizard.json` before/after).
 
+## 2026-09-26 — Write access to installer settings + dashboard graphs/IP
+
+- **Write-access question resolved:** Andreas explicitly authorized live
+  testing against his test device (`.54`) — "nothing can go wrong there".
+  Live verification of `POST /server1/`:
+  - No-op write (`AUTO_REBOOT_HOUR` sent back unchanged) + a full
+    before/after diff of every field → only the naturally ticking
+    `SOFTWARE_UPDATE` countdown text changed. Confirmed: **pure merge**, the
+    rest of the configuration is not replaced.
+  - Changed a value (`AUTO_REBOOT_HOUR` 2→3), waited 65s, re-read it: still
+    3. Confirmed: **no 60s revert** like the inline commands (heater
+    step/load setpoint/load feedin) — no keep-alive needed. Reset to the
+    original value afterward.
+  - Details/example request: [02_api-reference.md](02_api-reference.md),
+    "Writing installer settings" section.
+- The 12 previously read-only diagnostic sensors from the last entry
+  (except communication timeout, see below) are now **writable entities**:
+  6 new `number` entities (`number.py`, `AskoheatWizardNumber`) and 6 new
+  `time` entities (new file `time.py`, `AskoheatWizardTime`) for legionella
+  protection target temperature/start time, low-tariff window + target
+  temperature, feed-in window, heat pump request on/off step + target
+  temperature, auto-heater-off timeout, auto-reboot time. `api.py` got
+  `async_write_wizard()` for this. After every write,
+  `coordinator.secondary.wizard` is updated immediately with the device's
+  full response (no waiting for the next poll).
+- **Communication timeout deliberately stays read-only** — Andreas'
+  explicit request, since a wrong value here could break device
+  communication.
+- New `Platform.TIME` registered in `__init__.py`.
+- Verified live against both of Andreas' configured devices (checked the
+  entity registry entry after restart, no errors in `ha core logs`).
+- Dashboard: two new `history-graph` cards per device view (temperature
+  history sensors 0–4, heater-load history), default `hours_to_show: 24` —
+  Andreas' request from the last round, now implemented (see
+  [11_dashboard.md](11_dashboard.md)).
+- Dashboard: device IP address as an extra line in the markdown card above
+  image 1 (`generate_dashboard.py`, from the `host` field of that device's
+  config entry, not from an entity).
+
 ## Open points (TODO)
 
-- **Dashboard history graphs:** Andreas wants two additional graphs on the
-  dashboard — a temperature history (sensors 0–4) and a heater-load
-  history, default view the last 24h each. Not yet implemented.
-- **Write access to installer settings** (see above): the merge vs. replace
-  semantics of the `POST /server1/` endpoint must be safely verified
-  before implementing this.
-
+- **Screenshots of the ASKOHEAT add-on settings page** for the guide
+  (especially how feed-in/setpoint linking works during initial setup): I
+  can't generate these myself (no browser access to the Home Assistant UI)
+  — Andreas would need to provide them.
+- **Product images/screenshots for the README** (`product_pics/`):
+  Andreas' first upload attempt arrived with no file attachments (known
+  issue with pasted/inline images in this environment) — needs a retry as
+  genuine file attachments.
 - **Polling frequency of the secondary endpoints** (`getwizard_status.json`,
   `gettemperature_calibration.json`, `getreg.json`): currently loaded only
   once at startup, no refresh afterward. Needs a closer look later per

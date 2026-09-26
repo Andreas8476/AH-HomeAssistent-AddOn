@@ -130,6 +130,58 @@ Wertebereiche der Number-Entities: Ziel-Heizstufe `0`–`NUMBER_OF_STEPS`
 (dynamisch, Fallback 20000 W), Einspeisewert `-32768`–`32767` (int16-Bereich,
 negativ = Einspeisung/Überschuss, positiv = Bezug).
 
+## Installer-Einstellungen schreiben (`POST /server1/`, seit Phase 4)
+
+Andere Einstellungen als die drei Inline-Commands oben (Legionellenschutz,
+Niedertarif, Einspeise-Zeitfenster, Wärmepumpen-Anforderung, Auto-Abschaltung,
+Auto-Reboot — dieselben Felder, die auch `getwizard.json` liefert und die
+Geräte-eigene Weboberfläche unter `extended.html` anzeigt) werden **nicht**
+über die Inline-Command-Endpunkte gesetzt, sondern über einen eigenen
+POST-Endpunkt.
+
+Gefunden durch Analyse der Geräte-eigenen JavaScript-Dateien
+(`Jbootloader.js`: `xBASEURL="/server1/"`; `Jxfunc.js`:
+`sendBatchChanges`/`sendPayloadOnce`/`sendDataOnly`) und **live gegen das
+Testgerät verifiziert** (mit Andreas' ausdrücklicher Freigabe, da `.54` sein
+Testgerät ist):
+
+```
+POST http://<host>/server1/
+Content-Type: application/json
+Body: {"<WIZARD_SCHLÜSSEL>": "<WERT>"}
+```
+
+Bestätigtes Verhalten:
+
+- **Reines Merge, kein Ersetzen:** nur die im Body übergebenen Schlüssel
+  ändern sich, alle übrigen Werte in `getwizard.json` bleiben unverändert.
+  Verifiziert per Vollständigem Vorher/Nachher-Diff aller Felder nach einem
+  No-Op-Schreiben (`AUTO_REBOOT_HOUR` unverändert zurückgeschrieben) — einzige
+  Abweichung war der ohnehin tickende `SOFTWARE_UPDATE`-Countdown-Text.
+- **Kein 60s-Verfall:** anders als die Inline-Commands (siehe oben) bleiben
+  so gesetzte Werte dauerhaft bestehen. Verifiziert durch Setzen, 65s Warten,
+  erneutes Abfragen — Wert war noch da. Kein Keep-Alive für diese Entities
+  nötig.
+- Die Antwort ist der vollständige, aktualisierte `getwizard.json`-Dump
+  (nicht nur ein Echo der gesendeten Felder) — `AskoheatWizardNumber`/
+  `AskoheatWizardTime` nutzen das, um `coordinator.secondary.wizard` sofort
+  zu aktualisieren, ohne auf den nächsten Poll warten zu müssen.
+- Werte werden als JSON-**Strings** übergeben (auch reine Zahlen, z.B.
+  `"3"` nicht `3`) — entspricht dem Format, in dem das Gerät sie auch selbst
+  in `getwizard.json` zurückliefert.
+
+Implementiert in `api.py` (`AskoheatApiClient.async_write_wizard`),
+`number.py` (`AskoheatWizardNumber`) und `time.py` (`AskoheatWizardTime`).
+Entity-Liste: [05_entities.md](05_entities.md). Kommunikations-Timeout bleibt
+bewusst read-only, siehe dort.
+
+Andreas' Hinweis: nicht für alle Werte existiert dieser sprechende REST-Pfad
+— manche werden stattdessen über
+`curl 'http://<host>/{"<VARIABLE>":"<WERT>"}'` (JSON direkt im URL-Pfad, kein
+`/server1/`-Präfix) gesetzt. Für alle in dieser Integration bisher
+abgebildeten Installer-Einstellungen hat sich `POST /server1/` jedoch als
+funktionierender, einheitlicher Weg bestätigt.
+
 ## Datenschutz-Hinweis zu `getreg.json`
 
 `getreg.json` enthält neben `EXTRA.*` (Installationsdaten) auch `USER_CONTACT.*`

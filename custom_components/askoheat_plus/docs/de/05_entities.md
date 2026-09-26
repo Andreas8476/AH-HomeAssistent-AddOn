@@ -34,25 +34,24 @@ Abschnitt unten) sind **schreibbar**.
 | `rtu_connection` | Modbus RTU Verbindung | wizard_status | `MODBUS_INFO.RTU_CONNECTION` | Text, diagnostic | nein |
 | `pv_peak` | PV-Spitzenleistung | registration | `EXTRA.PV_PEAK` | Zahl, diagnostic | nein |
 | `battery_size` | Batteriegröße | registration | `EXTRA.BATTERY` | Zahl, diagnostic | nein |
-| `legio_target_temperature` | Legionellenschutz Zieltemperatur | wizard | `MODBUS_CON_LEGIO_TEMPERATURE` | °C, diagnostic | nein |
-| `legio_activation_time` | Legionellenschutz Startzeit | wizard | `MODBUS_CON_LEGIO_ACTIV_TIME_HOUR`/`_MINUTE` (als "HH:MM") | Text, diagnostic | nein |
-| `low_tariff_start_time` / `low_tariff_end_time` | Niedertarif Start/Ende | wizard | `MODBUS_CON_LOW_TARIFF_START/END_TIME_HOUR`/`_MINUTE` (als "HH:MM") | Text, diagnostic | nein |
-| `low_tariff_target_temperature` | Niedertarif Zieltemperatur | wizard | `MODBUS_CON_TEMPERATURE_LOW_TARIFF` | °C, diagnostic | nein |
-| `feedin_window_start_time` / `feedin_window_end_time` | Einspeise-Zeitfenster Start/Ende | wizard | `MODBUS_CON_USE_FEEDIN_START/END_TIME_HOUR`/`_MINUTE` (als "HH:MM") | Text, diagnostic | nein |
-| `heat_pump_request_on_step` / `heat_pump_request_off_step` | Wärmepumpen-Anforderung Ein-/Aus-Stufe | wizard | `MODBUS_CON_HEAT_PUMP_REQUEST_ON/OFF_STEP` | Zahl, diagnostic | nein |
-| `heat_pump_request_target_temperature` | Wärmepumpen-Anforderung Zieltemperatur | wizard | `MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST` | °C, diagnostic | nein |
-| `auto_heater_off_timeout` | Auto-Abschaltung Timeout | wizard | `MODBUS_CON_AUTO_HEATER_OFF_MINUTES` | min, diagnostic | nein |
-| `auto_reboot_time` | Auto-Reboot Zeit | wizard | `AUTO_REBOOT_HOUR`/`AUTO_REBOOT_MINUTE` (als "HH:MM") | Text, diagnostic | nein |
 | `communication_timeout_heater_off` / `communication_timeout_reset` | Kommunikations-Timeout (Heizstab aus/Reset) | wizard | `COMMUNICATION_TIMEOUT_HEATER_OFF`/`_RESET` | Zahl (Einheit unbestätigt), diagnostic | nein |
 
-**Hinweis zu den `wizard`-Sensoren oben:** `getwizard.json` (der volle
-Installer-Konfigurations-Dump) wird wie die anderen Sekundär-Endpunkte nur
-einmalig beim Integrations-Start geladen — die Werte spiegeln also den
-Stand bei Start wider, nicht spätere Änderungen über die Geräte-eigene
-Weboberfläche (`extended.html`) in Echtzeit. Aktuell bewusst nur lesend;
-Schreibzugriff aus Home Assistant heraus ist als nächster Schritt geplant,
-siehe [07_changelog.md](07_changelog.md) für den aktuellen Stand/offene
-Sicherheitsfrage.
+**Hinweis zu den `communication_timeout_*`-Sensoren:** bewusst read-only
+belassen (Andreas' ausdrücklicher Wunsch) — ein Fehlwert hier könnte die
+Geräte-Kommunikation lahmlegen. Alle anderen ursprünglich hier gelisteten
+Installer-Einstellungen (Legionellenschutz, Niedertarif, Einspeise-
+Zeitfenster, Wärmepumpen-Anforderung, Auto-Abschaltung, Auto-Reboot) sind
+jetzt schreibbare `number`-/`time`-Entities, siehe die entsprechenden
+Abschnitte unten.
+
+`getwizard.json` (der volle Installer-Konfigurations-Dump, Quelle für
+`source: wizard`) wird wie die anderen Sekundär-Endpunkte nur einmalig beim
+Integrations-Start geladen. Nach einem Schreibzugriff über eine der unten
+dokumentierten `number`-/`time`-Entities wird der lokale Cache aber sofort
+mit der vollständigen Geräte-Antwort aktualisiert — die Werte sind also nur
+dann veraltet, wenn die Einstellung stattdessen direkt über die Geräte-
+eigene Weboberfläche (`extended.html`) geändert wurde, ohne über Home
+Assistant zu laufen.
 
 ## Binary Sensoren (`binary_sensor.py`)
 
@@ -88,6 +87,39 @@ davon, ob eine Entity zusätzlich verknüpft ist — alle Wege nutzen denselben
 `load_feedin` und `load_setpoint` lassen sich zusätzlich direkt über den
 Options-Flow der Integration ("⋮ → Konfigurieren") mit einer beliebigen
 anderen Entity verknüpfen, siehe [10_automatisierung.md](10_automatisierung.md).
+
+## Number-Entities: Installer-Einstellungen (`number.py`, schreibbar)
+
+Zusätzlich zu den drei Steuer-Entities oben: schreibbare Installer-
+Einstellungen aus `getwizard.json`, geschrieben über `POST /server1/` (siehe
+[02_api-referenz.md](02_api-referenz.md), "Installer-Einstellungen
+schreiben"). **Kein Keep-Alive nötig** — anders als bei den SET_INPUTS-Werten
+oben verfallen diese Werte nicht nach 60s (live gegen das Testgerät
+verifiziert, siehe [07_changelog.md](07_changelog.md)).
+
+| Key | Name (DE) | Wizard-Schlüssel | Bereich | Einheit |
+|---|---|---|---|---|
+| `legio_target_temperature_set` | Legionellenschutz Zieltemperatur | `MODBUS_CON_LEGIO_TEMPERATURE` | 20–95 | °C |
+| `low_tariff_target_temperature_set` | Niedertarif Zieltemperatur | `MODBUS_CON_TEMPERATURE_LOW_TARIFF` | 20–95 | °C |
+| `heat_pump_request_on_step_set` / `heat_pump_request_off_step_set` | Wärmepumpen-Anforderung Ein-/Aus-Stufe | `MODBUS_CON_HEAT_PUMP_REQUEST_ON/OFF_STEP` | `0`–`NUMBER_OF_STEPS` (dynamisch) | — |
+| `heat_pump_request_target_temperature_set` | Wärmepumpen-Anforderung Zieltemperatur | `MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST` | 20–95 | °C |
+| `auto_heater_off_timeout_set` | Auto-Abschaltung Timeout | `MODBUS_CON_AUTO_HEATER_OFF_MINUTES` | 0–1440 | min |
+
+Alle als `entity_category: config` eingestuft (erscheinen im UI unter
+"Konfiguration", nicht in der normalen Entity-Liste).
+
+## Time-Entities: Installer-Zeitfenster (`time.py`, schreibbar)
+
+Uhrzeit-Installer-Einstellungen, ebenfalls über `POST /server1/` geschrieben.
+Das Gerät speichert Uhrzeiten intern als getrennte Stunde/Minute-Felder — die
+Entity kombiniert/zerlegt das transparent zu einem einzelnen `time`-Wert.
+
+| Key | Name (DE) | Wizard-Schlüssel (Stunde/Minute) |
+|---|---|---|
+| `legio_activation_time_set` | Legionellenschutz Startzeit | `MODBUS_CON_LEGIO_ACTIV_TIME_HOUR`/`_MINUTE` |
+| `low_tariff_start_time_set` / `low_tariff_end_time_set` | Niedertarif Start/Ende | `MODBUS_CON_LOW_TARIFF_START/END_TIME_HOUR`/`_MINUTE` |
+| `feedin_window_start_time_set` / `feedin_window_end_time_set` | Einspeise-Zeitfenster Start/Ende | `MODBUS_CON_USE_FEEDIN_START/END_TIME_HOUR`/`_MINUTE` |
+| `auto_reboot_time_set` | Auto-Reboot Zeit | `AUTO_REBOOT_HOUR`/`AUTO_REBOOT_MINUTE` |
 
 ## Switch-Entity (`switch.py`)
 

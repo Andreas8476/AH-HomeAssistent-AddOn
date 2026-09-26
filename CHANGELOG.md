@@ -32,11 +32,19 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
   Bedienung, der bestehende Keep-Alive greift also automatisch. Die
   bisherige Blueprint bleibt als Alternative für Nutzer mit eigenen
   Bedingungen/Filtern bestehen.
-- `sensor.py`: 13 neue read-only Diagnose-Sensoren aus `getwizard.json`
-  (Legionellenschutz, Niedertarif-Zeitfenster, Einspeise-Zeitfenster,
-  Wärmepumpen-Anforderung, Auto-Abschaltung, Auto-Reboot,
-  Kommunikations-Timeout). Schreibzugriff dafür ist als nächster Schritt
-  geplant, siehe `docs/de/07_changelog.md`.
+- `sensor.py`: Diagnose-Sensor `communication_timeout_heater_off`/`_reset`
+  aus `getwizard.json` (bewusst read-only auf Andreas' Wunsch).
+- Neue `number`-Entities (`number.py`) und neue `time`-Plattform (`time.py`):
+  Legionellenschutz-Zieltemperatur/-Startzeit, Niedertarif-Zeitfenster +
+  Zieltemperatur, Einspeise-Zeitfenster, Wärmepumpen-Anforderung Ein-/
+  Aus-Stufe + Zieltemperatur, Auto-Abschaltung-Timeout, Auto-Reboot-Zeit —
+  schreibbar über den neu verifizierten `POST /server1/`-Endpunkt
+  (`api.py`: `async_write_wizard`). Live gegen das Testgerät verifiziert:
+  reines Merge, kein 60s-Verfall, kein Keep-Alive nötig. Details:
+  `docs/de/07_changelog.md`.
+- Dashboard: zwei `history-graph`-Karten pro Geräte-Ansicht
+  (Temperaturverlauf Sensor 0–4, Heizleistungsverlauf), Standard 24h.
+- Dashboard: Geräte-IP-Adresse als zusätzliche Zeile in der Markdown-Karte.
 
 ### Geändert
 

@@ -27,6 +27,8 @@ views:
 
           🔄 Zuletzt aktualisiert: vor {{ relative_time(as_datetime(states('sensor.arbeitszimmer_ahf280_ti_plus_15_8_letzte_aktualisierung'))) }}
 
+          📡 Gerät: `192.168.20.54`
+
       - type: picture-elements
         image: /local/askoheat_plus/boiler-sensors.png
         elements:
@@ -147,6 +149,20 @@ views:
               font-weight: bold
               font-size: 12px
 
+      - type: history-graph
+        title: Temperaturverlauf (Sensor 0-4)
+        hours_to_show: 24
+        entities:
+          - sensor.ahf280_ti_plus_15_8_temperatur
+          - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_1
+          - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_2
+          - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_3
+          - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_4
+      - type: history-graph
+        title: Heizleistungsverlauf
+        hours_to_show: 24
+        entities:
+          - sensor.ahf280_ti_plus_15_8_heizleistung
       - type: entities
         title: Alle Werte (Fallback / Details)
         entities:
@@ -176,6 +192,8 @@ views:
           ## SONNENBOOSTER 5,2 kW — Temperaturen & Leistung
 
           🔄 Zuletzt aktualisiert: vor {{ relative_time(as_datetime(states('sensor.heizungsraum_sonnenbooster_52_kw_letzte_aktualisierung'))) }}
+
+          📡 Gerät: `192.168.1.201`
 
       - type: picture-elements
         image: /local/askoheat_plus/boiler-sensors.png
@@ -297,6 +315,20 @@ views:
               font-weight: bold
               font-size: 12px
 
+      - type: history-graph
+        title: Temperaturverlauf (Sensor 0-4)
+        hours_to_show: 24
+        entities:
+          - sensor.sonnenbooster_52_kw_temperatur
+          - sensor.sonnenbooster_52_kw_temperatur_sensor_1
+          - sensor.sonnenbooster_52_kw_temperatur_sensor_2
+          - sensor.sonnenbooster_52_kw_temperatur_sensor_3
+          - sensor.sonnenbooster_52_kw_temperatur_sensor_4
+      - type: history-graph
+        title: Heizleistungsverlauf
+        hours_to_show: 24
+        entities:
+          - sensor.sonnenbooster_52_kw_heizleistung
       - type: entities
         title: Alle Werte (Fallback / Details)
         entities:

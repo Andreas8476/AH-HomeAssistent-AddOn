@@ -117,6 +117,37 @@ class AskoheatApiClient:
         except (aiohttp.ClientError, RuntimeError) as err:
             raise AskoheatApiError(f"Error sending command to {url}: {err}") from err
 
+    async def async_write_wizard(self, values: dict[str, str]) -> dict[str, Any]:
+        """Installer-Einstellungen schreiben, z.B. values={"AUTO_REBOOT_HOUR": "3"}.
+
+        POST auf /server1/ mit den geänderten Schlüsseln als JSON-Body (aus
+        Jxfunc.js/Jbootloader.js der Geräte-Weboberfläche extended.html
+        rekonstruiert). Live gegen das Testgerät verifiziert (mit Andreas'
+        ausdrücklicher Freigabe): reines Merge der übergebenen Schlüssel, alle
+        übrigen Werte bleiben unverändert; anders als die Inline-Commands
+        oben verfallen diese Werte nicht nach 60s, kein Keep-Alive nötig. Die
+        Antwort ist der vollständige, aktualisierte getwizard.json-Dump.
+        """
+        url = f"{self.base_url}/server1/"
+        try:
+            async with self._session.post(url, json=values) as response:
+                response.raise_for_status()
+                text = await response.text()
+        except TimeoutError as err:
+            raise AskoheatApiError(f"Timeout writing to {url}") from err
+        except (aiohttp.ClientError, RuntimeError) as err:
+            raise AskoheatApiError(f"Error writing to {url}: {err}") from err
+
+        try:
+            data = json.loads(text)
+        except ValueError as err:
+            raise AskoheatApiError(f"Invalid JSON from {url}: {err}") from err
+
+        if not isinstance(data, dict):
+            raise AskoheatApiError(f"Unexpected JSON shape from {url}: {data!r}")
+
+        return data
+
     async def async_send_bare_command(self, path: str) -> None:
         """Einen parameterlosen Befehl senden, z.B. path="on" für den Notbetrieb.
 
