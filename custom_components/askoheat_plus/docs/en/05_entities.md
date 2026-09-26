@@ -34,6 +34,24 @@ section below) are **writable**.
 | `rtu_connection` | Modbus RTU connection | wizard_status | `MODBUS_INFO.RTU_CONNECTION` | text, diagnostic | no |
 | `pv_peak` | PV peak power | registration | `EXTRA.PV_PEAK` | number, diagnostic | no |
 | `battery_size` | Battery size | registration | `EXTRA.BATTERY` | number, diagnostic | no |
+| `legio_target_temperature` | Legionella protection target temperature | wizard | `MODBUS_CON_LEGIO_TEMPERATURE` | °C, diagnostic | no |
+| `legio_activation_time` | Legionella protection start time | wizard | `MODBUS_CON_LEGIO_ACTIV_TIME_HOUR`/`_MINUTE` (as "HH:MM") | text, diagnostic | no |
+| `low_tariff_start_time` / `low_tariff_end_time` | Low tariff start/end | wizard | `MODBUS_CON_LOW_TARIFF_START/END_TIME_HOUR`/`_MINUTE` (as "HH:MM") | text, diagnostic | no |
+| `low_tariff_target_temperature` | Low tariff target temperature | wizard | `MODBUS_CON_TEMPERATURE_LOW_TARIFF` | °C, diagnostic | no |
+| `feedin_window_start_time` / `feedin_window_end_time` | Feed-in window start/end | wizard | `MODBUS_CON_USE_FEEDIN_START/END_TIME_HOUR`/`_MINUTE` (as "HH:MM") | text, diagnostic | no |
+| `heat_pump_request_on_step` / `heat_pump_request_off_step` | Heat pump request on/off step | wizard | `MODBUS_CON_HEAT_PUMP_REQUEST_ON/OFF_STEP` | number, diagnostic | no |
+| `heat_pump_request_target_temperature` | Heat pump request target temperature | wizard | `MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST` | °C, diagnostic | no |
+| `auto_heater_off_timeout` | Auto heater-off timeout | wizard | `MODBUS_CON_AUTO_HEATER_OFF_MINUTES` | min, diagnostic | no |
+| `auto_reboot_time` | Auto reboot time | wizard | `AUTO_REBOOT_HOUR`/`AUTO_REBOOT_MINUTE` (as "HH:MM") | text, diagnostic | no |
+| `communication_timeout_heater_off` / `communication_timeout_reset` | Communication timeout (heater off/reset) | wizard | `COMMUNICATION_TIMEOUT_HEATER_OFF`/`_RESET` | number (unit unconfirmed), diagnostic | no |
+
+**Note on the `wizard` sensors above:** `getwizard.json` (the full installer
+config dump) is, like the other secondary endpoints, only loaded once when
+the integration starts — the values reflect the state at startup, not
+later changes made via the device's own web UI (`extended.html`) in real
+time. Currently deliberately read-only; write access from Home Assistant is
+planned as a next step, see [07_changelog.md](07_changelog.md) for the
+current status/open safety question.
 
 ## Binary sensors (`binary_sensor.py`)
 

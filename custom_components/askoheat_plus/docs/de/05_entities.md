@@ -34,6 +34,25 @@ Abschnitt unten) sind **schreibbar**.
 | `rtu_connection` | Modbus RTU Verbindung | wizard_status | `MODBUS_INFO.RTU_CONNECTION` | Text, diagnostic | nein |
 | `pv_peak` | PV-Spitzenleistung | registration | `EXTRA.PV_PEAK` | Zahl, diagnostic | nein |
 | `battery_size` | Batteriegröße | registration | `EXTRA.BATTERY` | Zahl, diagnostic | nein |
+| `legio_target_temperature` | Legionellenschutz Zieltemperatur | wizard | `MODBUS_CON_LEGIO_TEMPERATURE` | °C, diagnostic | nein |
+| `legio_activation_time` | Legionellenschutz Startzeit | wizard | `MODBUS_CON_LEGIO_ACTIV_TIME_HOUR`/`_MINUTE` (als "HH:MM") | Text, diagnostic | nein |
+| `low_tariff_start_time` / `low_tariff_end_time` | Niedertarif Start/Ende | wizard | `MODBUS_CON_LOW_TARIFF_START/END_TIME_HOUR`/`_MINUTE` (als "HH:MM") | Text, diagnostic | nein |
+| `low_tariff_target_temperature` | Niedertarif Zieltemperatur | wizard | `MODBUS_CON_TEMPERATURE_LOW_TARIFF` | °C, diagnostic | nein |
+| `feedin_window_start_time` / `feedin_window_end_time` | Einspeise-Zeitfenster Start/Ende | wizard | `MODBUS_CON_USE_FEEDIN_START/END_TIME_HOUR`/`_MINUTE` (als "HH:MM") | Text, diagnostic | nein |
+| `heat_pump_request_on_step` / `heat_pump_request_off_step` | Wärmepumpen-Anforderung Ein-/Aus-Stufe | wizard | `MODBUS_CON_HEAT_PUMP_REQUEST_ON/OFF_STEP` | Zahl, diagnostic | nein |
+| `heat_pump_request_target_temperature` | Wärmepumpen-Anforderung Zieltemperatur | wizard | `MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST` | °C, diagnostic | nein |
+| `auto_heater_off_timeout` | Auto-Abschaltung Timeout | wizard | `MODBUS_CON_AUTO_HEATER_OFF_MINUTES` | min, diagnostic | nein |
+| `auto_reboot_time` | Auto-Reboot Zeit | wizard | `AUTO_REBOOT_HOUR`/`AUTO_REBOOT_MINUTE` (als "HH:MM") | Text, diagnostic | nein |
+| `communication_timeout_heater_off` / `communication_timeout_reset` | Kommunikations-Timeout (Heizstab aus/Reset) | wizard | `COMMUNICATION_TIMEOUT_HEATER_OFF`/`_RESET` | Zahl (Einheit unbestätigt), diagnostic | nein |
+
+**Hinweis zu den `wizard`-Sensoren oben:** `getwizard.json` (der volle
+Installer-Konfigurations-Dump) wird wie die anderen Sekundär-Endpunkte nur
+einmalig beim Integrations-Start geladen — die Werte spiegeln also den
+Stand bei Start wider, nicht spätere Änderungen über die Geräte-eigene
+Weboberfläche (`extended.html`) in Echtzeit. Aktuell bewusst nur lesend;
+Schreibzugriff aus Home Assistant heraus ist als nächster Schritt geplant,
+siehe [07_changelog.md](07_changelog.md) für den aktuellen Stand/offene
+Sicherheitsfrage.
 
 ## Binary Sensoren (`binary_sensor.py`)
 

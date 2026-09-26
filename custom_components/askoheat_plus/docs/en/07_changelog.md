@@ -300,7 +300,41 @@ project).
   internal save. The real end-to-end test via the options-flow dialog in
   the UI is therefore still pending (by Andreas).
 
-## Open points
+## 2026-09-26 — Installer settings as diagnostic sensors (legionella protection, low tariff, heat pump, timeouts)
+
+- At Andreas' request (picked from the `extended.html` proposal below), 13
+  new read-only diagnostic sensors from `getwizard.json`: legionella
+  protection target temperature + start time, low-tariff window + target
+  temperature, feed-in window, heat pump request on/off step + target
+  temperature, auto-heater-off timeout, auto-reboot time, communication
+  timeout (heater-off/reset). `getwizard.json` newly wired in as a fourth
+  secondary endpoint for this (`coordinator.py`,
+  `AskoheatSecondaryData.wizard`) — like the other three, loaded only once
+  at startup, no extra polling load. All disabled by default like the
+  other master-data sensors. Values verified against the real device dump
+  (`docker exec` with the actual `getwizard.json` content) — all 13 values
+  match exactly.
+- **Deliberately read-only for now, no write access:** while investigating
+  `extended.html`/`Jxfunc.js`, found that writes happen via
+  `POST http://<host>/server1/` with a JSON body (not the device root, as
+  first assumed — found in `Jbootloader.js`, `xBASEURL`). The server log
+  hints at a pure delta/merge ("Sende nur Batch-Änderungen" — "sending
+  only batch changes"), but that's **not yet safely verified** — a planned
+  no-op test write against the real test device was correctly blocked by
+  the sandbox's safety system (a real write to physical hardware without
+  Andreas' direct sign-off). Writable `number`/`time` entities for these
+  settings are the next step once the merge-vs-replace question is safely
+  resolved (best approach: Andreas changes an uncritical value himself via
+  `extended.html` as a test, and we diff `getwizard.json` before/after).
+
+## Open points (TODO)
+
+- **Dashboard history graphs:** Andreas wants two additional graphs on the
+  dashboard — a temperature history (sensors 0–4) and a heater-load
+  history, default view the last 24h each. Not yet implemented.
+- **Write access to installer settings** (see above): the merge vs. replace
+  semantics of the `POST /server1/` endpoint must be safely verified
+  before implementing this.
 
 - **Polling frequency of the secondary endpoints** (`getwizard_status.json`,
   `gettemperature_calibration.json`, `getreg.json`): currently loaded only

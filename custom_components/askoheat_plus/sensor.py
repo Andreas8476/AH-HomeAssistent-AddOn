@@ -14,7 +14,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import UnitOfPower, UnitOfTemperature
+from homeassistant.const import UnitOfPower, UnitOfTemperature, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.entity import EntityCategory
@@ -55,6 +55,19 @@ def _number(path: str) -> Callable[[dict[str, Any]], Any]:
 def _last_update(coordinator: AskoheatDataUpdateCoordinator) -> datetime | None:
     """value_fn für den last_update-Sensor: Zeitpunkt des letzten erfolgreichen Polls."""
     return coordinator.last_update_time
+
+
+def _time_hm(hour_path: str, minute_path: str) -> Callable[[dict[str, Any]], Any]:
+    """Eine value_fn liefern, die zwei Stunde/Minute-Felder zu "HH:MM" zusammensetzt."""
+
+    def _value(data: dict[str, Any]) -> str | None:
+        hour = extract_number(get_path(data, hour_path))
+        minute = extract_number(get_path(data, minute_path))
+        if hour is None or minute is None:
+            return None
+        return f"{int(hour):02d}:{int(minute):02d}"
+
+    return _value
 
 
 # Präfix von HARDWARE_VERSION (z.B. "RCe1.0", "HW 1.3", "HWe1.8") gibt die
@@ -297,6 +310,158 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         entity_registry_enabled_default=False,
         source="registration",
         value_fn=_number("EXTRA.BATTERY"),
+    ),
+    # --- Installer-Einstellungen aus getwizard.json (siehe coordinator.py:
+    # "wizard" ist wie die anderen Sekundär-Endpunkte nur einmalig beim Start
+    # geladen, spiegelt also den Stand bei Integrations-Start wider, nicht
+    # live nachträgliche Änderungen über die Geräte-eigene Weboberfläche).
+    # Vorerst bewusst nur lesend — Schreibzugriff über den vom Gerät
+    # verwendeten POST-Endpunkt (server1/) ist technisch möglich, aber die
+    # genaue Schreibsemantik (Merge vs. vollständiges Ersetzen) ist noch
+    # nicht sicher verifiziert, siehe docs/de/07_changelog.md.
+    AskoheatSensorEntityDescription(
+        key="legio_target_temperature",
+        translation_key="legio_target_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_number("MODBUS_CON_LEGIO_TEMPERATURE"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="legio_activation_time",
+        translation_key="legio_activation_time",
+        icon="mdi:clock-start",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_time_hm(
+            "MODBUS_CON_LEGIO_ACTIV_TIME_HOUR", "MODBUS_CON_LEGIO_ACTIV_TIME_MINUTE"
+        ),
+    ),
+    AskoheatSensorEntityDescription(
+        key="low_tariff_start_time",
+        translation_key="low_tariff_start_time",
+        icon="mdi:clock-start",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_time_hm(
+            "MODBUS_CON_LOW_TARIFF_START_TIME_HOUR",
+            "MODBUS_CON_LOW_TARIFF_START_TIME_MINUTE",
+        ),
+    ),
+    AskoheatSensorEntityDescription(
+        key="low_tariff_end_time",
+        translation_key="low_tariff_end_time",
+        icon="mdi:clock-end",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_time_hm(
+            "MODBUS_CON_LOW_TARIFF_END_TIME_HOUR", "MODBUS_CON_LOW_TARIFF_END_TIME_MINUTE"
+        ),
+    ),
+    AskoheatSensorEntityDescription(
+        key="low_tariff_target_temperature",
+        translation_key="low_tariff_target_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_number("MODBUS_CON_TEMPERATURE_LOW_TARIFF"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="feedin_window_start_time",
+        translation_key="feedin_window_start_time",
+        icon="mdi:clock-start",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_time_hm(
+            "MODBUS_CON_USE_FEEDIN_START_TIME_HOUR", "MODBUS_CON_USE_FEEDIN_START_TIME_MINUTE"
+        ),
+    ),
+    AskoheatSensorEntityDescription(
+        key="feedin_window_end_time",
+        translation_key="feedin_window_end_time",
+        icon="mdi:clock-end",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_time_hm(
+            "MODBUS_CON_USE_FEEDIN_END_TIME_HOUR", "MODBUS_CON_USE_FEEDIN_END_TIME_MINUTE"
+        ),
+    ),
+    AskoheatSensorEntityDescription(
+        key="heat_pump_request_on_step",
+        translation_key="heat_pump_request_on_step",
+        icon="mdi:heat-pump",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_number("MODBUS_CON_HEAT_PUMP_REQUEST_ON_STEP"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="heat_pump_request_off_step",
+        translation_key="heat_pump_request_off_step",
+        icon="mdi:heat-pump-outline",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_number("MODBUS_CON_HEAT_PUMP_REQUEST_OFF_STEP"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="heat_pump_request_target_temperature",
+        translation_key="heat_pump_request_target_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_number("MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="auto_heater_off_timeout",
+        translation_key="auto_heater_off_timeout",
+        icon="mdi:timer-off-outline",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_number("MODBUS_CON_AUTO_HEATER_OFF_MINUTES"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="auto_reboot_time",
+        translation_key="auto_reboot_time",
+        icon="mdi:restart",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_time_hm("AUTO_REBOOT_HOUR", "AUTO_REBOOT_MINUTE"),
+    ),
+    # Einheit laut Feldname/Größenordnung vermutlich Sekunden, aber vom
+    # Hersteller nicht explizit dokumentiert — deshalb bewusst ohne
+    # native_unit_of_measurement, um keine falsche Einheit zu behaupten.
+    AskoheatSensorEntityDescription(
+        key="communication_timeout_heater_off",
+        translation_key="communication_timeout_heater_off",
+        icon="mdi:lan-disconnect",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_number("COMMUNICATION_TIMEOUT_HEATER_OFF"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="communication_timeout_reset",
+        translation_key="communication_timeout_reset",
+        icon="mdi:lan-disconnect",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        source="wizard",
+        value_fn=_number("COMMUNICATION_TIMEOUT_RESET"),
     ),
 )
 

@@ -299,7 +299,42 @@ kurz auf dieses Projekt).
   über den Options-Flow-Dialog in der UI steht daher noch aus (durch
   Andreas).
 
-## Offene Punkte
+## 2026-09-26 — Installer-Einstellungen als Diagnose-Sensoren (Legionellenschutz, Niedertarif, Wärmepumpe, Timeouts)
+
+- Auf Andreas' Wunsch (Auswahl aus dem `extended.html`-Vorschlag, siehe
+  unten) 13 neue read-only Diagnose-Sensoren aus `getwizard.json`:
+  Legionellenschutz-Zieltemperatur + Startzeit, Niedertarif-Zeitfenster +
+  Zieltemperatur, Einspeise-Zeitfenster, Wärmepumpen-Anforderung Ein-/
+  Aus-Stufe + Zieltemperatur, Auto-Abschaltung-Timeout, Auto-Reboot-Zeit,
+  Kommunikations-Timeout (Heizstab aus/Reset). `getwizard.json` dafür neu
+  als vierter Sekundär-Endpunkt eingebunden (`coordinator.py`,
+  `AskoheatSecondaryData.wizard`) — wie die anderen drei nur einmalig beim
+  Start geladen, keine zusätzliche Poll-Last. Alle standardmäßig
+  deaktiviert wie die übrigen Stammdaten-Sensoren. Werte gegen den echten
+  Gerätedump verifiziert (`docker exec` mit dem tatsächlichen
+  `getwizard.json`-Inhalt), alle 13 Werte stimmen exakt.
+- **Vorerst bewusst nur lesend, kein Schreibzugriff:** beim Untersuchen von
+  `extended.html`/`Jxfunc.js` gefunden, dass Schreiben über
+  `POST http://<host>/server1/` mit JSON-Body passiert (nicht der Geräte-
+  Root, wie zunächst vermutet — steht in `Jbootloader.js`, `xBASEURL`).
+  Das Server-Log deutet auf ein reines Delta/Merge hin ("Sende nur
+  Batch-Änderungen"), aber das ist **noch nicht sicher verifiziert** — ein
+  geplanter No-Op-Testschreibvorgang gegen das echte Testgerät wurde vom
+  Sandbox-Sicherheitssystem zurecht blockiert (echter Schreibzugriff auf
+  reale Hardware ohne Andreas' direkte Freigabe). Schreibbare `number`/
+  `time`-Entities für diese Einstellungen sind der nächste Schritt, sobald
+  die Merge-vs-Replace-Frage sicher geklärt ist (am besten: Andreas ändert
+  testweise selbst einen unkritischen Wert über `extended.html` und wir
+  vergleichen `getwizard.json` davor/danach).
+
+## Offene Punkte (ToDo)
+
+- **Dashboard-Verlaufsgrafen:** Andreas möchte zwei zusätzliche Grafen im
+  Dashboard — Temperaturverlauf (Sensor 0–4) und Heizleistungsverlauf,
+  Standardansicht jeweils die letzten 24h. Noch nicht umgesetzt.
+- **Schreibzugriff auf Installer-Einstellungen** (siehe oben): Merge- vs.
+  Replace-Semantik des `POST /server1/`-Endpunkts muss vor der Umsetzung
+  sicher verifiziert werden.
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
   `gettemperature_calibration.json`, `getreg.json`): aktuell nur einmalig beim

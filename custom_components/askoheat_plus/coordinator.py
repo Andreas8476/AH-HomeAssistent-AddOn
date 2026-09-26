@@ -26,6 +26,7 @@ class AskoheatSecondaryData:
     wizard_status: dict[str, Any] = field(default_factory=dict)
     temperature_calibration: dict[str, Any] = field(default_factory=dict)
     registration: dict[str, Any] = field(default_factory=dict)
+    wizard: dict[str, Any] = field(default_factory=dict)
 
 
 class AskoheatDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -83,6 +84,13 @@ class AskoheatDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             ("wizard_status", self.client.async_get_wizard_status),
             ("temperature_calibration", self.client.async_get_temperature_calibration),
             ("registration", self.client.async_get_registration),
+            # Installer-Einstellungen (Legionellenschutz, Niedertarif,
+            # Einspeise-Zeitfenster, Wärmepumpen-Anforderung, Timeouts, ...),
+            # aktuell nur lesend als Diagnose-Sensoren abgebildet (siehe
+            # sensor.py). Wie die anderen Sekundär-Endpunkte nur einmalig
+            # beim Start geladen, spiegelt also den Stand bei Integrations-
+            # Start wider, nicht live.
+            ("wizard", self.client.async_get_wizard),
         )
         for key, fetch in fetchers:
             try:

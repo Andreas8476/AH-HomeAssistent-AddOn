@@ -32,6 +32,11 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
   Bedienung, der bestehende Keep-Alive greift also automatisch. Die
   bisherige Blueprint bleibt als Alternative für Nutzer mit eigenen
   Bedingungen/Filtern bestehen.
+- `sensor.py`: 13 neue read-only Diagnose-Sensoren aus `getwizard.json`
+  (Legionellenschutz, Niedertarif-Zeitfenster, Einspeise-Zeitfenster,
+  Wärmepumpen-Anforderung, Auto-Abschaltung, Auto-Reboot,
+  Kommunikations-Timeout). Schreibzugriff dafür ist als nächster Schritt
+  geplant, siehe `docs/de/07_changelog.md`.
 
 ### Geändert
 

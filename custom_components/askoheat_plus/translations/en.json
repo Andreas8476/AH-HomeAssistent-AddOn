@@ -105,6 +105,48 @@
       },
       "battery_size": {
         "name": "Battery size"
+      },
+      "legio_target_temperature": {
+        "name": "Legionella protection target temperature"
+      },
+      "legio_activation_time": {
+        "name": "Legionella protection start time"
+      },
+      "low_tariff_start_time": {
+        "name": "Low tariff start"
+      },
+      "low_tariff_end_time": {
+        "name": "Low tariff end"
+      },
+      "low_tariff_target_temperature": {
+        "name": "Low tariff target temperature"
+      },
+      "feedin_window_start_time": {
+        "name": "Feed-in window start"
+      },
+      "feedin_window_end_time": {
+        "name": "Feed-in window end"
+      },
+      "heat_pump_request_on_step": {
+        "name": "Heat pump request on step"
+      },
+      "heat_pump_request_off_step": {
+        "name": "Heat pump request off step"
+      },
+      "heat_pump_request_target_temperature": {
+        "name": "Heat pump request target temperature"
+      },
+      "auto_heater_off_timeout": {
+        "name": "Auto heater-off timeout"
+      },
+      "auto_reboot_time": {
+        "name": "Auto reboot time"
+      },
+      "communication_timeout_heater_off": {
+        "name": "Communication timeout (heater off)"
+      },
+      "communication_timeout_reset": {
+        "name": "Communication timeout (reset)"
       }
     },
     "binary_sensor": {

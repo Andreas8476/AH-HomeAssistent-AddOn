@@ -105,6 +105,48 @@
       },
       "battery_size": {
         "name": "Batteriegröße"
+      },
+      "legio_target_temperature": {
+        "name": "Legionellenschutz Zieltemperatur"
+      },
+      "legio_activation_time": {
+        "name": "Legionellenschutz Startzeit"
+      },
+      "low_tariff_start_time": {
+        "name": "Niedertarif Start"
+      },
+      "low_tariff_end_time": {
+        "name": "Niedertarif Ende"
+      },
+      "low_tariff_target_temperature": {
+        "name": "Niedertarif Zieltemperatur"
+      },
+      "feedin_window_start_time": {
+        "name": "Einspeise-Zeitfenster Start"
+      },
+      "feedin_window_end_time": {
+        "name": "Einspeise-Zeitfenster Ende"
+      },
+      "heat_pump_request_on_step": {
+        "name": "Wärmepumpen-Anforderung Ein-Stufe"
+      },
+      "heat_pump_request_off_step": {
+        "name": "Wärmepumpen-Anforderung Aus-Stufe"
+      },
+      "heat_pump_request_target_temperature": {
+        "name": "Wärmepumpen-Anforderung Zieltemperatur"
+      },
+      "auto_heater_off_timeout": {
+        "name": "Auto-Abschaltung Timeout"
+      },
+      "auto_reboot_time": {
+        "name": "Auto-Reboot Zeit"
+      },
+      "communication_timeout_heater_off": {
+        "name": "Kommunikations-Timeout (Heizstab aus)"
+      },
+      "communication_timeout_reset": {
+        "name": "Kommunikations-Timeout (Reset)"
       }
     },
     "binary_sensor": {
