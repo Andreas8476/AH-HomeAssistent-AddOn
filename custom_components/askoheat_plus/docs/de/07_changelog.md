@@ -386,16 +386,30 @@ kurz auf dieses Projekt).
   Wunsch die Reihenfolge in der Mittelspalte getauscht: Heizstab-Bild
   ("Temperaturen & Leistung") jetzt oben, Zählerschrank-Bild darunter.
 
+## 2026-09-26 — Bilder in product_pics/, Bedienungsanleitung, README-Links geprüft
+
+- Andreas hat die 4 HA-Screenshots + 5 Produktbilder diesmal per Datei-
+  Kopie ins Container-Dateisystem bereitgestellt (`/home/andreas/`, nicht
+  mehr eingefügt/pasted) — alle 9 nach
+  `custom_components/askoheat_plus/product_pics/` kopiert.
+- Neue Doku [12_bedienung.md](12_bedienung.md) (+ EN:
+  [12_usage.md](../en/12_usage.md)): kurzer Rundgang mit den 4 HA-
+  Screenshots durch Dashboard, automatisch generierte Geräteseite,
+  Neu-Konfigurieren-Dialog und den Verknüpfungen-Options-Flow. Aus dem
+  README verlinkt.
+- `RC_Einschrauber.png` (Einschraub-Heizkörper-Produktbild) zur
+  Wiedererkennung oben ins README eingebunden.
+- **README-Links geprüft:** alle Doku-Links im README live gegen die
+  GitHub-Seite verifiziert (Ziel-Datei existiert, Seite rendert Inhalt statt
+  404) — nichts kaputt gefunden. GitLab konnte ich nicht automatisiert
+  gegenprüfen (der Datei-Browser dort ist eine JavaScript-Anwendung, mein
+  Fetch-Werkzeug bekommt nur den Lade-Platzhalter zu sehen, unabhängig vom
+  tatsächlichen Link-Ziel) — falls dort weiterhin ein konkreter Link nicht
+  funktioniert, brauche ich den genauen Link/die Seite von Andreas, um es
+  gezielt zu beheben.
+
 ## Offene Punkte (ToDo)
 
-- **Screenshots der ASKOHEAT-AddOn-Einstellungsseite** für die Anleitung
-  (v.a. wie Feed-in-/Setpoint-Verknüpfung beim Ersteinrichten funktioniert):
-  kann ich nicht selbst erzeugen (kein Browser-Zugriff auf die Home-
-  Assistant-UI) — Andreas müsste sie beisteuern.
-- **Produktbilder/Screenshots für README** (`product_pics/`): Andreas' erster
-  Upload-Versuch kam ohne Dateianhänge an (bekanntes Problem mit
-  eingefügten/inline-Bildern in dieser Umgebung) — erneuter Versuch als
-  echte Dateianhänge nötig.
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
   `gettemperature_calibration.json`, `getreg.json`): aktuell nur einmalig beim
   Start, kein Refresh danach. Muss laut Andreas später genauer betrachtet

@@ -1,5 +1,7 @@
 # ASKOHEAT+ für Home Assistant
 
+<img src="custom_components/askoheat_plus/product_pics/RC_Einschrauber.png" alt="ASKOHEAT-RC+ Einschraubheizkörper" width="360">
+
 Custom Integration für den [ASKOHEAT+](https://www.askoma.com) PV-Heizstab
 (Hersteller Askoma) — liest das Gerät über dessen lokale REST-API aus und
 steuert es.
@@ -24,6 +26,12 @@ Deutsch ist die primäre, maßgebliche Version.
 
 Siehe [`04_installation.md`](custom_components/askoheat_plus/docs/de/04_installation.md)
 (HACS, manuell, oder lokale Entwicklung per Symlink).
+
+## Bedienung
+
+Kurzer Rundgang mit Screenshots (Dashboard, Geräteseite, Rekonfiguration,
+Einspeisewert-/Leistungsvorgabe-Verknüpfung): siehe
+[`12_bedienung.md`](custom_components/askoheat_plus/docs/de/12_bedienung.md).
 
 ## Dashboard
 

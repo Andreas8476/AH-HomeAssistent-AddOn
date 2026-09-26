@@ -77,6 +77,10 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Die durchnummerierte Projekt-Doku liegt jetzt unter `docs/de/` (weiterhin
   primär/maßgeblich) mit einer vollständigen englischen Übersetzung
   parallel unter `docs/en/`.
+- Neue Doku `12_bedienung.md`/`12_usage.md`: Bedienungsanleitung mit
+  Screenshots (Dashboard, Geräteseite, Neu-Konfigurieren, Verknüpfungen).
+- `product_pics/`: 4 HA-Screenshots + 5 Produktbilder ergänzt;
+  `RC_Einschrauber.png` zur Wiedererkennung ins README eingebunden.
 
 ## [0.7.0] - 2026-09-25
 

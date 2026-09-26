@@ -385,16 +385,28 @@ project).
   heating-element image ("Temperaturen & Leistung") now on top, the
   meter-cabinet image below it.
 
+## 2026-09-26 — Images in product_pics/, usage guide, README links checked
+
+- This time Andreas provided the 4 HA screenshots + 5 product images via a
+  real file copy into the container filesystem (`/home/andreas/`, not
+  pasted/inline) — all 9 copied to
+  `custom_components/askoheat_plus/product_pics/`.
+- New doc [12_usage.md](12_usage.md) (DE:
+  [12_bedienung.md](../de/12_bedienung.md)): a short guided tour with the 4
+  HA screenshots through the dashboard, the auto-generated device page, the
+  reconfigure dialog, and the links options flow. Linked from the README.
+- `RC_Einschrauber.png` (screw-in heating element product photo) embedded
+  at the top of the README for recognition.
+- **README links checked:** verified every doc link in the README live
+  against the GitHub page (target file exists, page renders content
+  instead of a 404) — found nothing broken. Could not automatically
+  cross-check GitLab (its file browser is a JavaScript app, my fetch tool
+  only ever sees the loading placeholder regardless of the actual link
+  target) — if a specific link there still doesn't work, I need the exact
+  link/page from Andreas to fix it.
+
 ## Open points (TODO)
 
-- **Screenshots of the ASKOHEAT add-on settings page** for the guide
-  (especially how feed-in/setpoint linking works during initial setup): I
-  can't generate these myself (no browser access to the Home Assistant UI)
-  — Andreas would need to provide them.
-- **Product images/screenshots for the README** (`product_pics/`):
-  Andreas' first upload attempt arrived with no file attachments (known
-  issue with pasted/inline images in this environment) — needs a retry as
-  genuine file attachments.
 - **Polling frequency of the secondary endpoints** (`getwizard_status.json`,
   `gettemperature_calibration.json`, `getreg.json`): currently loaded only
   once at startup, no refresh afterward. Needs a closer look later per
