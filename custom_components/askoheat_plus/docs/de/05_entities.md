@@ -64,10 +64,11 @@ Ersetzen die früheren, rein lesenden Diagnose-Sensoren `set_heater_step` und
 Wert zu vermeiden — siehe [07_changelog.md](07_changelog.md)).
 
 Manuelles Setzen (per Slider/Eingabefeld in der UI) funktioniert unabhängig
-davon, ob eine Entity zusätzlich per Automation/Blueprint verknüpft ist —
-beide Wege nutzen denselben `number.set_value`-Service, es gibt keinen
-gesonderten "Automatik-Modus". Siehe [10_automatisierung.md](10_automatisierung.md)
-für die optionale Zähler-Verknüpfung des Einspeisewerts.
+davon, ob eine Entity zusätzlich verknüpft ist — alle Wege nutzen denselben
+`number.set_value`-Service, es gibt keinen gesonderten "Automatik-Modus".
+`load_feedin` und `load_setpoint` lassen sich zusätzlich direkt über den
+Options-Flow der Integration ("⋮ → Konfigurieren") mit einer beliebigen
+anderen Entity verknüpfen, siehe [10_automatisierung.md](10_automatisierung.md).
 
 ## Switch-Entity (`switch.py`)
 

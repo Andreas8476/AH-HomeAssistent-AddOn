@@ -7,10 +7,18 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
+from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
+    EntitySelector,
+    EntitySelectorConfig,
     NumberSelector,
     NumberSelectorConfig,
     NumberSelectorMode,
@@ -18,12 +26,29 @@ from homeassistant.helpers.selector import (
 
 from .api import AskoheatApiClient, AskoheatApiError, get_path
 from .const import (
+    CONF_FEEDIN_SOURCE_ENTITY_ID,
+    CONF_SETPOINT_SOURCE_ENTITY_ID,
     DEFAULT_PORT,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
     MAX_SCAN_INTERVAL,
     MIN_SCAN_INTERVAL,
     PATH_DEVICE_ID,
+)
+
+# Domains, aus denen sich für die Einspeisewert-/Leistungsvorgabe-Verknüpfung
+# eine sinnvolle numerische Quell-Entity auswählen lässt (siehe link.py).
+_LINK_SOURCE_DOMAINS = ["sensor", "number", "input_number"]
+
+OPTIONS_SCHEMA = vol.Schema(
+    {
+        vol.Optional(CONF_FEEDIN_SOURCE_ENTITY_ID): EntitySelector(
+            EntitySelectorConfig(domain=_LINK_SOURCE_DOMAINS)
+        ),
+        vol.Optional(CONF_SETPOINT_SOURCE_ENTITY_ID): EntitySelector(
+            EntitySelectorConfig(domain=_LINK_SOURCE_DOMAINS)
+        ),
+    }
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -49,6 +74,12 @@ class AskoheatConfigFlow(ConfigFlow, domain=DOMAIN):
     """Behandelt einen Config-Flow für ASKOHEAT+."""
 
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> AskoheatOptionsFlow:
+        """Den Options-Flow für ASKOHEAT+ liefern (Entity-Verknüpfungen, siehe link.py)."""
+        return AskoheatOptionsFlow()
 
     async def _async_validate(
         self, user_input: dict[str, Any]
@@ -141,3 +172,26 @@ class AskoheatConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="reconfigure", data_schema=schema, errors=errors
         )
+
+
+class AskoheatOptionsFlow(OptionsFlow):
+    """Options-Flow: Einspeisewert/Leistungsvorgabe optional mit einer Entity verknüpfen.
+
+    Leer gelassene Felder bedeuten "keine Verknüpfung" (weiterhin rein
+    manuelle Steuerung wie bisher) — dafür werden die Felder hier bewusst
+    ohne ``default=`` aufgebaut und stattdessen per
+    ``add_suggested_values_to_schema`` vorbelegt, damit sich ein einmal
+    gesetzter Wert im Formular auch wieder leeren lässt.
+    """
+
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Die Verknüpfungs-Auswahl anzeigen und speichern."""
+        if user_input is not None:
+            return self.async_create_entry(title="", data=user_input)
+
+        schema = self.add_suggested_values_to_schema(
+            OPTIONS_SCHEMA, self.config_entry.options
+        )
+        return self.async_show_form(step_id="init", data_schema=schema)

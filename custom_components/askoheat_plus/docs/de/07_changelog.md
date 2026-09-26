@@ -261,6 +261,44 @@ kurz auf dieses Projekt).
   Classic (ohne EEPROM)" — der Präfix-Regex funktioniert unabhängig vom
   Leerzeichen. Standardmäßig deaktiviert, wie die anderen Stammdaten-Sensoren.
 
+## 2026-09-26 — Eingebaute Verknüpfung für Einspeisewert & Leistungsvorgabe
+
+- Andreas' Wunsch: statt nur über die Blueprint soll sich der Einspeisewert
+  (und die Leistungsvorgabe) auch direkt in der Integration mit einer
+  beliebigen anderen Entity verknüpfen lassen, per Auswahl statt Automation.
+- Neuer Options-Flow (`config_flow.py`, `AskoheatOptionsFlow`, erreichbar
+  über "⋮ → Konfigurieren"): zwei optionale Entity-Picker
+  (`feedin_source_entity_id`, `setpoint_source_entity_id`), Domains
+  `sensor`/`number`/`input_number`. Leer lassen = keine Verknüpfung.
+- Neues Modul `link.py`: registriert bei gesetzter Verknüpfung einen
+  State-Listener (`async_track_state_change_event`) auf die Quell-Entity
+  und ruft bei jeder Änderung denselben `number.set_value`-Service auf, den
+  auch die manuelle UI-Bedienung nutzt — der bestehende Keep-Alive in
+  `number.py` greift dadurch automatisch, ohne eigene Wiederhol-/
+  Schreiblogik in `link.py`. Zusätzlich einmalige Synchronisierung direkt
+  beim Setup, statt erst auf die nächste Zustandsänderung der Quelle zu
+  warten.
+- `__init__.py`: `entry.add_update_listener` lädt die Integration automatisch
+  neu, sobald sich die Verknüpfung im Options-Flow ändert — kein manueller
+  Neustart nötig.
+- Bestehende Blueprint (`docs/de/10_automatisierung.md`) bleibt zusätzlich
+  bestehen, für Nutzer die eigene Bedingungen/Filter brauchen — jetzt als
+  "Alternative", die eingebaute Verknüpfung als empfohlener Standardweg.
+- **Architektur/Vorbild:** Pattern 1:1 aus dem bereits im selben
+  Home-Assistant-Setup laufenden `froeling_lambdatronic_modbus` übernommen
+  (`FroelingOptionsFlowHandler`) statt neu zu erfinden — inkl.
+  `add_suggested_values_to_schema` für leerbare Felder statt fester
+  `default=`-Werte.
+- **Verifikation:** `py_compile` + echter Import-Test (`docker exec`) aller
+  betroffenen Dateien, `ha core check` + Neustart ohne Fehler. Ein direkter
+  Live-Test über einen manuellen `.storage/core.config_entries`-Eintrag
+  wurde versucht, aber verworfen: Home Assistant persistiert Config-Entry-
+  Options offenbar ähnlich verzögert/debounced wie die Entity-Registry
+  (siehe bekannter Punkt oben) — der manuelle Datei-Edit wurde beim
+  nächsten internen Save wieder überschrieben. Der echte End-to-End-Test
+  über den Options-Flow-Dialog in der UI steht daher noch aus (durch
+  Andreas).
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,

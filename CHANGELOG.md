@@ -25,6 +25,13 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 - Dashboard, Bild 1: Zeile "Zuletzt aktualisiert: vor …" (Herzschlag/
   Zeitstempel des letzten erfolgreichen Polls).
+- Neuer Options-Flow ("⋮ → Konfigurieren"): Einspeisewert und
+  Leistungsvorgabe lassen sich jetzt direkt mit einer beliebigen Entity
+  verknüpfen (z.B. einem Zähler-/Wechselrichter-Sensor), ohne Automation.
+  Nutzt intern denselben `number.set_value`-Service wie die manuelle
+  Bedienung, der bestehende Keep-Alive greift also automatisch. Die
+  bisherige Blueprint bleibt als Alternative für Nutzer mit eigenen
+  Bedingungen/Filtern bestehen.
 
 ### Geändert
 

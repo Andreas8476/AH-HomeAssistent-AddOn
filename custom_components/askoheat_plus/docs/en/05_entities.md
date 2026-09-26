@@ -64,11 +64,11 @@ Replace the earlier, read-only diagnostic sensors `set_heater_step` and
 same value — see [07_changelog.md](07_changelog.md)).
 
 Setting a value manually (via slider/input field in the UI) works
-independently of whether an entity is additionally linked via an
-automation/blueprint — both paths use the same `number.set_value` service,
-there's no separate "automatic mode". See
-[10_automation.md](10_automation.md) for the optional meter link for the
-feed-in value.
+independently of whether an entity is additionally linked — every path
+uses the same `number.set_value` service, there's no separate "automatic
+mode". `load_feedin` and `load_setpoint` can also be linked directly to
+any other entity via the integration's options flow ("⋮ → Configure"), see
+[10_automation.md](10_automation.md).
 
 ## Switch entity (`switch.py`)
 

@@ -264,6 +264,42 @@ project).
   the prefix regex works regardless of the space. Disabled by default, like
   the other master-data sensors.
 
+## 2026-09-26 — Built-in link for feed-in value & load setpoint
+
+- Andreas' request: instead of only via the blueprint, the feed-in value
+  (and the load setpoint) should also be linkable directly in the
+  integration to any other entity, by selection rather than an automation.
+- New options flow (`config_flow.py`, `AskoheatOptionsFlow`, reachable via
+  "⋮ → Configure"): two optional entity pickers
+  (`feedin_source_entity_id`, `setpoint_source_entity_id`), domains
+  `sensor`/`number`/`input_number`. Leave empty = no link.
+- New module `link.py`: when a link is set, registers a state listener
+  (`async_track_state_change_event`) on the source entity and, on every
+  change, calls the same `number.set_value` service that manual UI control
+  also uses — the existing keep-alive in `number.py` thus applies
+  automatically, with no separate resend/write logic in `link.py`. Also
+  does a one-time sync right at setup, instead of waiting for the source's
+  next state change.
+- `__init__.py`: `entry.add_update_listener` automatically reloads the
+  integration as soon as the link changes in the options flow — no manual
+  restart needed.
+- The existing blueprint (`docs/de/10_automatisierung.md`) stays available
+  for anyone who needs custom conditions/filters — now presented as the
+  "alternative", with the built-in link as the recommended default path.
+- **Architecture/model:** pattern adopted 1:1 from
+  `froeling_lambdatronic_modbus`, already running in the same Home
+  Assistant setup (`FroelingOptionsFlowHandler`), instead of reinventing it
+  — including `add_suggested_values_to_schema` for clearable fields
+  instead of fixed `default=` values.
+- **Verification:** `py_compile` + a real import test (`docker exec`) of
+  every affected file, `ha core check` + restart with no errors. A direct
+  live test via a manual `.storage/core.config_entries` edit was attempted
+  but abandoned: Home Assistant apparently persists config-entry options
+  with a similar delayed/debounced save as the entity registry (see the
+  known point above) — the manual file edit got overwritten by the next
+  internal save. The real end-to-end test via the options-flow dialog in
+  the UI is therefore still pending (by Andreas).
+
 ## Open points
 
 - **Polling frequency of the secondary endpoints** (`getwizard_status.json`,

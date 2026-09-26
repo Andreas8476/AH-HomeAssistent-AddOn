@@ -10,13 +10,38 @@ of feeding it into the grid. For that, the **feed-in value**
 grid/inverter power sensor (negative = surplus, positive = draw — see
 [02_api-reference.md](02_api-reference.md)).
 
-This integration deliberately does **not** implement the actual **link**
-as a hardwired config option, but via a bundled **Home Assistant
-blueprint** — more flexible (custom conditions/filters possible) and
-without an extra setup step in the integration itself. The built-in
-keep-alive (see [02_api-reference.md](02_api-reference.md)) then
-automatically ensures the last-transmitted value isn't lost to the 60s
-revert, even if the meter doesn't update for a while.
+Two ways to do this: the **built-in link** directly in the integration's
+settings (recommended for the standard case), or a bundled **Home
+Assistant blueprint** for anyone who needs custom conditions/filters.
+Either way, the built-in keep-alive (see
+[02_api-reference.md](02_api-reference.md)) automatically ensures the
+last-transmitted value isn't lost to the 60s revert, even if the source
+doesn't update for a while.
+
+## Built-in link (recommended)
+
+**Settings → Devices & Services → ASKOHEAT+** → the three dots (⋮) on the
+device → **"Configure"** (the options flow, not to be confused with
+"Reconfigure" for host/port). Two optional entity pickers there:
+
+- **Feed-in value automatically from:** a meter/inverter sensor with the
+  current feed-in/draw power in watts.
+- **Load setpoint automatically from:** likewise for the load setpoint.
+
+Leave both empty = no link, purely manual control as before. Once an
+entity is selected, the integration keeps the target value automatically
+in sync with it (technically via the same `number.set_value` service the
+UI and the blueprint below also use — so the keep-alive applies
+identically). Changing the selection automatically reloads the
+integration, no manual restart needed.
+
+## Alternative: your own automation (blueprint)
+
+For anyone who needs extra conditions/filters (e.g. only linking during
+certain hours), a blueprint is still available — it works independently of
+the built-in link above (both call the same service, there's no special
+handling for collisions: as with two automations targeting the same
+entity, the last write simply wins).
 
 ## Importing the blueprint
 

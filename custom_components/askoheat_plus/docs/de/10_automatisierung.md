@@ -10,13 +10,40 @@ verheizen, statt ins Netz einzuspeisen. Dafür muss der **Einspeisewert**
 Wechselrichter-Leistungssensors widerspiegeln (negativ = Überschuss, positiv
 = Bezug — siehe [02_api-referenz.md](02_api-referenz.md)).
 
-Diese Integration bildet die eigentliche **Verknüpfung** bewusst **nicht**
-als fest verdrahtete Config-Option ab, sondern über eine mitgelieferte
-**Home-Assistant-Blueprint** — flexibler (eigene Bedingungen/Filter möglich)
-und ohne zusätzlichen Setup-Schritt in der Integration selbst. Das eingebaute
-Keep-Alive (siehe [02_api-referenz.md](02_api-referenz.md)) sorgt danach
-automatisch dafür, dass der zuletzt übertragene Wert nicht wegen des
-60s-Verfalls verloren geht, auch wenn der Zähler mal länger nicht aktualisiert.
+Zwei Wege dafür: die **eingebaute Verknüpfung** direkt in den Integrations-
+Einstellungen (empfohlen für den Standardfall), oder eine mitgelieferte
+**Home-Assistant-Blueprint** für alle, die eigene Bedingungen/Filter
+brauchen. Das eingebaute Keep-Alive (siehe
+[02_api-referenz.md](02_api-referenz.md)) sorgt in beiden Fällen automatisch
+dafür, dass der zuletzt übertragene Wert nicht wegen des 60s-Verfalls
+verloren geht, auch wenn die Quelle mal länger nicht aktualisiert.
+
+## Eingebaute Verknüpfung (empfohlen)
+
+**Einstellungen → Geräte & Dienste → ASKOHEAT+** → beim jeweiligen Gerät
+die drei Punkte (⋮) → **"Konfigurieren"** (Options-Flow, nicht zu
+verwechseln mit "Neu konfigurieren" für Host/Port). Dort zwei optionale
+Entity-Picker:
+
+- **Einspeisewert automatisch aus:** Zähler-/Wechselrichter-Sensor mit der
+  aktuellen Einspeise-/Bezugsleistung in Watt.
+- **Leistungsvorgabe automatisch aus:** entsprechend für die Leistungsvorgabe.
+
+Beide Felder leer lassen = keine Verknüpfung, weiterhin rein manuelle
+Steuerung wie bisher. Sobald eine Entity ausgewählt ist, hält die
+Integration den Zielwert automatisch synchron dazu (technisch über
+denselben `number.set_value`-Service, den auch die UI und die Blueprint
+unten nutzen — der Keep-Alive greift also identisch). Eine Änderung der
+Auswahl lädt die Integration automatisch neu, kein manueller Neustart nötig.
+
+## Alternative: eigene Automation (Blueprint)
+
+Für alle, die zusätzliche Bedingungen/Filter brauchen (z.B. nur zwischen
+bestimmten Uhrzeiten verknüpfen), steht weiterhin eine Blueprint zur
+Verfügung — funktioniert unabhängig von der eingebauten Verknüpfung oben
+(beide rufen denselben Service auf, es gibt keinen Sonderfall für
+Kollisionen: wie bei zwei Automationen auf dieselbe Entity gewinnt schlicht
+der letzte Schreibvorgang).
 
 ## Blueprint importieren
 

@@ -31,45 +31,123 @@
   },
   "entity": {
     "sensor": {
-      "heater_step": { "name": "Heizstufe" },
-      "heater_load": { "name": "Heizleistung" },
-      "temperature_sensor_0": { "name": "Temperatur" },
-      "temperature_sensor_1": { "name": "Temperatur Sensor 1" },
-      "temperature_sensor_2": { "name": "Temperatur Sensor 2" },
-      "temperature_sensor_3": { "name": "Temperatur Sensor 3" },
-      "temperature_sensor_4": { "name": "Temperatur Sensor 4" },
-      "temperature_limit_info": { "name": "Temperaturlimit" },
-      "error_status": { "name": "Gerätestatus" },
-      "legio_info": { "name": "Legionellenschutz" },
-      "last_update": { "name": "Letzte Aktualisierung" },
-      "article_name": { "name": "Artikelname" },
-      "article_number": { "name": "Artikelnummer" },
-      "serial_number": { "name": "Seriennummer" },
-      "software_version": { "name": "Software-Version" },
-      "hardware_version": { "name": "Hardware-Version" },
-      "device_family": { "name": "Gerätefamilie" },
-      "max_power": { "name": "Max. Leistung" },
-      "number_of_heater": { "name": "Anzahl Heizstäbe" },
-      "number_of_steps": { "name": "Anzahl Heizstufen" },
-      "temperature_precise": { "name": "Temperatur (präzise)" },
-      "tcp_connection": { "name": "Modbus TCP Verbindung" },
-      "rtu_connection": { "name": "Modbus RTU Verbindung" },
-      "pv_peak": { "name": "PV-Spitzenleistung" },
-      "battery_size": { "name": "Batteriegröße" }
+      "heater_step": {
+        "name": "Heizstufe"
+      },
+      "heater_load": {
+        "name": "Heizleistung"
+      },
+      "temperature_sensor_0": {
+        "name": "Temperatur"
+      },
+      "temperature_sensor_1": {
+        "name": "Temperatur Sensor 1"
+      },
+      "temperature_sensor_2": {
+        "name": "Temperatur Sensor 2"
+      },
+      "temperature_sensor_3": {
+        "name": "Temperatur Sensor 3"
+      },
+      "temperature_sensor_4": {
+        "name": "Temperatur Sensor 4"
+      },
+      "temperature_limit_info": {
+        "name": "Temperaturlimit"
+      },
+      "error_status": {
+        "name": "Gerätestatus"
+      },
+      "legio_info": {
+        "name": "Legionellenschutz"
+      },
+      "last_update": {
+        "name": "Letzte Aktualisierung"
+      },
+      "article_name": {
+        "name": "Artikelname"
+      },
+      "article_number": {
+        "name": "Artikelnummer"
+      },
+      "serial_number": {
+        "name": "Seriennummer"
+      },
+      "software_version": {
+        "name": "Software-Version"
+      },
+      "hardware_version": {
+        "name": "Hardware-Version"
+      },
+      "device_family": {
+        "name": "Gerätefamilie"
+      },
+      "max_power": {
+        "name": "Max. Leistung"
+      },
+      "number_of_heater": {
+        "name": "Anzahl Heizstäbe"
+      },
+      "number_of_steps": {
+        "name": "Anzahl Heizstufen"
+      },
+      "temperature_precise": {
+        "name": "Temperatur (präzise)"
+      },
+      "tcp_connection": {
+        "name": "Modbus TCP Verbindung"
+      },
+      "rtu_connection": {
+        "name": "Modbus RTU Verbindung"
+      },
+      "pv_peak": {
+        "name": "PV-Spitzenleistung"
+      },
+      "battery_size": {
+        "name": "Batteriegröße"
+      }
     },
     "binary_sensor": {
-      "pump_output": { "name": "Pumpe" },
-      "heater_disabled": { "name": "Heizstab gesperrt" },
-      "relayboard_connected": { "name": "Relayboard verbunden" },
-      "current_flow": { "name": "Stromfluss" }
+      "pump_output": {
+        "name": "Pumpe"
+      },
+      "heater_disabled": {
+        "name": "Heizstab gesperrt"
+      },
+      "relayboard_connected": {
+        "name": "Relayboard verbunden"
+      },
+      "current_flow": {
+        "name": "Stromfluss"
+      }
     },
     "number": {
-      "heater_step_target": { "name": "Ziel-Heizstufe" },
-      "load_setpoint": { "name": "Leistungsvorgabe" },
-      "load_feedin": { "name": "Einspeisewert" }
+      "heater_step_target": {
+        "name": "Ziel-Heizstufe"
+      },
+      "load_setpoint": {
+        "name": "Leistungsvorgabe"
+      },
+      "load_feedin": {
+        "name": "Einspeisewert"
+      }
     },
     "switch": {
-      "emergency_mode": { "name": "Notbetrieb" }
+      "emergency_mode": {
+        "name": "Notbetrieb"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "ASKOHEAT+ Verknüpfungen",
+        "description": "Optional: Einspeisewert und/oder Leistungsvorgabe automatisch aus einer anderen Entity übernehmen (z.B. einem Zähler-/Wechselrichter-Sensor). Leer lassen für rein manuelle Steuerung.",
+        "data": {
+          "feedin_source_entity_id": "Einspeisewert automatisch aus",
+          "setpoint_source_entity_id": "Leistungsvorgabe automatisch aus"
+        }
+      }
     }
   }
 }

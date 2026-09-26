@@ -63,3 +63,8 @@ LOAD_FEEDIN_MAX = 32767
 # Verhalten, dass ein steuerndes Gerät genau das tun soll — anders als bei
 # der Lese-Abfrage sind regelmäßige erneute Sendungen hier unbedenklich.
 NUMBER_KEEPALIVE_INTERVAL = 45
+
+# Options-Flow-Schlüssel: optionale Quell-Entity, deren Zustand automatisch
+# in die jeweilige Number-Entity übernommen wird (siehe link.py).
+CONF_FEEDIN_SOURCE_ENTITY_ID = "feedin_source_entity_id"
+CONF_SETPOINT_SOURCE_ENTITY_ID = "setpoint_source_entity_id"

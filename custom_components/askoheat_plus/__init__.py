@@ -10,6 +10,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import AskoheatApiClient
 from .const import DEFAULT_PORT, DEFAULT_SCAN_INTERVAL
 from .coordinator import AskoheatDataUpdateCoordinator
+from .link import async_setup_links
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
@@ -37,7 +38,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: AskoheatConfigEntry) -> 
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
+    await async_setup_links(hass, entry, coordinator)
+    entry.async_on_unload(entry.add_update_listener(_async_update_listener))
+
     return True
+
+
+async def _async_update_listener(hass: HomeAssistant, entry: AskoheatConfigEntry) -> None:
+    """Bei Options-Änderungen (z.B. neue/entfernte Entity-Verknüpfung) neu laden."""
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: AskoheatConfigEntry) -> bool:
