@@ -1,5 +1,7 @@
 # 11 — Dashboard (Phase 3)
 
+*[English version](../en/11_dashboard.md)*
+
 ## Was es ist
 
 Ein eigenes, per YAML versioniertes Lovelace-Dashboard "ASKOHEAT+"
@@ -19,11 +21,12 @@ zeigen und Live-Werte als Overlay-Labels direkt auf dem Bild positionieren:
 **Label-Positionen (Bild 1):** Der Tank enthält zwei optisch unterscheidbare
 Teile: die große Heizwendel (Wärmetauscher-Spirale) und das eigentliche
 ASKOHEAT+-Heizelement (die kleinere orangene Wendel darunter/dahinter, direkt
-neben dem weißen Sensor-Puck). T1–T4 sitzen rechts neben der großen Wendel;
-T0 und die Heizleistung sitzen bewusst weit links, weil ihre alte Position
-in der Mitte genau das ASKOHEAT+-Heizelement verdeckt hat (Feedback nach
-Screenshot-Review). Auf Bild 2 wurde "Stufe" aus demselben Grund vom Tank
-weg auf die freie Wand-/Bodenfläche verschoben.
+neben dem weißen Sensor-Puck). Aktuelles Layout (nach Andreas' Skizze):
+T0 sitzt rechts direkt neben dem ASKOHEAT+-Heizelement; T1–T4 sind sauber
+rechtsbündig mit T0 ausgerichtet (dieselbe `left`-Spalte); die Heizleistung
+sitzt mittig unter dem Heizelement. Auf Bild 2 wurde "Stufe" vom Tank weg
+auf die freie Wand-/Bodenfläche verschoben, damit das Heizelement dort
+ebenfalls sichtbar bleibt.
 
 **Herzschlag/Zeitstempel:** Die Markdown-Karte über Bild 1 zeigt
 `Zuletzt aktualisiert: vor …` als Jinja-Template, ausgelesen aus dem
@@ -50,7 +53,7 @@ Bereichs-Präfix, je nachdem ob dem Gerät beim Erstellen der Entities schon
 ein Home-Assistant-Bereich zugewiesen war) — von Hand pflegen ist also
 sowohl mühsam als auch fehleranfällig.
 
-**Die Lösung:** [`dashboard/generate_dashboard.py`](../../../dashboard/generate_dashboard.py) —
+**Die Lösung:** [`dashboard/generate_dashboard.py`](../../../../dashboard/generate_dashboard.py) —
 ein Skript, das `askoheat_plus_dashboard.yaml` **komplett neu erzeugt**,
 indem es direkt in Home Assistants eigener Registry
 (`.storage/core.config_entries` + `.storage/core.entity_registry`) nachschaut,

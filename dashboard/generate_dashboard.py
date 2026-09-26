@@ -40,20 +40,20 @@ LABEL_STYLE = """              color: white
               font-size: 12px"""
 
 # (unique_id-Suffix, Label-Präfix, top%, left%, Hintergrundfarbe) für das
-# Heizstab-/Wendel-Bild. Positionen pixelgenau gegen
-# dashboard/images/boiler-sensors.png (398x502) verifiziert: T1-T4 sitzen in
-# einer freien Spalte rechts der großen Wärmetauscher-Wendel. T0 und
-# heater_load sitzen bewusst weit links, weil das eigentliche
-# ASKOHEAT+-Heizelement (die kleine orangene Wendel bei ~49-73% links /
-# 63-70% oben, unterhalb der großen Wendel, neben dem Sensor-Puck) frei
-# bleiben soll (Feedback von Andreas nach Live-Test).
+# Heizstab-/Wendel-Bild. Layout nach Andreas' Skizze (Pfeile auf Screenshot):
+# T0 sitzt rechts neben dem eigentlichen ASKOHEAT+-Heizelement (die kleine
+# orangene Wendel bei ~49-73% links / 63-70% oben, unterhalb der großen
+# Wärmetauscher-Wendel, neben dem Sensor-Puck); T1-T4 sind sauber
+# rechtsbündig mit T0 ausgerichtet (dieselbe left%-Spalte); die
+# Heizleistung sitzt mittig unter dem Heizelement. Alle Positionen
+# pixelgenau gegen dashboard/images/boiler-sensors.png (398x502) verifiziert.
 SENSOR_ELEMENTS = [
-    ("temperature_sensor_4", "T4: ", 10, 72, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_3", "T3: ", 24, 72, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_2", "T2: ", 38, 72, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_1", "T1: ", 52, 72, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_0", "T0: ", 65, 26, "rgba(0, 0, 0, 0.65)"),
-    ("heater_load", "⚡ ", 88, 26, "rgba(120, 20, 20, 0.75)"),
+    ("temperature_sensor_4", "T4: ", 10, 76, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_3", "T3: ", 24, 76, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_2", "T2: ", 38, 76, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_1", "T1: ", 52, 76, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_0", "T0: ", 65, 76, "rgba(0, 0, 0, 0.65)"),
+    ("heater_load", "⚡ ", 88, 54, "rgba(120, 20, 20, 0.75)"),
 ]
 
 # (unique_id-Suffix, Label-Präfix, top%, left%) für das Zählerschrank-Bild.

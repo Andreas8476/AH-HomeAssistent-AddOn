@@ -1,5 +1,7 @@
 # 03 — Architektur
 
+*[English version](../en/03_architecture.md)*
+
 ## Ordnerstruktur
 
 ```
@@ -23,7 +25,9 @@
       switch.py
       translations/{de,en}.json
       brand/                                          # ASKOMA-Logo (icon/logo, HA 2026.3+ Konvention)
-      docs/                                          # <- diese Dokumentation
+      docs/
+        de/                                          # <- diese Dokumentation (maßgeblich)
+        en/                                          # englische Übersetzung
   dashboard/
     askoheat_plus_dashboard.yaml                      # YAML-Mode Lovelace-Dashboard (Phase 3)
     images/

@@ -1,5 +1,7 @@
 # 06 — Entwicklung
 
+*[English version](../en/06_development.md)*
+
 > ⚠️ **VERBINDLICHE REGEL: Jeder Commit geht auf BEIDE Remotes — GitLab
 > (`origin`) UND GitHub (`github`).** Kein Push nur auf eines der beiden.
 > Grund: GitLab ist das Haupt-Repo, GitHub ist zwingend nötig, damit HACS

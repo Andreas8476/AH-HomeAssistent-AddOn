@@ -1,8 +1,9 @@
-"""Lightweight REST client for the ASKOHEAT+ local JSON API.
+"""Schlanker REST-Client für die lokale JSON-API des ASKOHEAT+.
 
-The device exposes a set of unauthenticated ``GET`` endpoints under
-``http://<host>/<endpoint>`` that return JSON. See ``docs/02_api-referenz.md``
-for the full endpoint reference this integration was built against.
+Das Gerät stellt eine Reihe unauthentifizierter ``GET``-Endpunkte unter
+``http://<host>/<endpoint>`` bereit, die JSON liefern. Die vollständige
+Endpunkt-Referenz, gegen die diese Integration gebaut wurde, steht in
+``docs/de/02_api-referenz.md``.
 """
 
 from __future__ import annotations
@@ -18,17 +19,17 @@ _LOGGER = logging.getLogger(__name__)
 
 _NUMBER_RE = re.compile(r"-?\d+(?:[.,]\d+)?")
 
-# Text values that mean "off"/"inactive" across the various boolean-ish
-# string fields returned by the device (e.g. "not active", "off", "disabled").
+# Textwerte, die in den verschiedenen bool-artigen String-Feldern des Geräts
+# "aus"/"inaktiv" bedeuten (z.B. "not active", "off", "disabled").
 _INACTIVE_VALUES = {"not active", "off", "disabled", "false", "no", "0"}
 
 
 class AskoheatApiError(Exception):
-    """Raised when the ASKOHEAT+ device cannot be reached or replies unexpectedly."""
+    """Wird ausgelöst, wenn das ASKOHEAT+-Gerät nicht erreichbar ist oder unerwartet antwortet."""
 
 
 class AskoheatApiClient:
-    """Minimal async client for the ASKOHEAT+ local REST API."""
+    """Minimaler asynchroner Client für die lokale REST-API des ASKOHEAT+."""
 
     def __init__(
         self,
@@ -42,28 +43,31 @@ class AskoheatApiClient:
 
     @property
     def base_url(self) -> str:
-        """Return the base URL of the device, e.g. http://192.168.20.54:80."""
+        """Die Basis-URL des Geräts liefern, z.B. http://192.168.20.54:80."""
         return f"http://{self._host}:{self._port}"
 
     async def async_get_endpoint(self, endpoint: str) -> dict[str, Any]:
-        """Fetch a single JSON endpoint from the device.
+        """Einen einzelnen JSON-Endpunkt vom Gerät abrufen.
 
-        Raises AskoheatApiError on any connection, timeout or parsing problem
-        so callers only need to handle one exception type.
+        Löst bei jedem Verbindungs-, Timeout- oder Parsing-Problem einen
+        AskoheatApiError aus, damit Aufrufer nur einen Exception-Typ
+        behandeln müssen.
         """
         url = f"{self.base_url}/{endpoint}"
         try:
             async with self._session.get(url) as response:
                 response.raise_for_status()
-                # The device does not always send a proper JSON content-type
-                # header, so parse the body manually instead of relying on it.
+                # Das Gerät sendet nicht immer einen korrekten
+                # JSON-Content-Type-Header, daher den Body von Hand parsen
+                # statt sich darauf zu verlassen.
                 text = await response.text()
         except TimeoutError as err:
             raise AskoheatApiError(f"Timeout requesting {url}") from err
         except (aiohttp.ClientError, RuntimeError) as err:
-            # RuntimeError covers "Session is closed", which aiohttp raises
-            # (not a ClientError) if a request is in flight while HA's
-            # shared session is torn down during shutdown/restart.
+            # RuntimeError deckt "Session is closed" ab, das aiohttp auslöst
+            # (kein ClientError), wenn während des Herunterfahrens/Neustarts
+            # ein Request noch läuft, während HAs gemeinsame Session
+            # geschlossen wird.
             raise AskoheatApiError(f"Error requesting {url}: {err}") from err
 
         try:
@@ -77,30 +81,30 @@ class AskoheatApiClient:
         return data
 
     async def async_get_home(self) -> dict[str, Any]:
-        """Fetch gethome.json — the single endpoint polled regularly."""
+        """gethome.json abrufen — der einzige regelmäßig gepollte Endpunkt."""
         return await self.async_get_endpoint("gethome.json")
 
     async def async_get_wizard(self) -> dict[str, Any]:
-        """Fetch getwizard.json — full config dump, fetched rarely/on demand."""
+        """getwizard.json abrufen — vollständiger Konfigurations-Dump, selten/on demand."""
         return await self.async_get_endpoint("getwizard.json")
 
     async def async_get_wizard_status(self) -> dict[str, Any]:
-        """Fetch getwizard_status.json — connection diagnostics, fetched once at startup."""
+        """getwizard_status.json abrufen — Verbindungsdiagnose, einmalig beim Start."""
         return await self.async_get_endpoint("getwizard_status.json")
 
     async def async_get_temperature_calibration(self) -> dict[str, Any]:
-        """Fetch gettemperature_calibration.json, fetched once at startup."""
+        """gettemperature_calibration.json abrufen, einmalig beim Start."""
         return await self.async_get_endpoint("gettemperature_calibration.json")
 
     async def async_get_registration(self) -> dict[str, Any]:
-        """Fetch getreg.json — installation metadata, fetched once at startup."""
+        """getreg.json abrufen — Installationsmetadaten, einmalig beim Start."""
         return await self.async_get_endpoint("getreg.json")
 
     async def async_send_command(self, command: str, value: float | int) -> None:
-        """Send a write ("inline command") request, e.g. command="heater%20step".
+        """Einen Schreib-Request ("Inline Command") senden, z.B. command="heater%20step".
 
-        ``command`` must already be URL-encoded (spaces as %20), matching the
-        endpoints documented in docs/02_api-referenz.md.
+        ``command`` muss bereits URL-kodiert sein (Leerzeichen als %20),
+        passend zu den in docs/de/02_api-referenz.md dokumentierten Endpunkten.
         """
         if isinstance(value, float) and value.is_integer():
             value = int(value)
@@ -114,10 +118,11 @@ class AskoheatApiClient:
             raise AskoheatApiError(f"Error sending command to {url}: {err}") from err
 
     async def async_send_bare_command(self, path: str) -> None:
-        """Send a parameter-less command, e.g. path="on" for Emergency Mode.
+        """Einen parameterlosen Befehl senden, z.B. path="on" für den Notbetrieb.
 
-        Unlike async_send_command, these endpoints take no ``?value=`` and
-        act like a physical button press on the device (no 60s auto-revert).
+        Anders als async_send_command nehmen diese Endpunkte kein ``?value=``
+        entgegen und wirken wie ein physischer Tastendruck am Gerät (kein
+        60s-Auto-Verfall).
         """
         url = f"{self.base_url}/{path}"
         try:
@@ -130,7 +135,7 @@ class AskoheatApiClient:
 
 
 def get_path(data: dict[str, Any], path: str) -> Any | None:
-    """Look up a dotted path (e.g. "ACTUAL_VALUES.ACTUAL_HEATER_STEP") in a nested dict."""
+    """Einen gepunkteten Pfad (z.B. "ACTUAL_VALUES.ACTUAL_HEATER_STEP") in einem verschachtelten Dict nachschlagen."""
     current: Any = data
     for part in path.split("."):
         if not isinstance(current, dict) or part not in current:
@@ -140,9 +145,10 @@ def get_path(data: dict[str, Any], path: str) -> Any | None:
 
 
 def extract_number(value: Any) -> float | None:
-    """Extract a float from values like "0 watts", "24 °C" or plain numbers.
+    """Eine Fließkommazahl aus Werten wie "0 watts", "24 °C" oder reinen Zahlen extrahieren.
 
-    Returns None if no number can be found (e.g. empty string, "not connected").
+    Liefert None, wenn keine Zahl gefunden werden kann (z.B. leerer String,
+    "not connected").
     """
     if value is None:
         return None
@@ -158,9 +164,9 @@ def extract_number(value: Any) -> float | None:
 
 
 def parse_active(value: Any) -> bool | None:
-    """Parse device "active"/"not active"-style strings into a bool.
+    """Geräteseitige "active"/"not active"-artige Strings in einen bool umwandeln.
 
-    Returns None if the value is empty/unknown rather than guessing.
+    Liefert None, wenn der Wert leer/unbekannt ist, statt zu raten.
     """
     if value is None:
         return None

@@ -1,5 +1,7 @@
 # 05 — Entity-Referenz
 
+*[English version](../en/05_entities.md)*
+
 Sensoren und Binary-Sensoren (Phase 1) sind reine Anzeige-Entities (read-only).
 `source` gibt an, aus welchem Endpunkt der Wert stammt — `home` wird
 regelmäßig gepollt, alle anderen einmalig beim Start (siehe

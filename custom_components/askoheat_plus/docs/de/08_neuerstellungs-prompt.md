@@ -1,5 +1,7 @@
 # 08 — Neuerstellungs-Prompt
 
+*[English version](../en/08_recreation-prompt.md)*
+
 Dieser Prompt fasst Kontext, Entscheidungen und Architektur so zusammen, dass
 sich diese Integration (Phase 1 — Lesen) auch ohne den ursprünglichen Chat-
 Verlauf von Grund auf nachbauen lässt. Einfach als Ganzes an einen KI-Coding-
@@ -34,7 +36,11 @@ Assistenten (z.B. Claude Code) übergeben.
 > als Unterordner, README/LICENSE/hacs.json auf Repo-Root-Ebene) und hänge es per
 > **Symlink** nach `<config>/custom_components/askoheat_plus` ein, damit Home
 > Assistant es sofort lädt, ohne Code zu duplizieren. Die Doku liegt direkt im
-> Integrationsordner (`custom_components/askoheat_plus/docs/`).
+> Integrationsordner (`custom_components/askoheat_plus/docs/de/`, mit einer
+> vollständigen englischen Übersetzung parallel unter `docs/en/` — Deutsch ist
+> die primäre, maßgebliche Version). **Code-Kommentare und Docstrings im
+> gesamten Python-Code sind durchgehend auf Deutsch zu schreiben**, unabhängig
+> von der Doku-Sprache.
 >
 > **API-Endpunkte:** Nutze für den regelmäßigen Poll **ausschließlich**
 > `GET /gethome.json` (ein Request pro Zyklus, Default-Intervall 30 Sekunden,

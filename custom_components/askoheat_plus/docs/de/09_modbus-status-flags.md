@@ -1,5 +1,7 @@
 # 09 — Modbus Status-/Error-Flag-Register (Referenz)
 
+*[English version](../en/09_modbus-status-flags.md)*
+
 Quelle: offizielle Modbus-Registerdoku des Herstellers,
 <http://www.download.askoma.com/askofamily_plus/modbus/askoheat-modbus.html>.
 

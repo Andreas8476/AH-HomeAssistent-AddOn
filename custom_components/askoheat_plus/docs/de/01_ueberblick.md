@@ -1,5 +1,7 @@
 # 01 — Überblick
 
+*[English version](../en/01_overview.md)*
+
 ## Ziel
 
 Eine Home-Assistant-Integration für den **ASKOHEAT+** PV-Heizstab (Hersteller
@@ -52,10 +54,11 @@ Integration frei konfigurierbar, nicht hart kodiert).
 
 ## Weiterführende Dokumente
 
-Siehe [../docs/](.) — durchnummeriert, `02` beginnt mit der API-Referenz.
+Siehe [docs/de/](.) — durchnummeriert, `02` beginnt mit der API-Referenz.
+Englische Übersetzung parallel unter [docs/en/](../en/).
 
 ## Autor
 
 Andreas Stegemann, in Zusammenarbeit mit Claude (Anthropic, Sonnet 5) als
 Coding-Assistent entwickelt. Privates Projekt, keine offizielle Software der
-ASKOMA AG — Details siehe [README.md](../../../README.md#autor).
+ASKOMA AG — Details siehe [README.md](../../../../README.md#autor).

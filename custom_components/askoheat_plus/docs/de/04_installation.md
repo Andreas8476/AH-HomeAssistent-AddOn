@@ -1,5 +1,7 @@
 # 04 — Installation
 
+*[English version](../en/04_installation.md)*
+
 Zwei Repositories, ein Stand: **[GitLab](https://gitlab.com/SyberAlf/ah-homeassistent-addon)**
 ist das Haupt-Repo, **[GitHub](https://github.com/Andreas8476/AH-HomeAssistent-AddOn)**
 ist ein öffentlicher Spiegel — nötig, weil **HACS ausschließlich öffentliche
@@ -137,7 +139,7 @@ Jeder ASKOHEAT+ wird als eigene Integrationsinstanz eingerichtet — einfach
 **Einstellungen → Geräte & Dienste → Integration hinzufügen → "ASKOHEAT+"**
 erneut durchlaufen (Schritt 5) mit der Adresse des zweiten Geräts. Danach für
 eine eigene Dashboard-Ansicht je Gerät:
-[`dashboard/generate_dashboard.py`](../../../dashboard/generate_dashboard.py)
+[`dashboard/generate_dashboard.py`](../../../../dashboard/generate_dashboard.py)
 ausführen, siehe [11_dashboard.md](11_dashboard.md).
 
 ### Ein Gerät entfernen

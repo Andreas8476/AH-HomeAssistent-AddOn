@@ -1,4 +1,4 @@
-"""Switch platform for the ASKOHEAT+ integration."""
+"""Switch-Plattform für die ASKOHEAT+-Integration."""
 
 from __future__ import annotations
 
@@ -18,11 +18,11 @@ from .entity import AskoheatEntity
 
 @dataclass(frozen=True, kw_only=True)
 class AskoheatSwitchEntityDescription(SwitchEntityDescription):
-    """Describes an ASKOHEAT+ switch backed by parameter-less on/off commands.
+    """Beschreibt einen ASKOHEAT+-Switch, gesteuert über parameterlose on/off-Befehle.
 
-    Unlike the number entities, these correspond to the physical button on
-    the device (e.g. Emergency Mode) — the device does not auto-revert them,
-    so no keep-alive is needed here.
+    Anders als die Number-Entities entsprechen diese dem physischen Taster am
+    Gerät (z.B. Notbetrieb) — das Gerät setzt sie nicht automatisch zurück,
+    daher ist hier kein Keep-Alive nötig.
     """
 
     on_command: str
@@ -43,7 +43,7 @@ SWITCH_DESCRIPTIONS: tuple[AskoheatSwitchEntityDescription, ...] = (
 
 
 class AskoheatSwitch(AskoheatEntity, SwitchEntity):
-    """An ASKOHEAT+ switch backed by parameter-less on/off inline commands."""
+    """Ein ASKOHEAT+-Switch, gesteuert über parameterlose on/off-Inline-Commands."""
 
     entity_description: AskoheatSwitchEntityDescription
 
@@ -74,7 +74,7 @@ async def async_setup_entry(
     entry: AskoheatConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up ASKOHEAT+ switch entities from a config entry."""
+    """ASKOHEAT+-Switch-Entities aus einem Config-Entry einrichten."""
     coordinator = entry.runtime_data
     async_add_entities(
         AskoheatSwitch(coordinator, description) for description in SWITCH_DESCRIPTIONS

@@ -1,4 +1,4 @@
-"""Config flow for the ASKOHEAT+ integration."""
+"""Config-Flow für die ASKOHEAT+-Integration."""
 
 from __future__ import annotations
 
@@ -46,14 +46,14 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 
 
 class AskoheatConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for ASKOHEAT+."""
+    """Behandelt einen Config-Flow für ASKOHEAT+."""
 
     VERSION = 1
 
     async def _async_validate(
         self, user_input: dict[str, Any]
     ) -> tuple[dict[str, Any] | None, str | None]:
-        """Test the connection. Returns (gethome.json data, error_code)."""
+        """Die Verbindung testen. Liefert (gethome.json-Daten, Fehlercode)."""
         session = async_get_clientsession(self.hass)
         client = AskoheatApiClient(
             session, user_input[CONF_HOST], user_input.get(CONF_PORT, DEFAULT_PORT)
@@ -71,7 +71,7 @@ class AskoheatConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Handle the initial step: ask for host/port and test the connection."""
+        """Den ersten Schritt behandeln: Host/Port abfragen und die Verbindung testen."""
         errors: dict[str, str] = {}
 
         if user_input is not None:
@@ -94,12 +94,13 @@ class AskoheatConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_reconfigure(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Allow changing host/port/scan_interval after initial setup.
+        """Änderung von Host/Port/Abfrageintervall nach der Ersteinrichtung erlauben.
 
-        Reachable via the config entry's "..." menu -> "Reconfigure". Reuses
-        the same connection test as the initial setup; the device found must
-        be the same physical device (same DEVICEID) the entry was originally
-        set up for, to avoid silently repointing an entry at a different unit.
+        Erreichbar über das "..."-Menü des Config-Entry -> "Neu konfigurieren".
+        Nutzt denselben Verbindungstest wie die Ersteinrichtung; das gefundene
+        Gerät muss dasselbe physische Gerät (gleiche DEVICEID) sein, für das
+        der Entry ursprünglich eingerichtet wurde, damit ein Entry nicht
+        stillschweigend auf ein anderes Gerät umgebogen wird.
         """
         reconfigure_entry = self._get_reconfigure_entry()
         errors: dict[str, str] = {}

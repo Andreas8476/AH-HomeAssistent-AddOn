@@ -1,4 +1,4 @@
-"""Base entity for the ASKOHEAT+ integration."""
+"""Basis-Entity für die ASKOHEAT+-Integration."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from .coordinator import AskoheatDataUpdateCoordinator
 
 
 class AskoheatEntity(CoordinatorEntity[AskoheatDataUpdateCoordinator]):
-    """Common base for all ASKOHEAT+ entities."""
+    """Gemeinsame Basis für alle ASKOHEAT+-Entities."""
 
     _attr_has_entity_name = True
 

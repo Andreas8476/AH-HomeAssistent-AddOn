@@ -1,5 +1,7 @@
 # 07 — Changelog
 
+*[English version](../en/07_changelog.md)*
+
 Änderungsprotokoll dieses Projekts. Separat vom globalen
 `/homeassistant/docs/changelog.md` des Gesamt-HA-Setups (der dort verweist nur
 kurz auf dieses Projekt).
@@ -65,7 +67,7 @@ kurz auf dieses Projekt).
   gesendet, solange er `≠ 0` ist; stoppt bei `0` oder Entity-Entfernung.
   `native_value` zeigt bevorzugt den intern gehaltenen Wert (sofortiges
   UI-Feedback). Details: [02_api-referenz.md](02_api-referenz.md).
-- Neue Automation-Blueprint [`blueprints/askoheat_plus_feedin_from_meter.yaml`](../../../blueprints/askoheat_plus_feedin_from_meter.yaml)
+- Neue Automation-Blueprint [`blueprints/askoheat_plus_feedin_from_meter.yaml`](../../../../blueprints/askoheat_plus_feedin_from_meter.yaml)
   verknüpft einen beliebigen Zähler-/Wechselrichter-Leistungssensor mit dem
   Einspeisewert (`number.load_feedin`) — Import-Anleitung in neuer
   [10_automatisierung.md](10_automatisierung.md). Bewusst als Blueprint statt
@@ -135,7 +137,7 @@ kurz auf dieses Projekt).
 - "Alle Werte"-Fallback-Karte: explizite kurze `name:`-Overrides für jede
   Entity, da die vollen Standardnamen (inkl. Gerätename) in der
   Entities-Karte abgeschnitten wurden.
-- `docs/04_installation.md`: Terminal/SSH-Add-on als Voraussetzung für die
+- `docs/de/04_installation.md`: Terminal/SSH-Add-on als Voraussetzung für die
   HACS-Erstinstallation jetzt explizit unter "Voraussetzungen" genannt
   (vorher nur implizit in Schritt 1), inkl. terminalloser Alternative
   (File editor/Samba).
@@ -236,6 +238,17 @@ kurz auf dieses Projekt).
   Bild 1, per Jinja-Template aus dem `last_updated` der Heizleistungs-Entity.
 - Die bisherige Beschreibungszeile ("Sensor 0 sitzt direkt am Heizstab...")
   über Bild 1 auf Wunsch entfernt, für nicht mehr nötig befunden.
+
+## 2026-09-26 — Dashboard-Feinlayout nach Skizze: T0 neben Element, T1-T4 rechtsbündig, Watt zentriert
+
+- Andreas hat eine mit Pfeilen annotierte Skizze geschickt: T0 soll rechts
+  neben das ASKOHEAT+-Heizelement, T1–T4 sauber rechtsbündig mit T0
+  ausgerichtet werden, die Heizleistung mittig darunter. Umgesetzt und
+  pixelgenau gegen `boiler-sensors.png` verifiziert: T0/T1–T4 jetzt alle bei
+  `left: 76%` (T0 bei `top: 65%`, direkt rechts vom Element, das dort bei
+  ~49-73% eine Schattenzone bis ~74% hat), Heizleistung bei
+  `left: 54%, top: 88%` (mittig unter dem Element, unterhalb jeder
+  Schattenzone, durchgehend freie Fläche).
 
 ## Offene Punkte
 

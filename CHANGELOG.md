@@ -7,7 +7,8 @@ Versionierung nach [Semantic Versioning](https://semver.org/lang/de/) (die
 Versionsnummer steht auch in `custom_components/askoheat_plus/manifest.json`).
 
 Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidungen):
-[`custom_components/askoheat_plus/docs/07_changelog.md`](custom_components/askoheat_plus/docs/07_changelog.md).
+[`custom_components/askoheat_plus/docs/de/07_changelog.md`](custom_components/askoheat_plus/docs/de/07_changelog.md)
+(Englisch: [`docs/en/07_changelog.md`](custom_components/askoheat_plus/docs/en/07_changelog.md)).
 
 ## [Unreleased]
 
@@ -31,6 +32,23 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
   neben dem Tank verschoben, aus demselben Grund.
 - Dashboard, Bild 1: Beschreibungstext über der Karte entfernt (nicht mehr
   für nötig befunden).
+- Dashboard, Bild 1: Feinlayout nach Andreas' Skizze — T0 direkt rechts neben
+  dem Heizelement, T1–T4 rechtsbündig mit T0 ausgerichtet, Heizleistung
+  mittig unter dem Heizelement.
+- Dashboard, Bild 2: "Stufe"-Label zeigt jetzt die tatsächliche (Ist-)
+  Heizstufe statt der Ziel-Heizstufe, damit es auch bei aktivem Notbetrieb
+  korrekt mitläuft.
+- Herzschlag-Zeitstempel nutzt jetzt eine eigene `last_update`-Diagnose-
+  Entity statt `last_updated` eines gewöhnlichen Sensors (der nur bei
+  Wertänderung aktualisiert wird), damit er wirklich jeden Poll widerspiegelt.
+- Code-Kommentare und Docstrings im gesamten Python-Code durchgängig auf
+  Deutsch.
+
+### Dokumentation
+
+- Die durchnummerierte Projekt-Doku liegt jetzt unter `docs/de/` (weiterhin
+  primär/maßgeblich) mit einer vollständigen englischen Übersetzung
+  parallel unter `docs/en/`.
 
 ## [0.7.0] - 2026-09-25
 
@@ -128,7 +146,7 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
   (`heater%20step`, `load%20setpoint`, `load%20feedin`), Wertebereiche
   dynamisch vom Gerät (Anzahl Heizstufen/max. Leistung) bzw. int16-Bereich für
   den Einspeisewert.
-- Referenzdoku [`09_modbus-status-flags.md`](custom_components/askoheat_plus/docs/09_modbus-status-flags.md):
+- Referenzdoku [`09_modbus-status-flags.md`](custom_components/askoheat_plus/docs/de/09_modbus-status-flags.md):
   Bit-für-Bit-Bedeutung der Modbus-Status-/Fehler-Register, aus der
   offiziellen Registerdoku des Herstellers.
 

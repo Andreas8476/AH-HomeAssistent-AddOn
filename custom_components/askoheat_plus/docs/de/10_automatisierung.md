@@ -1,5 +1,7 @@
 # 10 — Automatisierung: Einspeisewert mit Zähler/Wechselrichter verknüpfen
 
+*[English version](../en/10_automation.md)*
+
 ## Hintergrund
 
 Der klassische Anwendungsfall für ASKOHEAT+: PV-Überschuss automatisch
@@ -18,7 +20,7 @@ automatisch dafür, dass der zuletzt übertragene Wert nicht wegen des
 
 ## Blueprint importieren
 
-Datei im Repo: [`blueprints/askoheat_plus_feedin_from_meter.yaml`](../../../blueprints/askoheat_plus_feedin_from_meter.yaml).
+Datei im Repo: [`blueprints/askoheat_plus_feedin_from_meter.yaml`](../../../../blueprints/askoheat_plus_feedin_from_meter.yaml).
 
 1. In Home Assistant: **Einstellungen → Automatisierungen & Szenen →
    Blueprints → Blueprint importieren**.

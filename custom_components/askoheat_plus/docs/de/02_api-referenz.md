@@ -1,5 +1,7 @@
 # 02 — API-Referenz
 
+*[English version](../en/02_api-reference.md)*
+
 Quelle: Herstellerdoku "ASKOHEAT+ JSON" und "Askoheat+ Steuerung via REST API"
 (Askoma Confluence-Export, dem Projekt als Anhang übergeben) sowie ein realer
 Beispiel-Dump aller Endpunkte eines Andreas' eigenen Geräts

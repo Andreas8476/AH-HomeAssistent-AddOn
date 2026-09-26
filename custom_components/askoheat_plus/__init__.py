@@ -1,4 +1,4 @@
-"""The ASKOHEAT+ integration."""
+"""Die ASKOHEAT+-Integration."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ type AskoheatConfigEntry = ConfigEntry[AskoheatDataUpdateCoordinator]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: AskoheatConfigEntry) -> bool:
-    """Set up ASKOHEAT+ from a config entry."""
+    """ASKOHEAT+ aus einem Config-Entry einrichten."""
     host = entry.data[CONF_HOST]
     port = entry.data.get(CONF_PORT, DEFAULT_PORT)
     scan_interval = entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
@@ -41,5 +41,5 @@ async def async_setup_entry(hass: HomeAssistant, entry: AskoheatConfigEntry) -> 
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: AskoheatConfigEntry) -> bool:
-    """Unload an ASKOHEAT+ config entry."""
+    """Einen ASKOHEAT+-Config-Entry entladen."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

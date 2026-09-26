@@ -1,4 +1,4 @@
-"""Binary sensor platform for the ASKOHEAT+ integration."""
+"""Binary-Sensor-Plattform für die ASKOHEAT+-Integration."""
 
 from __future__ import annotations
 
@@ -22,13 +22,13 @@ from .entity import AskoheatEntity
 
 @dataclass(frozen=True, kw_only=True)
 class AskoheatBinarySensorEntityDescription(BinarySensorEntityDescription):
-    """Describes an ASKOHEAT+ binary sensor backed by a path in gethome.json."""
+    """Beschreibt einen ASKOHEAT+-Binary-Sensor, der einen Pfad in gethome.json ausliest."""
 
     value_fn: Callable[[dict[str, Any]], bool | None]
 
 
 def _active(path: str) -> Callable[[dict[str, Any]], bool | None]:
-    """Return a value_fn that reads an "active"/"not active"-style path."""
+    """Eine value_fn liefern, die einen "active"/"not active"-artigen Pfad liest."""
     return lambda data: parse_active(get_path(data, path))
 
 
@@ -39,9 +39,9 @@ BINARY_SENSOR_DESCRIPTIONS: tuple[AskoheatBinarySensorEntityDescription, ...] = 
         icon="mdi:pump",
         value_fn=_active("ACTUAL_VALUES.PUMP_OUTPUT"),
     ),
-    # Note: emergency_mode is no longer a binary_sensor — see switch.py,
-    # which both shows and controls it (the device exposes a real on/off
-    # command for it, unlike the other STATUS_FLAGS.* fields here).
+    # Hinweis: emergency_mode ist kein binary_sensor mehr — siehe switch.py,
+    # das ihn sowohl anzeigt als auch steuert (das Gerät stellt dafür einen
+    # echten on/off-Befehl bereit, anders als die übrigen STATUS_FLAGS.*-Felder hier).
     AskoheatBinarySensorEntityDescription(
         key="heater_disabled",
         translation_key="heater_disabled",
@@ -66,7 +66,7 @@ BINARY_SENSOR_DESCRIPTIONS: tuple[AskoheatBinarySensorEntityDescription, ...] = 
 
 
 class AskoheatBinarySensor(AskoheatEntity, BinarySensorEntity):
-    """An ASKOHEAT+ binary sensor backed by a value_fn reading gethome.json."""
+    """Ein ASKOHEAT+-Binary-Sensor, dessen value_fn gethome.json ausliest."""
 
     entity_description: AskoheatBinarySensorEntityDescription
 
@@ -82,7 +82,7 @@ async def async_setup_entry(
     entry: AskoheatConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up ASKOHEAT+ binary sensors from a config entry."""
+    """ASKOHEAT+-Binary-Sensoren aus einem Config-Entry einrichten."""
     coordinator = entry.runtime_data
     async_add_entities(
         AskoheatBinarySensor(coordinator, description)

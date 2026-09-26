@@ -1,4 +1,4 @@
-"""Number platform for the ASKOHEAT+ integration (Phase 2 — Steuern)."""
+"""Number-Plattform für die ASKOHEAT+-Integration (Phase 2 — Steuern)."""
 
 from __future__ import annotations
 
@@ -42,13 +42,13 @@ _LOGGER = logging.getLogger(__name__)
 
 @dataclass(frozen=True, kw_only=True)
 class AskoheatNumberEntityDescription(NumberEntityDescription):
-    """Describes an ASKOHEAT+ number control.
+    """Beschreibt ein ASKOHEAT+-Number-Steuerelement.
 
-    ``command`` is the already-URL-encoded write endpoint (see const.py).
-    ``value_path`` reads the current value (for display) from gethome.json.
-    ``max_value_path``, if set, overrides ``native_max_value`` dynamically
-    from a value already present in gethome.json (device-reported limits
-    instead of a hardcoded guess).
+    ``command`` ist der bereits URL-kodierte Schreib-Endpunkt (siehe const.py).
+    ``value_path`` liest den aktuellen Wert (zur Anzeige) aus gethome.json.
+    ``max_value_path`` überschreibt, falls gesetzt, ``native_max_value``
+    dynamisch mit einem bereits in gethome.json vorhandenen Wert
+    (geräteseitig gemeldete Grenzwerte statt eines fest codierten Schätzwerts).
     """
 
     command: str
@@ -97,14 +97,14 @@ NUMBER_DESCRIPTIONS: tuple[AskoheatNumberEntityDescription, ...] = (
 
 
 class AskoheatNumber(AskoheatEntity, NumberEntity):
-    """A settable ASKOHEAT+ value, backed by an inline-command endpoint.
+    """Ein setzbarer ASKOHEAT+-Wert, geschrieben über einen Inline-Command-Endpunkt.
 
-    The device reverts these values on its own ~60s after the last write if
-    nothing resends them (manufacturer-documented behavior — a controlling
-    device is expected to keep sending). This entity resends the last-set
-    value every NUMBER_KEEPALIVE_INTERVAL seconds for as long as it is
-    non-zero, and stops as soon as it's set back to 0 (or the entity is
-    removed). See docs/02_api-referenz.md.
+    Das Gerät setzt diese Werte von sich aus ~60s nach dem letzten Schreiben
+    zurück, wenn sie niemand erneut sendet (herstellerseitig dokumentiertes
+    Verhalten — ein steuerndes Gerät soll kontinuierlich weitersenden). Diese
+    Entity sendet den zuletzt gesetzten Wert alle NUMBER_KEEPALIVE_INTERVAL
+    Sekunden erneut, solange er ungleich null ist, und stoppt, sobald er auf 0
+    gesetzt wird (oder die Entity entfernt wird). Siehe docs/de/02_api-referenz.md.
     """
 
     entity_description: AskoheatNumberEntityDescription
@@ -120,9 +120,9 @@ class AskoheatNumber(AskoheatEntity, NumberEntity):
 
     @property
     def native_value(self) -> Any:
-        # Prefer the value we're actively keeping alive over the next poll's
-        # SET_INPUTS.* snapshot — instant UI feedback, and accurate while a
-        # keep-alive is running since we're the one holding the value there.
+        # Den Wert, den wir gerade aktiv am Leben halten, gegenüber dem
+        # nächsten SET_INPUTS.*-Snapshot bevorzugen — sofortiges UI-Feedback,
+        # und korrekt solange ein Keep-Alive läuft, da wir selbst den Wert dort halten.
         if self._last_set_value is not None:
             return self._last_set_value
         if self.coordinator.data is None:
@@ -192,7 +192,7 @@ async def async_setup_entry(
     entry: AskoheatConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up ASKOHEAT+ number entities from a config entry."""
+    """ASKOHEAT+-Number-Entities aus einem Config-Entry einrichten."""
     coordinator = entry.runtime_data
     async_add_entities(
         AskoheatNumber(coordinator, description) for description in NUMBER_DESCRIPTIONS

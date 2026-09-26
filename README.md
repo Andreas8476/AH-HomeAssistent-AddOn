@@ -12,13 +12,17 @@ Heizstab-Bildern und Live-Werten als Overlay.
 
 ## Dokumentation
 
-Vollständige, durchnummerierte Doku unter
-[`custom_components/askoheat_plus/docs/`](custom_components/askoheat_plus/docs/),
-Start bei [`01_ueberblick.md`](custom_components/askoheat_plus/docs/01_ueberblick.md).
+Vollständige, durchnummerierte Doku auf Deutsch unter
+[`custom_components/askoheat_plus/docs/de/`](custom_components/askoheat_plus/docs/de/),
+Start bei [`01_ueberblick.md`](custom_components/askoheat_plus/docs/de/01_ueberblick.md).
+Englische Übersetzung unter
+[`custom_components/askoheat_plus/docs/en/`](custom_components/askoheat_plus/docs/en/)
+(Start bei [`01_overview.md`](custom_components/askoheat_plus/docs/en/01_overview.md)) —
+Deutsch ist die primäre, maßgebliche Version.
 
 ## Installation
 
-Siehe [`04_installation.md`](custom_components/askoheat_plus/docs/04_installation.md)
+Siehe [`04_installation.md`](custom_components/askoheat_plus/docs/de/04_installation.md)
 (HACS, manuell, oder lokale Entwicklung per Symlink).
 
 ## Dashboard
@@ -26,13 +30,13 @@ Siehe [`04_installation.md`](custom_components/askoheat_plus/docs/04_installatio
 Eigenes Lovelace-Dashboard mit Bild-Overlays (Andreas' Askoma-Renderbilder),
 unterstützt beliebig viele Geräte (eine Ansicht pro Heizstab, automatisch
 generiert aus `dashboard/generate_dashboard.py`): siehe
-[`11_dashboard.md`](custom_components/askoheat_plus/docs/11_dashboard.md).
+[`11_dashboard.md`](custom_components/askoheat_plus/docs/de/11_dashboard.md).
 
 ## Automatisierung
 
 Mitgelieferte Blueprint, um den Einspeisewert automatisch aus einem Zähler-/
 Wechselrichter-Sensor zu befüllen: siehe
-[`10_automatisierung.md`](custom_components/askoheat_plus/docs/10_automatisierung.md).
+[`10_automatisierung.md`](custom_components/askoheat_plus/docs/de/10_automatisierung.md).
 
 ## Repositories
 
