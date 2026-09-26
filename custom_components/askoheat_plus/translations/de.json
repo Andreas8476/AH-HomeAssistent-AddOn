@@ -41,6 +41,7 @@
       "temperature_limit_info": { "name": "Temperaturlimit" },
       "error_status": { "name": "Gerätestatus" },
       "legio_info": { "name": "Legionellenschutz" },
+      "last_update": { "name": "Letzte Aktualisierung" },
       "article_name": { "name": "Artikelname" },
       "article_number": { "name": "Artikelnummer" },
       "serial_number": { "name": "Seriennummer" },

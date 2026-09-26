@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-"""Generate askoheat_plus_dashboard.yaml from the currently configured
-ASKOHEAT+ devices in Home Assistant.
+"""Erzeugt askoheat_plus_dashboard.yaml aus den aktuell in Home Assistant
+eingerichteten ASKOHEAT+-Geräten.
 
-Why this exists: the dashboard's picture-elements cards need concrete
-entity_ids, which depend on the device's article name and are only known
-after setup — they can't be templated generically in plain Lovelace YAML.
-Instead of hand-editing the dashboard every time a device is added, removed
-or renamed, this script re-derives one dashboard view per configured
-ASKOHEAT+ device directly from Home Assistant's own entity registry.
+Warum es das gibt: die picture-elements-Karten des Dashboards brauchen
+konkrete Entity-IDs, die vom Artikelnamen des jeweiligen Geräts abhängen und
+erst nach dem Einrichten bekannt sind — generisch in reinem Lovelace-YAML
+lässt sich das nicht templaten. Statt das Dashboard bei jedem Hinzufügen,
+Entfernen oder Umbenennen eines Geräts von Hand zu pflegen, leitet dieses
+Skript eine Dashboard-Ansicht pro eingerichtetem ASKOHEAT+-Gerät direkt aus
+Home Assistants eigener Entity-Registry ab.
 
-Usage (on the HA host):
+Verwendung (auf dem HA-Host):
     python3 /homeassistant/askoheat_plus/dashboard/generate_dashboard.py
 
-Then: `ha core check` && `ha core restart` to see the result. Safe to run
-any time you add/remove/rename an ASKOHEAT+ device — it always regenerates
-the whole file from the current registry state, nothing is hand-merged.
+Danach: `ha core check` && `ha core restart`, um das Ergebnis zu sehen.
+Gefahrlos jederzeit erneut ausführbar, wenn ein ASKOHEAT+-Gerät hinzugefügt,
+entfernt oder umbenannt wird — es erzeugt die Datei jedes Mal komplett neu
+aus dem aktuellen Registry-Stand, nichts wird von Hand zusammengeführt.
 """
 
 from __future__ import annotations
@@ -37,33 +39,38 @@ LABEL_STYLE = """              color: white
               font-weight: bold
               font-size: 12px"""
 
-# (unique_id suffix, label prefix, top%, left%, bg color) for the boiler/coil image.
-# Positions verified pixel-by-pixel against dashboard/images/boiler-sensors.png
-# (398x502): T1-T4 sit in a clear column right of the coil (which never
-# reaches past ~58% left here); T0 and heater_load sit far left instead,
-# since the actual ASKOHEAT+ heating element (the small orange coil visible
-# at ~49-73% left / 63-70% top, below the heat-exchanger coil) needs that
-# spot kept clear per Andreas' feedback on the previous layout.
+# (unique_id-Suffix, Label-Präfix, top%, left%, Hintergrundfarbe) für das
+# Heizstab-/Wendel-Bild. Positionen pixelgenau gegen
+# dashboard/images/boiler-sensors.png (398x502) verifiziert: T1-T4 sitzen in
+# einer freien Spalte rechts der großen Wärmetauscher-Wendel. T0 und
+# heater_load sitzen bewusst weit links, weil das eigentliche
+# ASKOHEAT+-Heizelement (die kleine orangene Wendel bei ~49-73% links /
+# 63-70% oben, unterhalb der großen Wendel, neben dem Sensor-Puck) frei
+# bleiben soll (Feedback von Andreas nach Live-Test).
 SENSOR_ELEMENTS = [
     ("temperature_sensor_4", "T4: ", 10, 72, "rgba(0, 0, 0, 0.65)"),
     ("temperature_sensor_3", "T3: ", 24, 72, "rgba(0, 0, 0, 0.65)"),
     ("temperature_sensor_2", "T2: ", 38, 72, "rgba(0, 0, 0, 0.65)"),
     ("temperature_sensor_1", "T1: ", 52, 72, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_0", "T0: ", 65, 16, "rgba(0, 0, 0, 0.65)"),
-    ("heater_load", "⚡ ", 88, 16, "rgba(120, 20, 20, 0.75)"),
+    ("temperature_sensor_0", "T0: ", 65, 26, "rgba(0, 0, 0, 0.65)"),
+    ("heater_load", "⚡ ", 88, 26, "rgba(120, 20, 20, 0.75)"),
 ]
 
-# (unique_id suffix, label prefix, top%, left%) for the meter-cabinet image.
-# "Stufe" moved right of the tank onto the plain wall/floor area (was
-# overlapping the ASKOHEAT+ heating element at ~21-23% left / 68-71% top in
-# dashboard/images/boiler-meter.png).
+# (unique_id-Suffix, Label-Präfix, top%, left%) für das Zählerschrank-Bild.
+# "Stufe" ist an heater_step (Ist-Wert) gebunden statt an heater_step_target
+# (Soll-Wert): Bei aktivem Notbetrieb steuert das Gerät die Heizstufe selbst,
+# ohne die Ziel-Heizstufen-Entity zu ändern — mit heater_step_target blieb
+# die Anzeige dabei fälschlich stehen (Feedback von Andreas nach Live-Test
+# mit Notbetrieb). Position rechts neben dem Tank auf der freien Wand-/
+# Bodenfläche, weg vom ASKOHEAT+-Heizelement bei ~21-23% links / 68-71% oben
+# in dashboard/images/boiler-meter.png.
 METER_ELEMENTS = [
-    ("heater_step_target", "Stufe: ", 76, 42),
+    ("heater_step", "Stufe: ", 76, 42),
     ("load_setpoint", "Vorgabe: ", 18, 70),
     ("load_feedin", "Einspeisung: ", 60, 68),
 ]
 
-# (unique_id suffix, short display name) for the fallback entities card
+# (unique_id-Suffix, Kurzname) für die Fallback-Entities-Karte
 FALLBACK_ENTITIES = [
     ("error_status", "Gerätestatus"),
     ("heater_step", "Heizstufe (Ist)"),
@@ -83,7 +90,7 @@ def slugify(text: str) -> str:
 
 
 def load_devices() -> list[dict]:
-    """Return one dict per ASKOHEAT+ config entry: {entry_id, title, entities}."""
+    """Ein Dict pro ASKOHEAT+-Config-Entry liefern: {entry_id, title, entities}."""
     config_entries = json.loads(CONFIG_ENTRIES_PATH.read_text())
     entity_registry = json.loads(ENTITY_REGISTRY_PATH.read_text())
 
@@ -100,9 +107,9 @@ def load_devices() -> list[dict]:
             unique_id = ent.get("unique_id") or ""
             if "_" not in unique_id:
                 continue
-            # unique_id = f"{device_id}_{key}", device_id itself may contain
-            # colons (MAC-style) but never underscores, so split once from
-            # the left on the first "_" after the MAC-style id.
+            # unique_id = f"{device_id}_{key}", device_id selbst kann
+            # Doppelpunkte enthalten (MAC-artig), aber nie Unterstriche —
+            # daher einmalig von links am ersten "_" nach der MAC-artigen ID trennen.
             suffix = unique_id.split("_", 1)[1] if "_" in unique_id else None
             if suffix:
                 entities_by_suffix[suffix] = ent["entity_id"]
@@ -118,7 +125,7 @@ def load_devices() -> list[dict]:
 
 def render_label(entity_id: str | None, prefix: str, top: float, left: float, bg: str) -> str:
     if entity_id is None:
-        return ""  # entity not found on this device, skip silently
+        return ""  # Entity auf diesem Gerät nicht vorhanden, still überspringen
     style = LABEL_STYLE.format(bg=bg)
     return (
         f"          - type: state-label\n"
@@ -150,13 +157,16 @@ def render_view(device: dict) -> str:
         if suffix in ents
     )
 
-    # Heartbeat: "last updated" relative-time, read off heater_load since
-    # that's part of the regularly-polled gethome.json (updates every
-    # scan_interval), so it reflects the actual last successful poll.
-    heartbeat_entity = ents.get("heater_load")
+    # Herzschlag: Zeitpunkt des letzten erfolgreichen Polls, aus der
+    # last_update-Diagnose-Entity (siehe coordinator.py/sensor.py) statt aus
+    # last_updated eines gewöhnlichen Sensors — Home Assistant aktualisiert
+    # last_updated nämlich nur bei einer echten Wertänderung, nicht bei jedem
+    # Poll (bei konstanter Heizleistung stand hier sonst ein veralteter
+    # Zeitstempel, obwohl brav alle scan_interval-Sekunden gepollt wurde).
+    heartbeat_entity = ents.get("last_update")
     heartbeat_line = (
         "\n\n          🔄 Zuletzt aktualisiert: vor "
-        "{{ relative_time(states['" + heartbeat_entity + "'].last_updated) }}"
+        "{{ relative_time(as_datetime(states('" + heartbeat_entity + "'))) }}"
         if heartbeat_entity
         else ""
     )
@@ -191,24 +201,26 @@ def main() -> None:
     devices = load_devices()
     if not devices:
         raise SystemExit(
-            "No ASKOHEAT+ config entries found in core.config_entries - "
-            "set up at least one device first."
+            "Keine ASKOHEAT+-Config-Entries in core.config_entries gefunden - "
+            "zuerst mindestens ein Gerät einrichten."
         )
 
-    header = """# ASKOHEAT+ Dashboard — auto-generated, do not hand-edit
+    header = """# ASKOHEAT+ Dashboard — automatisch generiert, nicht von Hand bearbeiten
 #
-# Generated by dashboard/generate_dashboard.py from the ASKOHEAT+ devices
-# currently configured in this Home Assistant instance. Re-run that script
-# after adding/removing/renaming a device, then `ha core restart`.
+# Erzeugt von dashboard/generate_dashboard.py aus den aktuell in dieser
+# Home-Assistant-Instanz eingerichteten ASKOHEAT+-Geräten. Nach dem
+# Hinzufügen/Entfernen/Umbenennen eines Geräts erneut ausführen, dann
+# `ha core restart`.
 #
-# Positions (top/left in %) are a starting point, not a precision
-# measurement - adjustable via drag & drop in the Lovelace UI editor.
-# Details: custom_components/askoheat_plus/docs/11_dashboard.md
+# Positionen (top/left in %) sind ein Startpunkt, keine Präzisionsmessung -
+# per Drag & Drop im Lovelace-UI-Editor anpassbar.
+# Details: custom_components/askoheat_plus/docs/de/11_dashboard.md
 #
-# Note: deliberately written WITHOUT YAML anchors/merge keys (&/*/<<) - Home
-# Assistant's own YAML loader (annotatedyaml) logs "duplicate key" warnings
-# for "<<: *anchor" plus sibling keys in the same mapping instead of merging
-# them cleanly, so every style block is fully spelled out.
+# Hinweis: bewusst OHNE YAML-Anker/Merge-Keys (&/*/<<) geschrieben - Home
+# Assistants eigener YAML-Loader (annotatedyaml) protokolliert bei
+# "<<: *anchor" plus Geschwister-Keys in derselben Zuordnung "duplicate key"-
+# Warnungen statt sauber zu mergen, daher ist jeder style-Block vollständig
+# ausgeschrieben.
 
 title: ASKOHEAT+
 views:

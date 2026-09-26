@@ -1,9 +1,10 @@
-"""Sensor platform for the ASKOHEAT+ integration."""
+"""Sensor-Plattform für die ASKOHEAT+-Integration."""
 
 from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, replace
+from datetime import datetime
 from typing import Any
 
 from homeassistant.components.sensor import (
@@ -27,25 +28,32 @@ from .entity import AskoheatEntity
 
 @dataclass(frozen=True, kw_only=True)
 class AskoheatSensorEntityDescription(SensorEntityDescription):
-    """Describes an ASKOHEAT+ sensor backed by a path in one of the fetched endpoints.
+    """Beschreibt einen ASKOHEAT+-Sensor, der einen Pfad in einem der Endpunkte ausliest.
 
-    ``source`` selects which coordinator-held dict ``value_fn`` is applied to:
-    "home" is the regularly-polled gethome.json (default), the others are the
-    secondary endpoints fetched once at startup (see coordinator.py).
+    ``source`` legt fest, auf welches Coordinator-Dict ``value_fn`` angewendet
+    wird: "home" ist das regelmäßig gepollte gethome.json (Standard), die
+    anderen sind die einmalig beim Start geladenen Sekundär-Endpunkte.
+    "coordinator" ist ein Sonderfall: hier bekommt ``value_fn`` den Coordinator
+    selbst statt eines Daten-Dicts (siehe last_update unten).
     """
 
-    value_fn: Callable[[dict[str, Any]], Any]
+    value_fn: Callable[[Any], Any]
     source: str = "home"
 
 
 def _text(path: str) -> Callable[[dict[str, Any]], Any]:
-    """Return a value_fn that reads a path as plain text."""
+    """Eine value_fn liefern, die einen Pfad als reinen Text liest."""
     return lambda data: get_path(data, path)
 
 
 def _number(path: str) -> Callable[[dict[str, Any]], Any]:
-    """Return a value_fn that reads a path and extracts a number from it."""
+    """Eine value_fn liefern, die einen Pfad liest und eine Zahl daraus extrahiert."""
     return lambda data: extract_number(get_path(data, path))
+
+
+def _last_update(coordinator: AskoheatDataUpdateCoordinator) -> datetime | None:
+    """value_fn für den last_update-Sensor: Zeitpunkt des letzten erfolgreichen Polls."""
+    return coordinator.last_update_time
 
 
 SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
@@ -72,12 +80,13 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=_number("ACTUAL_VALUES.TEMP_SENSOR_0"),
     ),
-    # Sensor 0 is always the one at the heating element itself; 1-4 are
-    # additional probes along the tank, not present on every installation.
-    # entity_registry_enabled_default=False here is only the fallback for
-    # entities never seen before — async_setup_entry() below overrides it
-    # per-device based on whether the sensor actually reports a value, and
-    # retroactively re-enables already-registered ones the same way.
+    # Sensor 0 sitzt immer direkt am Heizstab; 1-4 sind zusätzliche Messfühler
+    # am Tank, nicht bei jeder Installation vorhanden.
+    # entity_registry_enabled_default=False ist hier nur der Fallback für
+    # Entities, die noch nie gesehen wurden — async_setup_entry() weiter unten
+    # überschreibt das pro Gerät live, je nachdem ob der Sensor tatsächlich
+    # einen Wert liefert, und aktiviert bereits registrierte Entities auf
+    # demselben Weg rückwirkend.
     AskoheatSensorEntityDescription(
         key="temperature_sensor_1",
         translation_key="temperature_sensor_1",
@@ -120,9 +129,9 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         icon="mdi:thermometer-alert",
         value_fn=_text("ACTUAL_VALUES.ACTUAL_TEMPERATURE_LIMIT"),
     ),
-    # Note: SET_INPUTS.SET_HEATER_STEP / SET_LOAD_FEEDIN are no longer shown
-    # as separate read-only sensors here — the Phase 2 number entities
-    # (number.py) display and set the same values in one place.
+    # Hinweis: SET_INPUTS.SET_HEATER_STEP / SET_LOAD_FEEDIN werden hier nicht
+    # mehr als eigene read-only-Sensoren geführt — die Phase-2-Number-Entities
+    # (number.py) zeigen und setzen dieselben Werte an einer Stelle.
     AskoheatSensorEntityDescription(
         key="error_status",
         translation_key="error_status",
@@ -136,7 +145,15 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=_text("ASKOHEAT_PLUS_INFO.LEGIO_INFO"),
     ),
-    # --- Diagnostic/static info, all from the same gethome.json poll ---
+    AskoheatSensorEntityDescription(
+        key="last_update",
+        translation_key="last_update",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        source="coordinator",
+        value_fn=_last_update,
+    ),
+    # --- Diagnose-/statische Infos, alle aus demselben gethome.json-Poll ---
     AskoheatSensorEntityDescription(
         key="article_name",
         translation_key="article_name",
@@ -202,7 +219,7 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         entity_registry_enabled_default=False,
         value_fn=_number("ASKOHEAT_PLUS_INFO.NUMBER_OF_STEPS"),
     ),
-    # --- From secondary endpoints, fetched once at startup (see coordinator.py) ---
+    # --- Aus den Sekundär-Endpunkten, einmalig beim Start geladen (siehe coordinator.py) ---
     AskoheatSensorEntityDescription(
         key="temperature_precise",
         translation_key="temperature_precise",
@@ -253,13 +270,16 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
 
 
 class AskoheatSensor(AskoheatEntity, SensorEntity):
-    """An ASKOHEAT+ sensor backed by a value_fn reading gethome.json or a secondary endpoint."""
+    """Ein ASKOHEAT+-Sensor, dessen value_fn gethome.json, einen Sekundär-Endpunkt
+    oder (source="coordinator") den Coordinator selbst ausliest."""
 
     entity_description: AskoheatSensorEntityDescription
 
     @property
     def native_value(self) -> Any:
         source = self.entity_description.source
+        if source == "coordinator":
+            return self.entity_description.value_fn(self.coordinator)
         data = (
             self.coordinator.data
             if source == "home"
@@ -270,9 +290,9 @@ class AskoheatSensor(AskoheatEntity, SensorEntity):
         return self.entity_description.value_fn(data)
 
 
-# 9999 is the manufacturer's raw-register "no sensor connected" sentinel;
-# "not connected" is the plain-text form already used in gethome.json today.
-# Both mean the probe isn't physically wired up.
+# 9999 ist der herstellerseitige Sentinel-Wert im Rohregister für "kein
+# Sensor angeschlossen"; "not connected" ist die bereits in gethome.json
+# verwendete Textform. Beides bedeutet: der Fühler ist nicht verkabelt.
 _TEMP_SENSOR_DISCONNECTED_SENTINEL = 9999
 
 _TEMP_SENSOR_PATHS: dict[str, str] = {
@@ -281,7 +301,7 @@ _TEMP_SENSOR_PATHS: dict[str, str] = {
 
 
 def _is_temp_sensor_connected(data: dict[str, Any], path: str) -> bool:
-    """A probe counts as connected unless it reports "not connected" or 9999."""
+    """Ein Fühler gilt als angeschlossen, außer er meldet "not connected" oder 9999."""
     value = extract_number(get_path(data, path))
     return value is not None and value != _TEMP_SENSOR_DISCONNECTED_SENTINEL
 
@@ -289,10 +309,10 @@ def _is_temp_sensor_connected(data: dict[str, Any], path: str) -> bool:
 def _resolve_temp_sensor_defaults(
     data: dict[str, Any],
 ) -> tuple[AskoheatSensorEntityDescription, ...]:
-    """Give temperature_sensor_1..4 a live entity_registry_enabled_default.
+    """temperature_sensor_1..4 einen live ermittelten entity_registry_enabled_default geben.
 
-    Applies only to brand-new entities never seen by the registry before —
-    already-registered ones are handled separately in async_setup_entry.
+    Gilt nur für brandneue Entities, die der Registry noch nie bekannt waren —
+    bereits registrierte werden separat in async_setup_entry behandelt.
     """
     return tuple(
         replace(
@@ -312,11 +332,12 @@ def _reenable_now_connected_temp_sensors(
     coordinator: AskoheatDataUpdateCoordinator,
     data: dict[str, Any],
 ) -> None:
-    """Re-enable temperature_sensor_1..4 that were disabled-by-default before but now report a value.
+    """temperature_sensor_1..4 reaktivieren, die vorher standardmäßig deaktiviert
+    waren, aber jetzt einen Wert liefern.
 
-    entity_registry_enabled_default only affects an entity the first time it's
-    registered, so a probe that was unconnected during initial setup and gets
-    wired up later would otherwise stay disabled forever without this.
+    entity_registry_enabled_default wirkt nur bei der erstmaligen Registrierung
+    einer Entity — ein Fühler, der beim Ersteinrichten nicht angeschlossen war
+    und später nachgerüstet wird, bliebe ohne diese Funktion für immer deaktiviert.
     """
     registry = er.async_get(hass)
     device_id = coordinator.device_id or coordinator.config_entry.entry_id
@@ -341,7 +362,7 @@ async def async_setup_entry(
     entry: AskoheatConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up ASKOHEAT+ sensors from a config entry."""
+    """ASKOHEAT+-Sensoren aus einem Config-Entry einrichten."""
     coordinator = entry.runtime_data
     data = coordinator.data or {}
     descriptions = _resolve_temp_sensor_defaults(data)

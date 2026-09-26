@@ -41,6 +41,7 @@
       "temperature_limit_info": { "name": "Temperature limit" },
       "error_status": { "name": "Error status" },
       "legio_info": { "name": "Legionella protection" },
+      "last_update": { "name": "Last update" },
       "article_name": { "name": "Article name" },
       "article_number": { "name": "Article number" },
       "serial_number": { "name": "Serial number" },
