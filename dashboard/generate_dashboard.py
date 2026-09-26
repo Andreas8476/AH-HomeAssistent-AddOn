@@ -37,14 +37,18 @@ LABEL_STYLE = """              color: white
               font-weight: bold
               font-size: 12px"""
 
-# (unique_id suffix, label prefix, top%, left%, bg color) for the boiler/coil image
+# (unique_id suffix, label prefix, top%, left%, bg color) for the boiler/coil image.
+# All labels sit in a clear column to the right of the coil cutaway (verified
+# pixel-by-pixel against dashboard/images/boiler-sensors.png: the coil never
+# reaches past ~58% left in this crop) so the heating element stays fully
+# visible instead of being covered by the value pills.
 SENSOR_ELEMENTS = [
-    ("temperature_sensor_0", "T0: ", 76, 61, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_1", "T1: ", 56, 30, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_2", "T2: ", 40, 50, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_3", "T3: ", 24, 30, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_4", "T4: ", 8, 48, "rgba(0, 0, 0, 0.65)"),
-    ("heater_load", "⚡ ", 88, 61, "rgba(120, 20, 20, 0.75)"),
+    ("temperature_sensor_4", "T4: ", 10, 63, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_3", "T3: ", 24, 63, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_2", "T2: ", 38, 63, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_1", "T1: ", 52, 63, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_0", "T0: ", 76, 63, "rgba(0, 0, 0, 0.65)"),
+    ("heater_load", "⚡ ", 88, 63, "rgba(120, 20, 20, 0.75)"),
 ]
 
 # (unique_id suffix, label prefix, top%, left%) for the meter-cabinet image

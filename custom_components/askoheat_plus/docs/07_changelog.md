@@ -195,6 +195,33 @@ kurz auf dieses Projekt).
   bestehenden Try/Except pro Sekundär-Endpunkt bereits korrekt als Warnung
   statt Fehler behandelt, keine Änderung nötig.
 
+## 2026-09-25 — Automatisches Aktivieren der Temperatursensoren 1–4, Dashboard-Label-Position korrigiert
+
+- **Temperatursensoren 1–4 automatisch aktiv statt manuell freizuschalten:**
+  Andreas' Feedback (Screenshot zeigte Warnsymbole für die deaktivierten
+  Sensoren): eine Entity soll aktiviert werden, sobald das Gerät einen
+  echten Wert liefert, statt dass man sie manuell in den Entity-Einstellungen
+  freischalten muss. `sensor.py` ermittelt jetzt bei jedem Setup live pro
+  Gerät, ob `TEMP_SENSOR_1`..`_4` verbunden sind (weder Text `"not connected"`
+  noch der numerische Sentinel `9999`) und setzt
+  `entity_registry_enabled_default` entsprechend — und reaktiviert dabei
+  auch bereits vorhandene, zuvor deaktivierte Entities automatisch, sobald
+  sie live einen Wert liefern (kein Entfernen/Neu-Einrichten nötig). Direkt
+  gegen beide Testgeräte geprüft: Gerät 1 (AHF280) hat echte Werte für
+  Sensor 1–4 → wird jetzt automatisch aktiv; Gerät 2 (SONNENBOOSTER) hat nur
+  Sensor 1–3 verbunden (Sensor 4 meldet `"not connected"`) → nur 1–3 werden
+  aktiv, 4 bleibt deaktiviert.
+- **Dashboard, Bild 1 (Heizstab-Nahaufnahme):** Andreas' Feedback nach
+  Screenshot — die Wertfelder (v.a. T1–T3) saßen direkt auf der
+  Heizwendel und verdeckten sie. Alle sechs Labels (T0–T4, Heizleistung)
+  sitzen jetzt in einer gemeinsamen Spalte rechts neben der Heizwendel
+  (`left: 63%`), deren Position pixelgenau anhand von
+  `dashboard/images/boiler-sensors.png` verifiziert wurde (die Heizwendel
+  reicht in diesem Bildausschnitt nie über `left: 58%` hinaus). Damit bleibt
+  die Heizwendel vollständig sichtbar. `dashboard/generate_dashboard.py`
+  neu ausführen + `ha core restart`, um die Änderung auf beide
+  Geräte-Ansichten anzuwenden.
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
@@ -204,16 +231,9 @@ kurz auf dieses Projekt).
   Trigger?).
 - **Relais-Zähler/Saldo** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) noch nicht als
   einzelne Sensoren abgebildet — Freitext-Parsing bewusst auf später verschoben.
-- **Dashboard-Feinjustierung:** Label-Positionen sind ein Startpunkt, von
-  Andreas noch visuell zu prüfen/per Drag&Drop nachzuziehen.
-- **ASKOMA-Logo:** von Andreas als Inline-Bild geschickt, konnte aber nicht
-  als Datei extrahiert werden (kein Bildgenerierungs-/Extraktions-Tool
-  verfügbar) — wartet auf erneuten Versand als Datei-Anhang, dann Einbau nach
-  `custom_components/askoheat_plus/brand/icon.png` (Muster wie bei
-  `froeling_lambdatronic_modbus/brand/icon.png`, HA 2026.3+ liest
-  Custom-Integration-Icons direkt aus dem Komponentenordner).
+- **Dashboard-Feinjustierung:** Label-Positionen für Bild 2 (Zählerschrank)
+  sind weiterhin ein Startpunkt; Bild 1 wurde am 2026-09-25 pixelgenau
+  gegen die Heizwendel korrigiert (siehe oben), aber noch nicht von Andreas
+  live bestätigt.
 - **EW-Sperre (`128`) / direkte Heizstufen-Pfade (`0`–`19`):** nicht als eigene
   Entities abgebildet, nur die reguläre Ziel-Heizstufe.
-- Verwaiste Entity-Registry-Einträge (`sensor..._soll_heizstufe`,
-  `sensor..._soll_einspeisewert`, Status `unavailable`) noch manuell zu
-  entfernen.

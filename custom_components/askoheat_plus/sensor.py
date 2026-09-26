@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 
 from homeassistant.components.sensor import (
@@ -14,11 +14,14 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import UnitOfPower, UnitOfTemperature
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import AskoheatConfigEntry
 from .api import extract_number, get_path
+from .const import DOMAIN
+from .coordinator import AskoheatDataUpdateCoordinator
 from .entity import AskoheatEntity
 
 
@@ -70,9 +73,11 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         value_fn=_number("ACTUAL_VALUES.TEMP_SENSOR_0"),
     ),
     # Sensor 0 is always the one at the heating element itself; 1-4 are
-    # additional probes along the tank, not present on every installation
-    # (extract_number("not connected") -> None -> shows as unavailable,
-    # not an error). Added for the Phase 3 dashboard.
+    # additional probes along the tank, not present on every installation.
+    # entity_registry_enabled_default=False here is only the fallback for
+    # entities never seen before — async_setup_entry() below overrides it
+    # per-device based on whether the sensor actually reports a value, and
+    # retroactively re-enables already-registered ones the same way.
     AskoheatSensorEntityDescription(
         key="temperature_sensor_1",
         translation_key="temperature_sensor_1",
@@ -265,6 +270,72 @@ class AskoheatSensor(AskoheatEntity, SensorEntity):
         return self.entity_description.value_fn(data)
 
 
+# 9999 is the manufacturer's raw-register "no sensor connected" sentinel;
+# "not connected" is the plain-text form already used in gethome.json today.
+# Both mean the probe isn't physically wired up.
+_TEMP_SENSOR_DISCONNECTED_SENTINEL = 9999
+
+_TEMP_SENSOR_PATHS: dict[str, str] = {
+    f"temperature_sensor_{i}": f"ACTUAL_VALUES.TEMP_SENSOR_{i}" for i in range(1, 5)
+}
+
+
+def _is_temp_sensor_connected(data: dict[str, Any], path: str) -> bool:
+    """A probe counts as connected unless it reports "not connected" or 9999."""
+    value = extract_number(get_path(data, path))
+    return value is not None and value != _TEMP_SENSOR_DISCONNECTED_SENTINEL
+
+
+def _resolve_temp_sensor_defaults(
+    data: dict[str, Any],
+) -> tuple[AskoheatSensorEntityDescription, ...]:
+    """Give temperature_sensor_1..4 a live entity_registry_enabled_default.
+
+    Applies only to brand-new entities never seen by the registry before —
+    already-registered ones are handled separately in async_setup_entry.
+    """
+    return tuple(
+        replace(
+            description,
+            entity_registry_enabled_default=_is_temp_sensor_connected(
+                data, _TEMP_SENSOR_PATHS[description.key]
+            ),
+        )
+        if description.key in _TEMP_SENSOR_PATHS
+        else description
+        for description in SENSOR_DESCRIPTIONS
+    )
+
+
+def _reenable_now_connected_temp_sensors(
+    hass: HomeAssistant,
+    coordinator: AskoheatDataUpdateCoordinator,
+    data: dict[str, Any],
+) -> None:
+    """Re-enable temperature_sensor_1..4 that were disabled-by-default before but now report a value.
+
+    entity_registry_enabled_default only affects an entity the first time it's
+    registered, so a probe that was unconnected during initial setup and gets
+    wired up later would otherwise stay disabled forever without this.
+    """
+    registry = er.async_get(hass)
+    device_id = coordinator.device_id or coordinator.config_entry.entry_id
+    for key, path in _TEMP_SENSOR_PATHS.items():
+        if not _is_temp_sensor_connected(data, path):
+            continue
+        entity_id = registry.async_get_entity_id(
+            "sensor", DOMAIN, f"{device_id}_{key}"
+        )
+        if not entity_id:
+            continue
+        entity_entry = registry.async_get(entity_id)
+        if (
+            entity_entry is not None
+            and entity_entry.disabled_by is er.RegistryEntryDisabler.INTEGRATION
+        ):
+            registry.async_update_entity(entity_id, disabled_by=None)
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: AskoheatConfigEntry,
@@ -272,6 +343,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up ASKOHEAT+ sensors from a config entry."""
     coordinator = entry.runtime_data
-    async_add_entities(
-        AskoheatSensor(coordinator, description) for description in SENSOR_DESCRIPTIONS
-    )
+    data = coordinator.data or {}
+    descriptions = _resolve_temp_sensor_defaults(data)
+    async_add_entities(AskoheatSensor(coordinator, description) for description in descriptions)
+    _reenable_now_connected_temp_sensors(hass, coordinator, data)

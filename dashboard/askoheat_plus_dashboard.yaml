@@ -31,35 +31,11 @@ views:
         image: /local/askoheat_plus/boiler-sensors.png
         elements:
           - type: state-label
-            entity: sensor.ahf280_ti_plus_15_8_temperatur
-            prefix: "T0: "
+            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_4
+            prefix: "T4: "
             style:
-              top: 76%
-              left: 61%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_1
-            prefix: "T1: "
-            style:
-              top: 56%
-              left: 30%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_2
-            prefix: "T2: "
-            style:
-              top: 40%
-              left: 50%
+              top: 10%
+              left: 63%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -71,7 +47,7 @@ views:
             prefix: "T3: "
             style:
               top: 24%
-              left: 30%
+              left: 63%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -79,11 +55,35 @@ views:
               font-weight: bold
               font-size: 12px
           - type: state-label
-            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_4
-            prefix: "T4: "
+            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_2
+            prefix: "T2: "
             style:
-              top: 8%
-              left: 48%
+              top: 38%
+              left: 63%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_1
+            prefix: "T1: "
+            style:
+              top: 52%
+              left: 63%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.ahf280_ti_plus_15_8_temperatur
+            prefix: "T0: "
+            style:
+              top: 76%
+              left: 63%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -95,7 +95,7 @@ views:
             prefix: "⚡ "
             style:
               top: 88%
-              left: 61%
+              left: 63%
               color: white
               background-color: rgba(120, 20, 20, 0.75)
               padding: 2px 6px
@@ -183,35 +183,11 @@ views:
         image: /local/askoheat_plus/boiler-sensors.png
         elements:
           - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur
-            prefix: "T0: "
+            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_4
+            prefix: "T4: "
             style:
-              top: 76%
-              left: 61%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_1
-            prefix: "T1: "
-            style:
-              top: 56%
-              left: 30%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_2
-            prefix: "T2: "
-            style:
-              top: 40%
-              left: 50%
+              top: 10%
+              left: 63%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -223,7 +199,7 @@ views:
             prefix: "T3: "
             style:
               top: 24%
-              left: 30%
+              left: 63%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -231,11 +207,35 @@ views:
               font-weight: bold
               font-size: 12px
           - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_4
-            prefix: "T4: "
+            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_2
+            prefix: "T2: "
             style:
-              top: 8%
-              left: 48%
+              top: 38%
+              left: 63%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_1
+            prefix: "T1: "
+            style:
+              top: 52%
+              left: 63%
+              color: white
+              background-color: rgba(0, 0, 0, 0.65)
+              padding: 2px 6px
+              border-radius: 6px
+              font-weight: bold
+              font-size: 12px
+          - type: state-label
+            entity: sensor.sonnenbooster_52_kw_temperatur
+            prefix: "T0: "
+            style:
+              top: 76%
+              left: 63%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -247,7 +247,7 @@ views:
             prefix: "⚡ "
             style:
               top: 88%
-              left: 61%
+              left: 63%
               color: white
               background-color: rgba(120, 20, 20, 0.75)
               padding: 2px 6px

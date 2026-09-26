@@ -11,6 +11,20 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- `sensor.py`: Temperatursensoren 1–4 werden jetzt automatisch aktiviert,
+  sobald das Gerät für sie einen echten Wert liefert (statt `"not connected"`
+  oder dem Sentinel `9999`) — auch rückwirkend für bereits eingerichtete
+  Geräte, ohne dass man sie manuell in den Entity-Einstellungen freischalten
+  muss.
+
+### Geändert
+
+- Dashboard, Bild 1 (Heizstab-Nahaufnahme): Wertfelder sitzen jetzt in einer
+  pixelgenau verifizierten Spalte rechts neben der Heizwendel statt darauf —
+  die Heizwendel bleibt vollständig sichtbar.
+
 ## [0.7.0] - 2026-09-25
 
 ### Hinzugefügt
