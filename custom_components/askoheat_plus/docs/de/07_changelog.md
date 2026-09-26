@@ -377,6 +377,14 @@ kurz auf dieses Projekt).
   `type: vertical-stack` (mittlere/rechte Spalte) in
   `generate_dashboard.py` — siehe [11_dashboard.md](11_dashboard.md) für
   Details, warum diese Kartentypen statt der Standard-Masonry-Ansicht.
+- **Nachbesserung (Feedback nach Live-Screenshot):** die Spaltenbreiten
+  waren winzig — Ursache war, dass die Standard-Masonry-Ansicht die einzige
+  Top-Level-Karte (den `horizontal-stack`) auf eine einzelne
+  Masonry-Spaltenbreite (~500px) begrenzt hat, in der sich die drei inneren
+  Spalten drängen mussten. Behoben durch `type: panel` auf der
+  Geräte-Ansicht (gibt der einzigen Karte die volle Breite). Zusätzlich auf
+  Wunsch die Reihenfolge in der Mittelspalte getauscht: Heizstab-Bild
+  ("Temperaturen & Leistung") jetzt oben, Zählerschrank-Bild darunter.
 
 ## Offene Punkte (ToDo)
 

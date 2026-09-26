@@ -24,13 +24,24 @@ zeigen und Live-Werte als Overlay-Labels direkt auf dem Bild positionieren:
 **Spalten-Layout (nach Andreas' Skizze, 2026-09-26):** drei Spalten
 nebeneinander statt der Standard-Masonry-Anordnung (die Karten nur nach
 Höhe balanciert, ohne feste Spalten-Zuordnung). Links: Fallback-Tabelle.
-Mitte: Zählerschrank-Bild (Karte 2), direkt darunter das Heizstab-Bild
-(Karte 1) — beide in einem `vertical-stack`. Rechts: die beiden
-Verlaufs-Grafen, ebenfalls in einem `vertical-stack`. Umgesetzt über
+Mitte: Heizstab-Bild (Karte 1) ganz oben, direkt darunter das
+Zählerschrank-Bild (Karte 2) — beide in einem `vertical-stack`. Rechts: die
+beiden Verlaufs-Grafen, ebenfalls in einem `vertical-stack`. Umgesetzt über
 `type: horizontal-stack` mit drei `cards`-Einträgen (die mittlere und
 rechte Spalte je ein verschachtelter `type: vertical-stack`) — die einzigen
 Lovelace-Kartentypen, die eine exakte Spalten-Position statt einer reinen
 Höhen-Heuristik garantieren.
+
+**Wichtig — Ansicht braucht `type: panel`:** die Standard-Masonry-Ansicht
+behandelt jede Top-Level-Karte (auch einen `horizontal-stack`) als *eine*
+Karte und begrenzt sie auf eine einzelne Masonry-Spaltenbreite (Default
+~500px) — bei nur einer Karte in `cards:` wirkte das wie ein winziges,
+zentriertes Fenster, in dem sich dann auch noch die drei inneren Spalten
+drängen mussten (das Problem aus Andreas' Screenshot nach der ersten
+Layout-Version: Spaltenbreiten "stimmten gar nicht mehr"). Jede
+Geräte-Ansicht hat deshalb jetzt `type: panel` gesetzt — Panel-Ansichten
+geben ihrer einzigen Karte die volle Breite der Ansicht ohne
+Spalten-Begrenzung.
 
 **Label-Positionen (Bild 1):** Der Tank enthält zwei optisch unterscheidbare
 Teile: die große Heizwendel (Wärmetauscher-Spirale) und das eigentliche

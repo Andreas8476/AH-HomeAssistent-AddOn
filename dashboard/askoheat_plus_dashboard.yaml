@@ -20,6 +20,7 @@ views:
   - title: AHF280-TI-plus-15.8
     path: ahf280-ti-plus-15-8
     icon: mdi:radiator
+    type: panel
     cards:
       - type: horizontal-stack
         cards:
@@ -45,50 +46,6 @@ views:
 
           - type: vertical-stack
             cards:
-              - type: markdown
-                content: >
-                  ## Einspeisewert & Leistungsvorgabe am Zählerschrank
-
-              - type: picture-elements
-                image: /local/askoheat_plus/boiler-meter.png
-                elements:
-                  - type: state-label
-                    entity: sensor.ahf280_ti_plus_15_8_heizstufe
-                    prefix: "Stufe: "
-                    style:
-                      top: 76%
-                      left: 42%
-                      color: white
-                      background-color: rgba(0, 0, 0, 0.65)
-                      padding: 2px 6px
-                      border-radius: 6px
-                      font-weight: bold
-                      font-size: 12px
-                  - type: state-label
-                    entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
-                    prefix: "Vorgabe: "
-                    style:
-                      top: 18%
-                      left: 70%
-                      color: white
-                      background-color: rgba(0, 0, 0, 0.65)
-                      padding: 2px 6px
-                      border-radius: 6px
-                      font-weight: bold
-                      font-size: 12px
-                  - type: state-label
-                    entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
-                    prefix: "Einspeisung: "
-                    style:
-                      top: 60%
-                      left: 68%
-                      color: white
-                      background-color: rgba(0, 0, 0, 0.65)
-                      padding: 2px 6px
-                      border-radius: 6px
-                      font-weight: bold
-                      font-size: 12px
-
               - type: markdown
                 content: >
                   ## AHF280-TI-plus-15.8 — Temperaturen & Leistung
@@ -173,6 +130,50 @@ views:
                       font-weight: bold
                       font-size: 12px
 
+              - type: markdown
+                content: >
+                  ## Einspeisewert & Leistungsvorgabe am Zählerschrank
+
+              - type: picture-elements
+                image: /local/askoheat_plus/boiler-meter.png
+                elements:
+                  - type: state-label
+                    entity: sensor.ahf280_ti_plus_15_8_heizstufe
+                    prefix: "Stufe: "
+                    style:
+                      top: 76%
+                      left: 42%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
+                    prefix: "Vorgabe: "
+                    style:
+                      top: 18%
+                      left: 70%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
+                    prefix: "Einspeisung: "
+                    style:
+                      top: 60%
+                      left: 68%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+
           - type: vertical-stack
             cards:
               - type: history-graph
@@ -193,6 +194,7 @@ views:
   - title: SONNENBOOSTER 5,2 kW
     path: sonnenbooster-5-2-kw
     icon: mdi:radiator
+    type: panel
     cards:
       - type: horizontal-stack
         cards:
@@ -218,50 +220,6 @@ views:
 
           - type: vertical-stack
             cards:
-              - type: markdown
-                content: >
-                  ## Einspeisewert & Leistungsvorgabe am Zählerschrank
-
-              - type: picture-elements
-                image: /local/askoheat_plus/boiler-meter.png
-                elements:
-                  - type: state-label
-                    entity: sensor.sonnenbooster_52_kw_heizstufe
-                    prefix: "Stufe: "
-                    style:
-                      top: 76%
-                      left: 42%
-                      color: white
-                      background-color: rgba(0, 0, 0, 0.65)
-                      padding: 2px 6px
-                      border-radius: 6px
-                      font-weight: bold
-                      font-size: 12px
-                  - type: state-label
-                    entity: number.sonnenbooster_52_kw_leistungsvorgabe
-                    prefix: "Vorgabe: "
-                    style:
-                      top: 18%
-                      left: 70%
-                      color: white
-                      background-color: rgba(0, 0, 0, 0.65)
-                      padding: 2px 6px
-                      border-radius: 6px
-                      font-weight: bold
-                      font-size: 12px
-                  - type: state-label
-                    entity: number.sonnenbooster_52_kw_einspeisewert
-                    prefix: "Einspeisung: "
-                    style:
-                      top: 60%
-                      left: 68%
-                      color: white
-                      background-color: rgba(0, 0, 0, 0.65)
-                      padding: 2px 6px
-                      border-radius: 6px
-                      font-weight: bold
-                      font-size: 12px
-
               - type: markdown
                 content: >
                   ## SONNENBOOSTER 5,2 kW — Temperaturen & Leistung
@@ -341,6 +299,50 @@ views:
                       left: 54%
                       color: white
                       background-color: rgba(120, 20, 20, 0.75)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+
+              - type: markdown
+                content: >
+                  ## Einspeisewert & Leistungsvorgabe am Zählerschrank
+
+              - type: picture-elements
+                image: /local/askoheat_plus/boiler-meter.png
+                elements:
+                  - type: state-label
+                    entity: sensor.sonnenbooster_52_kw_heizstufe
+                    prefix: "Stufe: "
+                    style:
+                      top: 76%
+                      left: 42%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: number.sonnenbooster_52_kw_leistungsvorgabe
+                    prefix: "Vorgabe: "
+                    style:
+                      top: 18%
+                      left: 70%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: number.sonnenbooster_52_kw_einspeisewert
+                    prefix: "Einspeisung: "
+                    style:
+                      top: 60%
+                      left: 68%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
                       padding: 2px 6px
                       border-radius: 6px
                       font-weight: bold

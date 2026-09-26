@@ -376,6 +376,14 @@ project).
   (middle/right column) in `generate_dashboard.py` — see
   [11_dashboard.md](11_dashboard.md) for details on why these card types
   instead of the default masonry view.
+- **Follow-up fix (feedback after a live screenshot):** the columns
+  rendered tiny — caused by the default masonry view capping the one
+  top-level card (the `horizontal-stack`) at a single masonry column width
+  (~500px), forcing the three inner columns to squeeze into that. Fixed
+  with `type: panel` on the device view (gives the one card the full
+  width). Also swapped the middle column's order per request: the
+  heating-element image ("Temperaturen & Leistung") now on top, the
+  meter-cabinet image below it.
 
 ## Open points (TODO)
 

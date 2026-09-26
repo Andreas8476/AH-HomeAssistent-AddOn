@@ -26,13 +26,22 @@ positioning live values as overlay labels directly on the image:
 **Column layout (per Andreas' sketch, 2026-09-26):** three columns side by
 side instead of the default masonry arrangement (which only balances cards
 by height, with no fixed column assignment). Left: the fallback table.
-Middle: the meter-cabinet image (card 2), directly below it the heating
-element image (card 1) — both in one `vertical-stack`. Right: the two
+Middle: the heating-element image (card 1) on top, directly below it the
+meter-cabinet image (card 2) — both in one `vertical-stack`. Right: the two
 history graphs, also in a `vertical-stack`. Implemented via
 `type: horizontal-stack` with three `cards` entries (the middle and right
 columns each a nested `type: vertical-stack`) — the only Lovelace card
 types that guarantee an exact column position instead of a pure
 height-balancing heuristic.
+
+**Important — the view needs `type: panel`:** the default masonry view
+treats every top-level card (even a `horizontal-stack`) as *one* card and
+caps it at a single masonry column width (default ~500px) — with only one
+card in `cards:`, that rendered as a tiny, centered window that then also
+had to squeeze the three inner columns into it (the problem in Andreas'
+screenshot after the first layout version: the column widths "didn't match
+at all anymore"). Each device view therefore now sets `type: panel` — panel
+views give their one card the view's full width, with no column cap.
 
 **Label positions (image 1):** the tank contains two visually distinct
 parts: the large heating coil (heat-exchanger spiral) and the actual

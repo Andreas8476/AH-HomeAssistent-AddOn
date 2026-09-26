@@ -217,20 +217,20 @@ def render_view(device: dict) -> str:
 
     meter_and_sensor_cards = f"""      - type: markdown
         content: >
-          ## Einspeisewert & Leistungsvorgabe am Zählerschrank
-
-      - type: picture-elements
-        image: /local/askoheat_plus/boiler-meter.png
-        elements:
-{meter_labels}
-      - type: markdown
-        content: >
           ## {device["title"]} — Temperaturen & Leistung{heartbeat_line}{ip_line}
 
       - type: picture-elements
         image: /local/askoheat_plus/boiler-sensors.png
         elements:
-{sensor_labels}"""
+{sensor_labels}
+      - type: markdown
+        content: >
+          ## Einspeisewert & Leistungsvorgabe am Zählerschrank
+
+      - type: picture-elements
+        image: /local/askoheat_plus/boiler-meter.png
+        elements:
+{meter_labels}"""
 
     history_column = (
         f"""          - type: vertical-stack
@@ -240,9 +240,17 @@ def render_view(device: dict) -> str:
         else ""
     )
 
+    # type: panel: die Standard-Masonry-Ansicht behandelt jede Top-Level-
+    # Karte (auch einen horizontal-stack) als EINE Karte und begrenzt sie auf
+    # eine einzelne Masonry-Spaltenbreite (~500px) — bei nur einer Karte in
+    # "cards:" wirkt das wie ein winziges, zentriertes Fenster, in dem sich
+    # dann auch noch die drei inneren Spalten drängen (genau das Problem aus
+    # Andreas' Screenshot). Panel-Ansichten geben der einzigen Karte dagegen
+    # die volle Breite der Ansicht, ohne Spalten-Begrenzung.
     return f"""  - title: {device["title"]}
     path: {path}
     icon: mdi:radiator
+    type: panel
     cards:
       - type: horizontal-stack
         cards:
