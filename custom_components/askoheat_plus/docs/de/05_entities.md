@@ -15,9 +15,11 @@ Abschnitt unten) sind **schreibbar**.
 | `heater_step` | Heizstufe | home | `ACTUAL_VALUES.ACTUAL_HEATER_STEP` | Zahl | ja |
 | `heater_load` | Heizleistung | home | `ACTUAL_VALUES.ACTUAL_HEATER_LOAD` | W, power | ja |
 | `temperature_sensor_0` | Temperatur | home | `ACTUAL_VALUES.TEMP_SENSOR_0` | °C, temperature | ja |
+| `temperature_sensor_1`..`4` | Temperatur Sensor 1..4 | home | `ACTUAL_VALUES.TEMP_SENSOR_1`..`4` | °C, temperature | **live ermittelt** — aktiv, sobald der Fühler einen Wert liefert (weder "not connected" noch der Sentinel `9999`), siehe unten |
 | `temperature_limit_info` | Temperaturlimit | home | `ACTUAL_VALUES.ACTUAL_TEMPERATURE_LIMIT` | Text | ja |
 | `error_status` | Gerätestatus | home | `ASKOHEAT_PLUS_INFO.ERROR_STATUS` | Text | ja |
 | `legio_info` | Legionellenschutz | home | `ASKOHEAT_PLUS_INFO.LEGIO_INFO` | Text, diagnostic | ja |
+| `last_update` | Letzte Aktualisierung | coordinator | — (Zeitstempel des Coordinators, kein JSON-Pfad) | timestamp, diagnostic | ja |
 | `article_name` | Artikelname | home | `ASKOHEAT_PLUS_INFO.ARTICLE_NAME` | Text, diagnostic | nein |
 | `article_number` | Artikelnummer | home | `ASKOHEAT_PLUS_INFO.ARTICLE_NUMBER` | Text, diagnostic | nein |
 | `serial_number` | Seriennummer | home | `ASKOHEAT_PLUS_INFO.SERIAL_NUMBER` | Text, diagnostic | nein |
@@ -85,6 +87,14 @@ Verbindungsdiagnose) sind standardmäßig **deaktiviert**
 (`entity_registry_enabled_default=False`), damit die Entity-Liste im Alltag
 übersichtlich bleibt. Sie lassen sich pro Entity in den Einstellungen
 jederzeit aktivieren.
+
+**Sonderfall `temperature_sensor_1`..`4`:** hier wird der Standard nicht statisch
+gesetzt, sondern bei jedem Setup live anhand des aktuellen Gerätewerts
+ermittelt — ein Fühler ist "aktiv", außer er meldet `"not connected"` oder den
+numerischen Sentinel `9999`. Bereits registrierte, zuvor deaktivierte Sensoren
+werden automatisch reaktiviert, sobald sie live einen Wert liefern (kein
+Entfernen/Neu-Einrichten nötig). Siehe `sensor.py`
+(`_resolve_temp_sensor_defaults`, `_reenable_now_connected_temp_sensors`).
 
 ## Bewusst nicht abgebildet (Phase 1)
 

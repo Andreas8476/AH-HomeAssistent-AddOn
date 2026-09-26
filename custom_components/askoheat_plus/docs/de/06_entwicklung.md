@@ -75,3 +75,6 @@ GitHub-Repos, siehe [04_installation.md](04_installation.md).
 - **ESP32 schonen:** keine zusätzlichen Endpunkte leichtfertig in den regulären
   Coordinator-Zyklus (`_async_update_data`) aufnehmen — siehe
   [02_api-referenz.md](02_api-referenz.md), Abschnitt "Abfrage-Strategie".
+- **Code-Kommentare/Docstrings auf Deutsch:** unabhängig von der Doku-Sprache
+  (siehe [01_ueberblick.md](01_ueberblick.md)) sind Kommentare und Docstrings
+  im gesamten Python-Code durchgängig auf Deutsch zu schreiben.

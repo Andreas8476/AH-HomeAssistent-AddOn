@@ -259,9 +259,5 @@ kurz auf dieses Projekt).
   Trigger?).
 - **Relais-Zähler/Saldo** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) noch nicht als
   einzelne Sensoren abgebildet — Freitext-Parsing bewusst auf später verschoben.
-- **Dashboard-Feinjustierung:** Label-Positionen für Bild 2 (Zählerschrank)
-  sind weiterhin ein Startpunkt; Bild 1 wurde am 2026-09-25 pixelgenau
-  gegen die Heizwendel korrigiert (siehe oben), aber noch nicht von Andreas
-  live bestätigt.
 - **EW-Sperre (`128`) / direkte Heizstufen-Pfade (`0`–`19`):** nicht als eigene
   Entities abgebildet, nur die reguläre Ziel-Heizstufe.
