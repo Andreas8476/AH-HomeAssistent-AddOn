@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import re
+import textwrap
 import unicodedata
 from pathlib import Path
 
@@ -201,19 +202,20 @@ def render_view(device: dict) -> str:
         entities:
 {entity_rows}"""
 
-    return f"""  - title: {device["title"]}
-    path: {path}
-    icon: mdi:radiator
-    cards:
-      - type: markdown
-        content: >
-          ## {device["title"]} — Temperaturen & Leistung{heartbeat_line}{ip_line}
+    # Layout nach Andreas' Skizze (Pfeile auf Screenshot, 2026-09-26): drei
+    # Spalten nebeneinander statt der Standard-Masonry-Ansicht (die Karten
+    # nur nach Höhe balanciert, keine feste Spalten-Zuordnung erlaubt).
+    # Links: Fallback-Tabelle. Mitte: Zählerschrank-Bild, darunter das
+    # Heizstab-Bild (beide in einem vertical-stack). Rechts: die beiden
+    # Verlaufs-Grafen (ebenfalls vertical-stack). horizontal-stack/
+    # vertical-stack sind die einzigen Lovelace-Kartentypen, die eine exakte
+    # Spalten-Position statt einer Höhen-Heuristik garantieren.
+    fallback_card = f"""      - type: entities
+        title: Alle Werte (Fallback / Details)
+        entities:
+{fallback_rows}"""
 
-      - type: picture-elements
-        image: /local/askoheat_plus/boiler-sensors.png
-        elements:
-{sensor_labels}
-      - type: markdown
+    meter_and_sensor_cards = f"""      - type: markdown
         content: >
           ## Einspeisewert & Leistungsvorgabe am Zählerschrank
 
@@ -221,10 +223,34 @@ def render_view(device: dict) -> str:
         image: /local/askoheat_plus/boiler-meter.png
         elements:
 {meter_labels}
-{history_cards}      - type: entities
-        title: Alle Werte (Fallback / Details)
-        entities:
-{fallback_rows}"""
+      - type: markdown
+        content: >
+          ## {device["title"]} — Temperaturen & Leistung{heartbeat_line}{ip_line}
+
+      - type: picture-elements
+        image: /local/askoheat_plus/boiler-sensors.png
+        elements:
+{sensor_labels}"""
+
+    history_column = (
+        f"""          - type: vertical-stack
+            cards:
+{textwrap.indent(history_cards, "        ")}"""
+        if history_cards
+        else ""
+    )
+
+    return f"""  - title: {device["title"]}
+    path: {path}
+    icon: mdi:radiator
+    cards:
+      - type: horizontal-stack
+        cards:
+{textwrap.indent(fallback_card, "    ")}
+          - type: vertical-stack
+            cards:
+{textwrap.indent(meter_and_sensor_cards, "        ")}
+{history_column}"""
 
 
 def main() -> None:

@@ -21,6 +21,17 @@ zeigen und Live-Werte als Overlay-Labels direkt auf dem Bild positionieren:
 - Zusätzliche **Fallback-Tabellenkarte** mit denselben Werten als normale
   Liste (falls die Bild-Overlays mal nicht laden oder man es lieber tabellarisch mag).
 
+**Spalten-Layout (nach Andreas' Skizze, 2026-09-26):** drei Spalten
+nebeneinander statt der Standard-Masonry-Anordnung (die Karten nur nach
+Höhe balanciert, ohne feste Spalten-Zuordnung). Links: Fallback-Tabelle.
+Mitte: Zählerschrank-Bild (Karte 2), direkt darunter das Heizstab-Bild
+(Karte 1) — beide in einem `vertical-stack`. Rechts: die beiden
+Verlaufs-Grafen, ebenfalls in einem `vertical-stack`. Umgesetzt über
+`type: horizontal-stack` mit drei `cards`-Einträgen (die mittlere und
+rechte Spalte je ein verschachtelter `type: vertical-stack`) — die einzigen
+Lovelace-Kartentypen, die eine exakte Spalten-Position statt einer reinen
+Höhen-Heuristik garantieren.
+
 **Label-Positionen (Bild 1):** Der Tank enthält zwei optisch unterscheidbare
 Teile: die große Heizwendel (Wärmetauscher-Spirale) und das eigentliche
 ASKOHEAT+-Heizelement (die kleinere orangene Wendel darunter/dahinter, direkt

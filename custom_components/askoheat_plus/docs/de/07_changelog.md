@@ -367,6 +367,17 @@ kurz auf dieses Projekt).
   über Bild 1 (`generate_dashboard.py`, aus dem `host`-Feld des jeweiligen
   Config-Entry, nicht aus einer Entity).
 
+## 2026-09-26 — Dashboard: 3-Spalten-Layout
+
+- Nach Andreas' Skizze (Pfeile auf Screenshot): Dashboard von der Standard-
+  Masonry-Anordnung auf ein explizites 3-Spalten-Layout umgestellt.
+  Fallback-Tabelle ganz links, Zählerschrank-Bild + Heizstab-Bild
+  übereinander in der Mitte, die beiden Verlaufs-Grafen rechts. Umgesetzt
+  über `type: horizontal-stack` mit zwei verschachtelten
+  `type: vertical-stack` (mittlere/rechte Spalte) in
+  `generate_dashboard.py` — siehe [11_dashboard.md](11_dashboard.md) für
+  Details, warum diese Kartentypen statt der Standard-Masonry-Ansicht.
+
 ## Offene Punkte (ToDo)
 
 - **Screenshots der ASKOHEAT-AddOn-Einstellungsseite** für die Anleitung

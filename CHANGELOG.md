@@ -45,6 +45,9 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Dashboard: zwei `history-graph`-Karten pro Geräte-Ansicht
   (Temperaturverlauf Sensor 0–4, Heizleistungsverlauf), Standard 24h.
 - Dashboard: Geräte-IP-Adresse als zusätzliche Zeile in der Markdown-Karte.
+- Dashboard: explizites 3-Spalten-Layout (Fallback-Tabelle links,
+  Zählerschrank-/Heizstab-Bild übereinander in der Mitte, Verlaufs-Grafen
+  rechts) über `horizontal-stack`/`vertical-stack` statt Standard-Masonry.
 
 ### Geändert
 

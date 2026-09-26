@@ -366,6 +366,17 @@ project).
   image 1 (`generate_dashboard.py`, from the `host` field of that device's
   config entry, not from an entity).
 
+## 2026-09-26 — Dashboard: 3-column layout
+
+- Per Andreas' sketch (arrows on a screenshot): switched the dashboard from
+  the default masonry arrangement to an explicit 3-column layout. Fallback
+  table on the far left, meter-cabinet image + heating-element image
+  stacked in the middle, the two history graphs on the right. Implemented
+  via `type: horizontal-stack` with two nested `type: vertical-stack`
+  (middle/right column) in `generate_dashboard.py` — see
+  [11_dashboard.md](11_dashboard.md) for details on why these card types
+  instead of the default masonry view.
+
 ## Open points (TODO)
 
 - **Screenshots of the ASKOHEAT add-on settings page** for the guide

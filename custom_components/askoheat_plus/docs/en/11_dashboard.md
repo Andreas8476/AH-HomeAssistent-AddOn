@@ -23,6 +23,17 @@ positioning live values as overlay labels directly on the image:
   list (in case the image overlays fail to load, or you just prefer a
   table).
 
+**Column layout (per Andreas' sketch, 2026-09-26):** three columns side by
+side instead of the default masonry arrangement (which only balances cards
+by height, with no fixed column assignment). Left: the fallback table.
+Middle: the meter-cabinet image (card 2), directly below it the heating
+element image (card 1) — both in one `vertical-stack`. Right: the two
+history graphs, also in a `vertical-stack`. Implemented via
+`type: horizontal-stack` with three `cards` entries (the middle and right
+columns each a nested `type: vertical-stack`) — the only Lovelace card
+types that guarantee an exact column position instead of a pure
+height-balancing heuristic.
+
 **Label positions (image 1):** the tank contains two visually distinct
 parts: the large heating coil (heat-exchanger spiral) and the actual
 ASKOHEAT+ heating element (the smaller orange coil beneath/behind it,

@@ -21,331 +21,345 @@ views:
     path: ahf280-ti-plus-15-8
     icon: mdi:radiator
     cards:
-      - type: markdown
-        content: >
-          ## AHF280-TI-plus-15.8 — Temperaturen & Leistung
+      - type: horizontal-stack
+        cards:
+          - type: entities
+            title: Alle Werte (Fallback / Details)
+            entities:
+              - entity: sensor.ahf280_ti_plus_15_8_geratestatus
+                name: Gerätestatus
+              - entity: sensor.ahf280_ti_plus_15_8_heizstufe
+                name: Heizstufe (Ist)
+              - entity: sensor.ahf280_ti_plus_15_8_heizleistung
+                name: Heizleistung
+              - entity: sensor.ahf280_ti_plus_15_8_temperatur
+                name: Temperatur
+              - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_ziel_heizstufe
+                name: Ziel-Heizstufe
+              - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
+                name: Leistungsvorgabe
+              - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
+                name: Einspeisewert
+              - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_notbetrieb
+                name: Notbetrieb
 
-          🔄 Zuletzt aktualisiert: vor {{ relative_time(as_datetime(states('sensor.arbeitszimmer_ahf280_ti_plus_15_8_letzte_aktualisierung'))) }}
+          - type: vertical-stack
+            cards:
+              - type: markdown
+                content: >
+                  ## Einspeisewert & Leistungsvorgabe am Zählerschrank
 
-          📡 Gerät: `192.168.20.54`
+              - type: picture-elements
+                image: /local/askoheat_plus/boiler-meter.png
+                elements:
+                  - type: state-label
+                    entity: sensor.ahf280_ti_plus_15_8_heizstufe
+                    prefix: "Stufe: "
+                    style:
+                      top: 76%
+                      left: 42%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
+                    prefix: "Vorgabe: "
+                    style:
+                      top: 18%
+                      left: 70%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
+                    prefix: "Einspeisung: "
+                    style:
+                      top: 60%
+                      left: 68%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
 
-      - type: picture-elements
-        image: /local/askoheat_plus/boiler-sensors.png
-        elements:
-          - type: state-label
-            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_4
-            prefix: "T4: "
-            style:
-              top: 10%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_3
-            prefix: "T3: "
-            style:
-              top: 24%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_2
-            prefix: "T2: "
-            style:
-              top: 38%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_1
-            prefix: "T1: "
-            style:
-              top: 52%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.ahf280_ti_plus_15_8_temperatur
-            prefix: "T0: "
-            style:
-              top: 65%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.ahf280_ti_plus_15_8_heizleistung
-            prefix: "⚡ "
-            style:
-              top: 88%
-              left: 54%
-              color: white
-              background-color: rgba(120, 20, 20, 0.75)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
+              - type: markdown
+                content: >
+                  ## AHF280-TI-plus-15.8 — Temperaturen & Leistung
 
-      - type: markdown
-        content: >
-          ## Einspeisewert & Leistungsvorgabe am Zählerschrank
+                  🔄 Zuletzt aktualisiert: vor {{ relative_time(as_datetime(states('sensor.arbeitszimmer_ahf280_ti_plus_15_8_letzte_aktualisierung'))) }}
 
-      - type: picture-elements
-        image: /local/askoheat_plus/boiler-meter.png
-        elements:
-          - type: state-label
-            entity: sensor.ahf280_ti_plus_15_8_heizstufe
-            prefix: "Stufe: "
-            style:
-              top: 76%
-              left: 42%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
-            prefix: "Vorgabe: "
-            style:
-              top: 18%
-              left: 70%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
-            prefix: "Einspeisung: "
-            style:
-              top: 60%
-              left: 68%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
+                  📡 Gerät: `192.168.20.54`
 
-      - type: history-graph
-        title: Temperaturverlauf (Sensor 0-4)
-        hours_to_show: 24
-        entities:
-          - sensor.ahf280_ti_plus_15_8_temperatur
-          - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_1
-          - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_2
-          - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_3
-          - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_4
-      - type: history-graph
-        title: Heizleistungsverlauf
-        hours_to_show: 24
-        entities:
-          - sensor.ahf280_ti_plus_15_8_heizleistung
-      - type: entities
-        title: Alle Werte (Fallback / Details)
-        entities:
-          - entity: sensor.ahf280_ti_plus_15_8_geratestatus
-            name: Gerätestatus
-          - entity: sensor.ahf280_ti_plus_15_8_heizstufe
-            name: Heizstufe (Ist)
-          - entity: sensor.ahf280_ti_plus_15_8_heizleistung
-            name: Heizleistung
-          - entity: sensor.ahf280_ti_plus_15_8_temperatur
-            name: Temperatur
-          - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_ziel_heizstufe
-            name: Ziel-Heizstufe
-          - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
-            name: Leistungsvorgabe
-          - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
-            name: Einspeisewert
-          - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_notbetrieb
-            name: Notbetrieb
+              - type: picture-elements
+                image: /local/askoheat_plus/boiler-sensors.png
+                elements:
+                  - type: state-label
+                    entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_4
+                    prefix: "T4: "
+                    style:
+                      top: 10%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_3
+                    prefix: "T3: "
+                    style:
+                      top: 24%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_2
+                    prefix: "T2: "
+                    style:
+                      top: 38%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_1
+                    prefix: "T1: "
+                    style:
+                      top: 52%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.ahf280_ti_plus_15_8_temperatur
+                    prefix: "T0: "
+                    style:
+                      top: 65%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.ahf280_ti_plus_15_8_heizleistung
+                    prefix: "⚡ "
+                    style:
+                      top: 88%
+                      left: 54%
+                      color: white
+                      background-color: rgba(120, 20, 20, 0.75)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+
+          - type: vertical-stack
+            cards:
+              - type: history-graph
+                title: Temperaturverlauf (Sensor 0-4)
+                hours_to_show: 24
+                entities:
+                  - sensor.ahf280_ti_plus_15_8_temperatur
+                  - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_1
+                  - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_2
+                  - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_3
+                  - sensor.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_sensor_4
+              - type: history-graph
+                title: Heizleistungsverlauf
+                hours_to_show: 24
+                entities:
+                  - sensor.ahf280_ti_plus_15_8_heizleistung
 
   - title: SONNENBOOSTER 5,2 kW
     path: sonnenbooster-5-2-kw
     icon: mdi:radiator
     cards:
-      - type: markdown
-        content: >
-          ## SONNENBOOSTER 5,2 kW — Temperaturen & Leistung
+      - type: horizontal-stack
+        cards:
+          - type: entities
+            title: Alle Werte (Fallback / Details)
+            entities:
+              - entity: sensor.sonnenbooster_52_kw_geratestatus
+                name: Gerätestatus
+              - entity: sensor.sonnenbooster_52_kw_heizstufe
+                name: Heizstufe (Ist)
+              - entity: sensor.sonnenbooster_52_kw_heizleistung
+                name: Heizleistung
+              - entity: sensor.sonnenbooster_52_kw_temperatur
+                name: Temperatur
+              - entity: number.sonnenbooster_52_kw_ziel_heizstufe
+                name: Ziel-Heizstufe
+              - entity: number.sonnenbooster_52_kw_leistungsvorgabe
+                name: Leistungsvorgabe
+              - entity: number.sonnenbooster_52_kw_einspeisewert
+                name: Einspeisewert
+              - entity: switch.sonnenbooster_52_kw_notbetrieb
+                name: Notbetrieb
 
-          🔄 Zuletzt aktualisiert: vor {{ relative_time(as_datetime(states('sensor.heizungsraum_sonnenbooster_52_kw_letzte_aktualisierung'))) }}
+          - type: vertical-stack
+            cards:
+              - type: markdown
+                content: >
+                  ## Einspeisewert & Leistungsvorgabe am Zählerschrank
 
-          📡 Gerät: `192.168.1.201`
+              - type: picture-elements
+                image: /local/askoheat_plus/boiler-meter.png
+                elements:
+                  - type: state-label
+                    entity: sensor.sonnenbooster_52_kw_heizstufe
+                    prefix: "Stufe: "
+                    style:
+                      top: 76%
+                      left: 42%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: number.sonnenbooster_52_kw_leistungsvorgabe
+                    prefix: "Vorgabe: "
+                    style:
+                      top: 18%
+                      left: 70%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: number.sonnenbooster_52_kw_einspeisewert
+                    prefix: "Einspeisung: "
+                    style:
+                      top: 60%
+                      left: 68%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
 
-      - type: picture-elements
-        image: /local/askoheat_plus/boiler-sensors.png
-        elements:
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_4
-            prefix: "T4: "
-            style:
-              top: 10%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_3
-            prefix: "T3: "
-            style:
-              top: 24%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_2
-            prefix: "T2: "
-            style:
-              top: 38%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur_sensor_1
-            prefix: "T1: "
-            style:
-              top: 52%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_temperatur
-            prefix: "T0: "
-            style:
-              top: 65%
-              left: 76%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_heizleistung
-            prefix: "⚡ "
-            style:
-              top: 88%
-              left: 54%
-              color: white
-              background-color: rgba(120, 20, 20, 0.75)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
+              - type: markdown
+                content: >
+                  ## SONNENBOOSTER 5,2 kW — Temperaturen & Leistung
 
-      - type: markdown
-        content: >
-          ## Einspeisewert & Leistungsvorgabe am Zählerschrank
+                  🔄 Zuletzt aktualisiert: vor {{ relative_time(as_datetime(states('sensor.heizungsraum_sonnenbooster_52_kw_letzte_aktualisierung'))) }}
 
-      - type: picture-elements
-        image: /local/askoheat_plus/boiler-meter.png
-        elements:
-          - type: state-label
-            entity: sensor.sonnenbooster_52_kw_heizstufe
-            prefix: "Stufe: "
-            style:
-              top: 76%
-              left: 42%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: number.sonnenbooster_52_kw_leistungsvorgabe
-            prefix: "Vorgabe: "
-            style:
-              top: 18%
-              left: 70%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
-          - type: state-label
-            entity: number.sonnenbooster_52_kw_einspeisewert
-            prefix: "Einspeisung: "
-            style:
-              top: 60%
-              left: 68%
-              color: white
-              background-color: rgba(0, 0, 0, 0.65)
-              padding: 2px 6px
-              border-radius: 6px
-              font-weight: bold
-              font-size: 12px
+                  📡 Gerät: `192.168.1.201`
 
-      - type: history-graph
-        title: Temperaturverlauf (Sensor 0-4)
-        hours_to_show: 24
-        entities:
-          - sensor.sonnenbooster_52_kw_temperatur
-          - sensor.sonnenbooster_52_kw_temperatur_sensor_1
-          - sensor.sonnenbooster_52_kw_temperatur_sensor_2
-          - sensor.sonnenbooster_52_kw_temperatur_sensor_3
-          - sensor.sonnenbooster_52_kw_temperatur_sensor_4
-      - type: history-graph
-        title: Heizleistungsverlauf
-        hours_to_show: 24
-        entities:
-          - sensor.sonnenbooster_52_kw_heizleistung
-      - type: entities
-        title: Alle Werte (Fallback / Details)
-        entities:
-          - entity: sensor.sonnenbooster_52_kw_geratestatus
-            name: Gerätestatus
-          - entity: sensor.sonnenbooster_52_kw_heizstufe
-            name: Heizstufe (Ist)
-          - entity: sensor.sonnenbooster_52_kw_heizleistung
-            name: Heizleistung
-          - entity: sensor.sonnenbooster_52_kw_temperatur
-            name: Temperatur
-          - entity: number.sonnenbooster_52_kw_ziel_heizstufe
-            name: Ziel-Heizstufe
-          - entity: number.sonnenbooster_52_kw_leistungsvorgabe
-            name: Leistungsvorgabe
-          - entity: number.sonnenbooster_52_kw_einspeisewert
-            name: Einspeisewert
-          - entity: switch.sonnenbooster_52_kw_notbetrieb
-            name: Notbetrieb
+              - type: picture-elements
+                image: /local/askoheat_plus/boiler-sensors.png
+                elements:
+                  - type: state-label
+                    entity: sensor.sonnenbooster_52_kw_temperatur_sensor_4
+                    prefix: "T4: "
+                    style:
+                      top: 10%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.sonnenbooster_52_kw_temperatur_sensor_3
+                    prefix: "T3: "
+                    style:
+                      top: 24%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.sonnenbooster_52_kw_temperatur_sensor_2
+                    prefix: "T2: "
+                    style:
+                      top: 38%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.sonnenbooster_52_kw_temperatur_sensor_1
+                    prefix: "T1: "
+                    style:
+                      top: 52%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.sonnenbooster_52_kw_temperatur
+                    prefix: "T0: "
+                    style:
+                      top: 65%
+                      left: 76%
+                      color: white
+                      background-color: rgba(0, 0, 0, 0.65)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+                  - type: state-label
+                    entity: sensor.sonnenbooster_52_kw_heizleistung
+                    prefix: "⚡ "
+                    style:
+                      top: 88%
+                      left: 54%
+                      color: white
+                      background-color: rgba(120, 20, 20, 0.75)
+                      padding: 2px 6px
+                      border-radius: 6px
+                      font-weight: bold
+                      font-size: 12px
+
+          - type: vertical-stack
+            cards:
+              - type: history-graph
+                title: Temperaturverlauf (Sensor 0-4)
+                hours_to_show: 24
+                entities:
+                  - sensor.sonnenbooster_52_kw_temperatur
+                  - sensor.sonnenbooster_52_kw_temperatur_sensor_1
+                  - sensor.sonnenbooster_52_kw_temperatur_sensor_2
+                  - sensor.sonnenbooster_52_kw_temperatur_sensor_3
+                  - sensor.sonnenbooster_52_kw_temperatur_sensor_4
+              - type: history-graph
+                title: Heizleistungsverlauf
+                hours_to_show: 24
+                entities:
+                  - sensor.sonnenbooster_52_kw_heizleistung
 
