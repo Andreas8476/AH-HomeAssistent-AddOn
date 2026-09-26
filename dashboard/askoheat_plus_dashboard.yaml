@@ -23,9 +23,7 @@ views:
         content: >
           ## AHF280-TI-plus-15.8 — Temperaturen & Leistung
 
-          Sensor 0 sitzt direkt am Heizstab, Sensor 1–4 sind zusätzliche
-          Messpunkte am Tank (falls am Gerät nicht angeschlossen: "nicht
-          verfügbar" — siehe `docs/11_dashboard.md` im Repo für Details).
+          🔄 Zuletzt aktualisiert: vor {{ relative_time(states['sensor.ahf280_ti_plus_15_8_heizleistung'].last_updated) }}
 
       - type: picture-elements
         image: /local/askoheat_plus/boiler-sensors.png
@@ -35,7 +33,7 @@ views:
             prefix: "T4: "
             style:
               top: 10%
-              left: 63%
+              left: 72%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -47,7 +45,7 @@ views:
             prefix: "T3: "
             style:
               top: 24%
-              left: 63%
+              left: 72%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -59,7 +57,7 @@ views:
             prefix: "T2: "
             style:
               top: 38%
-              left: 63%
+              left: 72%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -71,7 +69,7 @@ views:
             prefix: "T1: "
             style:
               top: 52%
-              left: 63%
+              left: 72%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -82,8 +80,8 @@ views:
             entity: sensor.ahf280_ti_plus_15_8_temperatur
             prefix: "T0: "
             style:
-              top: 76%
-              left: 63%
+              top: 65%
+              left: 16%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -95,7 +93,7 @@ views:
             prefix: "⚡ "
             style:
               top: 88%
-              left: 63%
+              left: 16%
               color: white
               background-color: rgba(120, 20, 20, 0.75)
               padding: 2px 6px
@@ -115,7 +113,7 @@ views:
             prefix: "Stufe: "
             style:
               top: 76%
-              left: 25%
+              left: 42%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -175,9 +173,7 @@ views:
         content: >
           ## SONNENBOOSTER 5,2 kW — Temperaturen & Leistung
 
-          Sensor 0 sitzt direkt am Heizstab, Sensor 1–4 sind zusätzliche
-          Messpunkte am Tank (falls am Gerät nicht angeschlossen: "nicht
-          verfügbar" — siehe `docs/11_dashboard.md` im Repo für Details).
+          🔄 Zuletzt aktualisiert: vor {{ relative_time(states['sensor.sonnenbooster_52_kw_heizleistung'].last_updated) }}
 
       - type: picture-elements
         image: /local/askoheat_plus/boiler-sensors.png
@@ -187,7 +183,7 @@ views:
             prefix: "T4: "
             style:
               top: 10%
-              left: 63%
+              left: 72%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -199,7 +195,7 @@ views:
             prefix: "T3: "
             style:
               top: 24%
-              left: 63%
+              left: 72%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -211,7 +207,7 @@ views:
             prefix: "T2: "
             style:
               top: 38%
-              left: 63%
+              left: 72%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -223,7 +219,7 @@ views:
             prefix: "T1: "
             style:
               top: 52%
-              left: 63%
+              left: 72%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -234,8 +230,8 @@ views:
             entity: sensor.sonnenbooster_52_kw_temperatur
             prefix: "T0: "
             style:
-              top: 76%
-              left: 63%
+              top: 65%
+              left: 16%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px
@@ -247,7 +243,7 @@ views:
             prefix: "⚡ "
             style:
               top: 88%
-              left: 63%
+              left: 16%
               color: white
               background-color: rgba(120, 20, 20, 0.75)
               padding: 2px 6px
@@ -267,7 +263,7 @@ views:
             prefix: "Stufe: "
             style:
               top: 76%
-              left: 25%
+              left: 42%
               color: white
               background-color: rgba(0, 0, 0, 0.65)
               padding: 2px 6px

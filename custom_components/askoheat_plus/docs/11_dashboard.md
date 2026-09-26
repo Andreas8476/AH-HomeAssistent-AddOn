@@ -9,12 +9,27 @@ Karten je Ansicht, die Andreas' eigene Askoma-Renderbilder als Hintergrund
 zeigen und Live-Werte als Overlay-Labels direkt auf dem Bild positionieren:
 
 - **Karte 1** (`dashboard/images/boiler-sensors.png`): Temperatursensoren
-  0–4 (Sensor 0 = immer am Heizstab) sowie die aktuelle Heizleistung, verteilt
-  entlang der Heizwendel im Bild.
+  0–4 (Sensor 0 = immer am Heizstab) sowie die aktuelle Heizleistung, plus
+  eine Zeile mit dem Zeitpunkt der letzten Aktualisierung ("Herzschlag").
 - **Karte 2** (`dashboard/images/boiler-meter.png`): Ziel-Heizstufe am Tank,
   Leistungsvorgabe und Einspeisewert am Zählerschrank im Bild.
 - Zusätzliche **Fallback-Tabellenkarte** mit denselben Werten als normale
   Liste (falls die Bild-Overlays mal nicht laden oder man es lieber tabellarisch mag).
+
+**Label-Positionen (Bild 1):** Der Tank enthält zwei optisch unterscheidbare
+Teile: die große Heizwendel (Wärmetauscher-Spirale) und das eigentliche
+ASKOHEAT+-Heizelement (die kleinere orangene Wendel darunter/dahinter, direkt
+neben dem weißen Sensor-Puck). T1–T4 sitzen rechts neben der großen Wendel;
+T0 und die Heizleistung sitzen bewusst weit links, weil ihre alte Position
+in der Mitte genau das ASKOHEAT+-Heizelement verdeckt hat (Feedback nach
+Screenshot-Review). Auf Bild 2 wurde "Stufe" aus demselben Grund vom Tank
+weg auf die freie Wand-/Bodenfläche verschoben.
+
+**Herzschlag/Zeitstempel:** Die Markdown-Karte über Bild 1 zeigt
+`Zuletzt aktualisiert: vor …` als Jinja-Template, ausgelesen aus dem
+`last_updated`-Zeitstempel der Heizleistungs-Entity (Teil des regulär
+gepollten `gethome.json` — spiegelt also den letzten erfolgreichen
+Poll-Zyklus wider, nicht nur "Integration läuft").
 
 **Wichtiger Hinweis zu den Bildern:** Es sind Andreas' eigene, unveränderte
 Original-Renderbilder von Askoma — ich habe keine Möglichkeit, neue Bilder zu

@@ -222,6 +222,21 @@ kurz auf dieses Projekt).
   neu ausführen + `ha core restart`, um die Änderung auf beide
   Geräte-Ansichten anzuwenden.
 
+## 2026-09-26 — Dashboard: ASKOHEAT+-Heizelement freigelegt, Herzschlag-Anzeige
+
+- Andreas' Feedback nach Live-Test: das eigentliche ASKOHEAT+-Heizelement
+  (die kleine orangene Wendel neben dem Sensor-Puck, zu unterscheiden von
+  der größeren Wärmetauscher-Heizwendel) war in Bild 1 weiterhin von den
+  T0-/Heizleistungs-Labels verdeckt, in Bild 2 vom "Stufe"-Label. Beide
+  jetzt so verschoben, dass das Element frei sichtbar ist: T0/Heizleistung
+  ganz nach links, T1–T4 weiter nach rechts (Bild 1); "Stufe" auf die freie
+  Wandfläche neben den Tank (Bild 2). Positionen wieder pixelgenau gegen
+  beide Bilder verifiziert.
+- Neu: Herzschlag-/Zeitstempel-Zeile ("Zuletzt aktualisiert: vor …") über
+  Bild 1, per Jinja-Template aus dem `last_updated` der Heizleistungs-Entity.
+- Die bisherige Beschreibungszeile ("Sensor 0 sitzt direkt am Heizstab...")
+  über Bild 1 auf Wunsch entfernt, für nicht mehr nötig befunden.
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,

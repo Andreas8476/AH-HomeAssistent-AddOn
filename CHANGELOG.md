@@ -19,11 +19,18 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
   Geräte, ohne dass man sie manuell in den Entity-Einstellungen freischalten
   muss.
 
+- Dashboard, Bild 1: Zeile "Zuletzt aktualisiert: vor …" (Herzschlag/
+  Zeitstempel des letzten erfolgreichen Polls).
+
 ### Geändert
 
-- Dashboard, Bild 1 (Heizstab-Nahaufnahme): Wertfelder sitzen jetzt in einer
-  pixelgenau verifizierten Spalte rechts neben der Heizwendel statt darauf —
-  die Heizwendel bleibt vollständig sichtbar.
+- Dashboard, Bild 1 (Heizstab-Nahaufnahme): Wertfelder verschoben, damit das
+  eigentliche ASKOHEAT+-Heizelement (nicht die größere Wärmetauscher-Wendel)
+  sichtbar bleibt — T0/Heizleistung ganz links, T1–T4 weiter rechts.
+- Dashboard, Bild 2 (Zählerschrank): "Stufe"-Label auf die freie Wandfläche
+  neben dem Tank verschoben, aus demselben Grund.
+- Dashboard, Bild 1: Beschreibungstext über der Karte entfernt (nicht mehr
+  für nötig befunden).
 
 ## [0.7.0] - 2026-09-25
 

@@ -38,22 +38,27 @@ LABEL_STYLE = """              color: white
               font-size: 12px"""
 
 # (unique_id suffix, label prefix, top%, left%, bg color) for the boiler/coil image.
-# All labels sit in a clear column to the right of the coil cutaway (verified
-# pixel-by-pixel against dashboard/images/boiler-sensors.png: the coil never
-# reaches past ~58% left in this crop) so the heating element stays fully
-# visible instead of being covered by the value pills.
+# Positions verified pixel-by-pixel against dashboard/images/boiler-sensors.png
+# (398x502): T1-T4 sit in a clear column right of the coil (which never
+# reaches past ~58% left here); T0 and heater_load sit far left instead,
+# since the actual ASKOHEAT+ heating element (the small orange coil visible
+# at ~49-73% left / 63-70% top, below the heat-exchanger coil) needs that
+# spot kept clear per Andreas' feedback on the previous layout.
 SENSOR_ELEMENTS = [
-    ("temperature_sensor_4", "T4: ", 10, 63, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_3", "T3: ", 24, 63, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_2", "T2: ", 38, 63, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_1", "T1: ", 52, 63, "rgba(0, 0, 0, 0.65)"),
-    ("temperature_sensor_0", "T0: ", 76, 63, "rgba(0, 0, 0, 0.65)"),
-    ("heater_load", "⚡ ", 88, 63, "rgba(120, 20, 20, 0.75)"),
+    ("temperature_sensor_4", "T4: ", 10, 72, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_3", "T3: ", 24, 72, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_2", "T2: ", 38, 72, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_1", "T1: ", 52, 72, "rgba(0, 0, 0, 0.65)"),
+    ("temperature_sensor_0", "T0: ", 65, 16, "rgba(0, 0, 0, 0.65)"),
+    ("heater_load", "⚡ ", 88, 16, "rgba(120, 20, 20, 0.75)"),
 ]
 
-# (unique_id suffix, label prefix, top%, left%) for the meter-cabinet image
+# (unique_id suffix, label prefix, top%, left%) for the meter-cabinet image.
+# "Stufe" moved right of the tank onto the plain wall/floor area (was
+# overlapping the ASKOHEAT+ heating element at ~21-23% left / 68-71% top in
+# dashboard/images/boiler-meter.png).
 METER_ELEMENTS = [
-    ("heater_step_target", "Stufe: ", 76, 25),
+    ("heater_step_target", "Stufe: ", 76, 42),
     ("load_setpoint", "Vorgabe: ", 18, 70),
     ("load_feedin", "Einspeisung: ", 60, 68),
 ]
@@ -145,17 +150,24 @@ def render_view(device: dict) -> str:
         if suffix in ents
     )
 
+    # Heartbeat: "last updated" relative-time, read off heater_load since
+    # that's part of the regularly-polled gethome.json (updates every
+    # scan_interval), so it reflects the actual last successful poll.
+    heartbeat_entity = ents.get("heater_load")
+    heartbeat_line = (
+        "\n\n          🔄 Zuletzt aktualisiert: vor "
+        "{{ relative_time(states['" + heartbeat_entity + "'].last_updated) }}"
+        if heartbeat_entity
+        else ""
+    )
+
     return f"""  - title: {device["title"]}
     path: {path}
     icon: mdi:radiator
     cards:
       - type: markdown
         content: >
-          ## {device["title"]} — Temperaturen & Leistung
-
-          Sensor 0 sitzt direkt am Heizstab, Sensor 1–4 sind zusätzliche
-          Messpunkte am Tank (falls am Gerät nicht angeschlossen: "nicht
-          verfügbar" — siehe `docs/11_dashboard.md` im Repo für Details).
+          ## {device["title"]} — Temperaturen & Leistung{heartbeat_line}
 
       - type: picture-elements
         image: /local/askoheat_plus/boiler-sensors.png
