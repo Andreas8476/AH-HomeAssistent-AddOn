@@ -47,6 +47,7 @@
       "serial_number": { "name": "Seriennummer" },
       "software_version": { "name": "Software-Version" },
       "hardware_version": { "name": "Hardware-Version" },
+      "device_family": { "name": "Gerätefamilie" },
       "max_power": { "name": "Max. Leistung" },
       "number_of_heater": { "name": "Anzahl Heizstäbe" },
       "number_of_steps": { "name": "Anzahl Heizstufen" },

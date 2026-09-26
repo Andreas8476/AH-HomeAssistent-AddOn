@@ -25,6 +25,7 @@ section below) are **writable**.
 | `serial_number` | Serial number | home | `ASKOHEAT_PLUS_INFO.SERIAL_NUMBER` | text, diagnostic | no |
 | `software_version` | Software version | home | `ASKOHEAT_PLUS_INFO.SOFTWARE_VERSION` | text, diagnostic | no |
 | `hardware_version` | Hardware version | home | `ASKOHEAT_PLUS_INFO.HARDWARE_VERSION` | text, diagnostic | no |
+| `device_family` | Device family | home | derived from `ASKOHEAT_PLUS_INFO.HARDWARE_VERSION` (prefix) | text, diagnostic | no |
 | `max_power` | Max. power | home | `ASKOHEAT_PLUS_INFO.MAX_POWER` | W, diagnostic | no |
 | `number_of_heater` | Number of heaters | home | `ASKOHEAT_PLUS_INFO.NUMBER_OF_HEATER` | number, diagnostic | no |
 | `number_of_steps` | Number of heater steps | home | `ASKOHEAT_PLUS_INFO.NUMBER_OF_STEPS` | number, diagnostic | no |

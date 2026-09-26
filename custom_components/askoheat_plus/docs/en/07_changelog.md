@@ -253,6 +253,17 @@ project).
   `left: 54%, top: 88%` (centered below the element, below any shadow zone,
   consistently open area).
 
+## 2026-09-26 — Detect device family (ASKOHEAT 2.0 / Classic, with/without EEPROM)
+
+- New diagnostic sensor `device_family`: derives which device family it is
+  from the `HARDWARE_VERSION` prefix (per Andreas/ASKOMA AG) — `RCe` →
+  "ASKOHEAT 2.0 (mit EEPROM)", `HWe` → "ASKOHEAT Classic (mit EEPROM)",
+  `HW` → "ASKOHEAT Classic (ohne EEPROM)". Verified against both test
+  devices: device 1 reports `RCe1.0` → "ASKOHEAT 2.0 (mit EEPROM)", device
+  2 reports `HW 1.3` (with a space!) → "ASKOHEAT Classic (ohne EEPROM)" —
+  the prefix regex works regardless of the space. Disabled by default, like
+  the other master-data sensors.
+
 ## Open points
 
 - **Polling frequency of the secondary endpoints** (`getwizard_status.json`,

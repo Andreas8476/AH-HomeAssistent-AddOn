@@ -25,6 +25,7 @@ Abschnitt unten) sind **schreibbar**.
 | `serial_number` | Seriennummer | home | `ASKOHEAT_PLUS_INFO.SERIAL_NUMBER` | Text, diagnostic | nein |
 | `software_version` | Software-Version | home | `ASKOHEAT_PLUS_INFO.SOFTWARE_VERSION` | Text, diagnostic | nein |
 | `hardware_version` | Hardware-Version | home | `ASKOHEAT_PLUS_INFO.HARDWARE_VERSION` | Text, diagnostic | nein |
+| `device_family` | Gerätefamilie | home | abgeleitet aus `ASKOHEAT_PLUS_INFO.HARDWARE_VERSION` (Präfix) | Text, diagnostic | nein |
 | `max_power` | Max. Leistung | home | `ASKOHEAT_PLUS_INFO.MAX_POWER` | W, diagnostic | nein |
 | `number_of_heater` | Anzahl Heizstäbe | home | `ASKOHEAT_PLUS_INFO.NUMBER_OF_HEATER` | Zahl, diagnostic | nein |
 | `number_of_steps` | Anzahl Heizstufen | home | `ASKOHEAT_PLUS_INFO.NUMBER_OF_STEPS` | Zahl, diagnostic | nein |

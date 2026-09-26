@@ -14,6 +14,9 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ### Hinzugefügt
 
+- `sensor.py`: neuer Diagnose-Sensor `device_family`, erkennt anhand von
+  `HARDWARE_VERSION` ob es sich um ASKOHEAT 2.0 oder Classic, mit oder ohne
+  EEPROM handelt.
 - `sensor.py`: Temperatursensoren 1–4 werden jetzt automatisch aktiviert,
   sobald das Gerät für sie einen echten Wert liefert (statt `"not connected"`
   oder dem Sentinel `9999`) — auch rückwirkend für bereits eingerichtete

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from datetime import datetime
@@ -54,6 +55,29 @@ def _number(path: str) -> Callable[[dict[str, Any]], Any]:
 def _last_update(coordinator: AskoheatDataUpdateCoordinator) -> datetime | None:
     """value_fn für den last_update-Sensor: Zeitpunkt des letzten erfolgreichen Polls."""
     return coordinator.last_update_time
+
+
+# Präfix von HARDWARE_VERSION (z.B. "RCe1.0", "HW 1.3", "HWe1.8") gibt die
+# Gerätefamilie an: "RCe" = ASKOHEAT 2.0 mit EEPROM (das "e"), "HWe" = ASKOHEAT
+# Classic mit EEPROM, "HW" = ASKOHEAT Classic ohne EEPROM. Die Zahl danach ist
+# die Hardware-Generation. Quelle: Andreas (ASKOMA AG).
+_HARDWARE_FAMILY_PREFIXES = {
+    "RCe": "ASKOHEAT 2.0 (mit EEPROM)",
+    "HWe": "ASKOHEAT Classic (mit EEPROM)",
+    "HW": "ASKOHEAT Classic (ohne EEPROM)",
+}
+
+
+def _hardware_family(data: dict[str, Any]) -> str | None:
+    """value_fn für den device_family-Sensor: Gerätefamilie aus HARDWARE_VERSION ableiten."""
+    raw = get_path(data, "ASKOHEAT_PLUS_INFO.HARDWARE_VERSION")
+    if not raw:
+        return None
+    match = re.match(r"[A-Za-z]+", str(raw))
+    if not match:
+        return None
+    prefix = match.group()
+    return _HARDWARE_FAMILY_PREFIXES.get(prefix, f"Unbekannt ({prefix})")
 
 
 SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
@@ -193,6 +217,14 @@ SENSOR_DESCRIPTIONS: tuple[AskoheatSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         value_fn=_text("ASKOHEAT_PLUS_INFO.HARDWARE_VERSION"),
+    ),
+    AskoheatSensorEntityDescription(
+        key="device_family",
+        translation_key="device_family",
+        icon="mdi:memory",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+        value_fn=_hardware_family,
     ),
     AskoheatSensorEntityDescription(
         key="max_power",

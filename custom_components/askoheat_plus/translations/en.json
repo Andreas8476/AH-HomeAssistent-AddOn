@@ -47,6 +47,7 @@
       "serial_number": { "name": "Serial number" },
       "software_version": { "name": "Software version" },
       "hardware_version": { "name": "Hardware version" },
+      "device_family": { "name": "Device family" },
       "max_power": { "name": "Max. power" },
       "number_of_heater": { "name": "Number of heating elements" },
       "number_of_steps": { "name": "Number of steps" },

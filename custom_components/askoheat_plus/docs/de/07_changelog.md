@@ -250,6 +250,17 @@ kurz auf dieses Projekt).
   `left: 54%, top: 88%` (mittig unter dem Element, unterhalb jeder
   Schattenzone, durchgehend freie Fläche).
 
+## 2026-09-26 — Gerätefamilie erkennen (ASKOHEAT 2.0 / Classic, mit/ohne EEPROM)
+
+- Neuer Diagnose-Sensor `device_family`: leitet aus dem Präfix von
+  `HARDWARE_VERSION` ab, um welche Gerätefamilie es sich handelt (Angaben
+  von Andreas/ASKOMA AG) — `RCe` → "ASKOHEAT 2.0 (mit EEPROM)", `HWe` →
+  "ASKOHEAT Classic (mit EEPROM)", `HW` → "ASKOHEAT Classic (ohne EEPROM)".
+  Gegen beide Testgeräte verifiziert: Gerät 1 meldet `RCe1.0` → "ASKOHEAT
+  2.0 (mit EEPROM)", Gerät 2 meldet `HW 1.3` (mit Leerzeichen!) → "ASKOHEAT
+  Classic (ohne EEPROM)" — der Präfix-Regex funktioniert unabhängig vom
+  Leerzeichen. Standardmäßig deaktiviert, wie die anderen Stammdaten-Sensoren.
+
 ## Offene Punkte
 
 - **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
