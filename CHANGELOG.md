@@ -12,6 +12,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-09-26
+
 ### Hinzugefügt
 
 - `sensor.py`: neuer Diagnose-Sensor `device_family`, erkennt anhand von
@@ -214,7 +216,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Phase 2: Steuerung/Schreiben (Heizstufe, Leistungsvorgabe, Einspeisewert).
 - Phase 3: Lovelace-Dashboard mit Heizstab-Bildern.
 
-[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.7.0...main
+[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.8.0...main
+[0.8.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.7.0...v0.8.0
 [0.7.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.6.0...v0.7.0
 [0.6.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.5.0...v0.6.0
 [0.5.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.4.0...v0.5.0
