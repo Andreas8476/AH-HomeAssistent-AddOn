@@ -87,6 +87,13 @@ HACS kennt dieses Projekt nicht automatisch (kein Eintrag im offiziellen
 HACS-Standard-Store) — es muss einmalig als **Custom Repository** eingetragen
 werden:
 
+> **Achtung, nicht verwechseln:** Unter **Einstellungen → Apps (Add-ons) →
+> Add-on Store → ⋮ → Repositorys** funktioniert die URL **nicht**. Dort
+> lassen sich nur Supervisor-Apps eintragen (eigenständige Programme in einem
+> Container, z.B. evcc). ASKOHEAT+ ist trotz des Projektnamens "AddOn" eine
+> **Integration**, also Code, der direkt in Home Assistant läuft — und
+> Integrationen kommen über **HACS**.
+
 1. In der Seitenleiste **HACS** öffnen.
 2. Oben rechts die drei Punkte (⋮) → **Benutzerdefinierte Repositories**
    ("Custom repositories").

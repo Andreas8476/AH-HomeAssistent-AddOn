@@ -21,7 +21,7 @@ _LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class AskoheatSecondaryData:
-    """Daten der selten abgefragten Sekundär-Endpunkte, einmalig beim Start geladen."""
+    """Daten der selten abgefragten Sekundär-Endpunkte, beim Start und auf Anforderung geladen."""
 
     wizard_status: dict[str, Any] = field(default_factory=dict)
     temperature_calibration: dict[str, Any] = field(default_factory=dict)
@@ -35,7 +35,8 @@ class AskoheatDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     Nur gethome.json wird wiederholt abgefragt, bewusst so entworfen (siehe
     docs/de/02_api-referenz.md, "Abfrage-Strategie"), um den ESP32-Controller
     des Geräts nicht zu überlasten. Die übrigen, weniger zeitkritischen
-    Endpunkte werden nur einmalig nach dem ersten erfolgreichen Update geladen.
+    Endpunkte werden nach dem ersten erfolgreichen Update und danach nur auf
+    Anforderung (async_reload_secondary, Button) geladen.
     """
 
     def __init__(
@@ -74,22 +75,57 @@ class AskoheatDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             # Vor dem Abruf schon als erledigt markieren: ein Fehlschlag hier
             # darf bei jedem weiteren Poll keinen Retry-Sturm gegen das Gerät auslösen.
             self._secondary_fetched = True
-            await self._async_fetch_secondary_once()
+            await self._async_fetch_secondary()
 
         return data
 
-    async def _async_fetch_secondary_once(self) -> None:
-        """Die selten abgefragten Sekundär-Endpunkte einmalig laden."""
+    async def async_reload_secondary(self) -> None:
+        """Die Sekundär-Endpunkte auf Anforderung neu laden (Button "Einstellungen neu laden").
+
+        Bewusst kein automatisches Intervall, sondern nur manuell ausgelöst
+        (Andreas' Wunsch), damit das Gerät nicht zusätzlich belastet wird.
+        Nützlich z.B. nachdem Einstellungen direkt in der Geräte-Weboberfläche
+        geändert wurden.
+        """
+        await self._async_fetch_secondary()
+        self.async_update_listeners()
+
+    async def async_write_wizard_flags(self, wizard_key: str, mask: int, bits: int) -> None:
+        """Einzelne Bits eines Bitfeld-Registers aus getwizard.json setzen.
+
+        Mehrere Funktionen teilen sich ein Register (z.B.
+        MODBUS_CON_INPUT_SETTING für die "Aktiviert"-Checkboxen), daher
+        Read-Modify-Write: vorher getwizard.json frisch laden, damit
+        zwischenzeitlich in der Geräte-Weboberfläche geänderte Bits nicht mit
+        einem veralteten Cache-Stand überschrieben werden. Nur die Bits in
+        ``mask`` werden durch ``bits`` ersetzt, alle übrigen bleiben erhalten
+        (genau wie setupGroupChangeHandler in der Geräte-Weboberfläche).
+        """
+        wizard = await self.client.async_get_wizard()
+        try:
+            current = int(wizard[wizard_key])
+        except (KeyError, TypeError, ValueError) as err:
+            raise AskoheatApiError(f"Register {wizard_key} not readable: {err}") from err
+        new_value = (current & ~mask) | (bits & mask)
+        if new_value == current:
+            self.secondary.wizard = wizard
+        else:
+            self.secondary.wizard = await self.client.async_write_wizard(
+                {wizard_key: str(new_value)}
+            )
+        self.async_update_listeners()
+
+    async def _async_fetch_secondary(self) -> None:
+        """Die selten abgefragten Sekundär-Endpunkte laden (beim Start und auf Anforderung)."""
         fetchers = (
             ("wizard_status", self.client.async_get_wizard_status),
             ("temperature_calibration", self.client.async_get_temperature_calibration),
             ("registration", self.client.async_get_registration),
-            # Installer-Einstellungen (Legionellenschutz, Niedertarif,
-            # Einspeise-Zeitfenster, Wärmepumpen-Anforderung, Timeouts, ...),
-            # aktuell nur lesend als Diagnose-Sensoren abgebildet (siehe
-            # sensor.py). Wie die anderen Sekundär-Endpunkte nur einmalig
-            # beim Start geladen, spiegelt also den Stand bei Integrations-
-            # Start wider, nicht live.
+            # Installer-Einstellungen (Temperatur-Funktionen, Legionellenschutz,
+            # Niedertarif, Einspeise-Zeitfenster, Wärmepumpen-Anforderung,
+            # Timeouts, ...), siehe number.py/time.py/switch.py/select.py.
+            # Wie die anderen Sekundär-Endpunkte nur beim Start und per
+            # Button "Einstellungen neu laden" geladen, nicht live.
             ("wizard", self.client.async_get_wizard),
         )
         for key, fetch in fetchers:

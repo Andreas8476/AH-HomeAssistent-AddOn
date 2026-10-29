@@ -102,6 +102,10 @@ don't revert after 60s (verified live against the test device, see
 | `heat_pump_request_on_step_set` / `heat_pump_request_off_step_set` | Heat pump request on/off step | `MODBUS_CON_HEAT_PUMP_REQUEST_ON/OFF_STEP` | `0`–`NUMBER_OF_STEPS` (dynamic) | — |
 | `heat_pump_request_target_temperature_set` | Heat pump request target temperature | `MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST` | 20–95 | °C |
 | `auto_heater_off_timeout_set` | Auto heater-off timeout | `MODBUS_CON_AUTO_HEATER_OFF_MINUTES` | 0–1440 | min |
+| `legio_heatup_limit_set` | Legionella protection heat-up limit | `MODBUS_CON_LEGIO_HEATUP_MINUTES` | 0–1440 | min |
+| `minimum_temperature_set` | Minimum temperature | `MODBUS_CON_TEMPERATURE_MINIMUM` | 0–95 | °C |
+| `load_temperature_set` | Temperature for feed-in value/load setpoint | `MODBUS_CON_TEMPERATURE_LOAD_SETPOINT` | 20–95 | °C |
+| `heater_step_temperature_set` | Temperature for heater step | `MODBUS_CON_TEMPERATURE_SET_HEATER_STEP` | 20–95 | °C |
 
 All classified as `entity_category: config` (shown under "Configuration" in
 the UI, not in the regular entity list).
@@ -118,6 +122,65 @@ transparently combines/splits these into a single `time` value.
 | `low_tariff_start_time_set` / `low_tariff_end_time_set` | Low tariff start/end | `MODBUS_CON_LOW_TARIFF_START/END_TIME_HOUR`/`_MINUTE` |
 | `feedin_window_start_time_set` / `feedin_window_end_time_set` | Feed-in window start/end | `MODBUS_CON_USE_FEEDIN_START/END_TIME_HOUR`/`_MINUTE` |
 | `auto_reboot_time_set` | Auto reboot time | `AUTO_REBOOT_HOUR`/`AUTO_REBOOT_MINUTE` |
+
+## Temperature functions (`switch.py`/`select.py`, writable)
+
+Fully maps the **"Temperatur Funktionen"** (temperature functions) tile of the
+device's web UI (`extended.html`): per row an "enabled" switch, the target
+temperature (number entities above), the sensor selection and, where
+applicable, the time window (time entities above). Plus the legionella
+protection from the same tile.
+
+The "enabled" checkboxes and sensor selections are not separate values on
+the device but individual **bits** in shared registers (bit layout
+reconstructed from `Jextended.js` of the device web UI and cross-checked
+against the checkboxes of both devices). When writing, the integration
+therefore first reloads `getwizard.json` and changes only the affected bit
+(read-modify-write); all other bits stay unchanged — exactly like the device
+web UI itself.
+
+| Row in the device UI | Switch (key) | Register / bit | Temperature | Time window |
+|---|---|---|---|---|
+| Heat pump request or emergency mode | `heat_pump_request_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0080` | `heat_pump_request_target_temperature_set` | — |
+| Heat to minimum temperature | `minimum_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0200` | `minimum_temperature_set` | — |
+| Heat during low tariff | `low_tariff_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0100` | `low_tariff_target_temperature_set` | `low_tariff_start/end_time_set` |
+| Temperature for feed-in value | `feedin_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0004` | `load_temperature_set` ¹ | `feedin_window_start/end_time_set` |
+| Temperature for load setpoint | `setpoint_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0008` | `load_temperature_set` ¹ | — |
+| Temperature for set heater step | `heater_step_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0010` | `heater_step_temperature_set` | — |
+| Legionella protection | `legio_enabled` | `MODBUS_CON_LEGIO_SETTING` / `0x8000` | `legio_target_temperature_set` | start time `legio_activation_time_set`, heat-up limit `legio_heatup_limit_set` |
+
+¹ **One shared value, due to the device:** the device has only **one**
+register for "temperature for feed-in value" and "temperature for load
+setpoint" (`MODBUS_CON_TEMPERATURE_LOAD_SETPOINT`); the device web UI merely
+shows the same field in two rows. Changing it in one row changes the other
+as well.
+
+### Select entities (`select.py`)
+
+| Key | Name (EN) | Register / bits | Options |
+|---|---|---|---|
+| `temperature_sensor_select` | Temperature functions sensor | `MODBUS_CON_TEMPERATURE_SETTING` / `0x0001`–`0x0010` | Internal sensor 0, external sensor 1–4 |
+| `legio_sensor_select` | Legionella protection sensor | `MODBUS_CON_LEGIO_SETTING` / `0x0001`–`0x0010` | Internal sensor 0, external sensor 1–4 |
+| `legio_interval_select` | Legionella protection interval | `MODBUS_CON_LEGIO_SETTING` / `0x0100`–`0x0800` | Daily, weekly, fortnightly, monthly |
+
+**One shared sensor, due to the device:** in the device web UI each of the
+six temperature functions has its own sensor dropdown, but they all write the
+same bits — so there is only **one** sensor for all temperature functions
+(only legionella protection has its own). Bits `0x0800`–`0x8000` of the same
+register belong to the buffer charging pump and are left untouched.
+
+## Button: reload settings (`button.py`)
+
+| Key | Name (EN) |
+|---|---|
+| `reload_settings` | Reload settings |
+
+The installer settings (`getwizard.json`, `getwizard_status.json`,
+`gettemperature_calibration.json`, `getreg.json`) are deliberately **not**
+polled regularly, to avoid loading the device's ESP32 — only at integration
+startup and when this button is pressed. Useful after changing something
+directly in the device web UI. Values written via Home Assistant are current
+immediately and don't need the button.
 
 ## Switch entity (`switch.py`)
 

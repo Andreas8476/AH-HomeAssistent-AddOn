@@ -27,6 +27,12 @@ Deutsch ist die primäre, maßgebliche Version.
 Siehe [`04_installation.md`](custom_components/askoheat_plus/docs/de/04_installation.md)
 (HACS, manuell, oder lokale Entwicklung per Symlink).
 
+## Aktualisieren
+
+Neue Version auf GitHub? Bei HACS-Installation erscheint das Update
+automatisch unter **Einstellungen**. Alle Varianten: siehe
+[`13_aktualisieren.md`](custom_components/askoheat_plus/docs/de/13_aktualisieren.md).
+
 ## Bedienung
 
 Kurzer Rundgang mit Screenshots (Dashboard, Geräteseite, Rekonfiguration,

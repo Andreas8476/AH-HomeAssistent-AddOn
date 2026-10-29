@@ -81,6 +81,13 @@ Detailed, up-to-date instructions if anything differs:
 HACS doesn't know this project automatically (no entry in the official
 HACS default store) — it must be added once as a **custom repository**:
 
+> **Careful, don't mix this up:** the URL does **not** work under
+> **Settings → Apps (Add-ons) → Add-on store → ⋮ → Repositories**. Only
+> Supervisor apps can be added there (standalone programs in a container,
+> e.g. evcc). Despite the project name "AddOn", ASKOHEAT+ is an
+> **integration**, i.e. code that runs directly inside Home Assistant — and
+> integrations come via **HACS**.
+
 1. Open **HACS** in the sidebar.
 2. Three dots (⋮) at the top right → **"Custom repositories"**.
 3. **Repository URL:** `https://github.com/Andreas8476/AH-HomeAssistent-AddOn`

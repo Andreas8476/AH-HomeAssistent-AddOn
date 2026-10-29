@@ -408,6 +408,47 @@ kurz auf dieses Projekt).
   funktioniert, brauche ich den genauen Link/die Seite von Andreas, um es
   gezielt zu beheben.
 
+## 2026-10-29 — Temperatur-Funktionen + Button "Einstellungen neu laden"
+
+- Auf Andreas' Wunsch (Screenshot der Kachel "Temperatur Funktionen" aus der
+  Geräte-Weboberfläche): alle Temperatur-Programme jetzt les- und schreibbar.
+  Bitbelegung aus `Jextended.js` der Geräte-Weboberfläche rekonstruiert:
+  - "Aktiviert"-Häkchen = Bits in `MODBUS_CON_INPUT_SETTING`
+    (`0x0080` WP-Anforderung/Notbetrieb, `0x0200` Minimaltemperatur, `0x0100`
+    Niedertarif, `0x0004` Einspeisewert, `0x0008` Leistungsvorgabe, `0x0010`
+    Heizstufe), Legionellenschutz = `0x8000` in `MODBUS_CON_LEGIO_SETTING`.
+  - Fühler = Bits `0x0001`–`0x0010` in `MODBUS_CON_TEMPERATURE_SETTING`
+    (bzw. `MODBUS_CON_LEGIO_SETTING` für Legionellen), Legionellen-Intervall =
+    Bits `0x0100`–`0x0800` in `MODBUS_CON_LEGIO_SETTING`.
+  - Gegen die Häkchen beider Geräte (Testgerät `192.168.20.54`,
+    SONNENBOOSTER `192.168.1.201`) abgeglichen: passt exakt zum Screenshot.
+- **Zwei Geräte-Eigenheiten** (keine Einschränkung der Integration, sondern
+  so in der Geräte-Firmware): "Temperatur bei Einspeisewert" und "Temperatur
+  bei Leistungsvorgabe" teilen sich ein Register
+  (`MODBUS_CON_TEMPERATURE_LOAD_SETPOINT`), und alle sechs Fühler-Dropdowns
+  schreiben dieselben Bits — es gibt also nur einen gemeinsamen Fühler.
+  Daher jeweils nur eine Entity statt zwei bzw. sechs.
+- Neu: 7 Schalter (`switch.py`), 3 Auswahl-Entities (neue Plattform
+  `select.py`), 4 Number-Entities (Minimaltemperatur, Temperatur bei
+  Einspeisewert/Leistungsvorgabe, Temperatur bei Heizstufe,
+  Legionellenschutz-Zeitbegrenzung). Details:
+  [05_entities.md](05_entities.md), "Temperatur-Funktionen".
+- Bitfeld-Schreiben per Read-Modify-Write im Coordinator
+  (`async_write_wizard_flags`): vorher `getwizard.json` frisch laden, nur die
+  betroffenen Bits ändern, damit in der Geräte-Weboberfläche zwischenzeitlich
+  geänderte Bits nicht überschrieben werden.
+- **Offener Punkt "Polling der Sekundär-Endpunkte" erledigt:** statt eines
+  automatischen Intervalls (Andreas' Wunsch) neuer Button
+  `reload_settings` ("Einstellungen neu laden", neue Plattform `button.py`),
+  der alle Sekundär-Endpunkte auf Anforderung neu lädt.
+- Neue Doku [13_aktualisieren.md](13_aktualisieren.md) (+ EN:
+  [13_updating.md](../en/13_updating.md)): wie Nutzer das AddOn bei einer
+  neuen GitHub-Version aktualisieren (HACS, manuell, Entwicklungs-Setup),
+  plus Release-Ablauf für uns. Entscheidung: kein eigener Update-Mechanismus
+  in der Integration — HACS bringt das bereits mit (Update-Entity unter
+  "Einstellungen"), Voraussetzung ist ein echtes GitHub-Release pro Version
+  (Tag allein reicht nicht).
+
 ## Offene Punkte (ToDo)
 
 - **Aufnahme in den offiziellen HACS-Standard-Store:** aktuell nur als
@@ -417,11 +458,6 @@ kurz auf dieses Projekt).
   `home-assistant/brands` fürs Icon) und danach eine Review durch die
   HACS-Maintainer (Dauer nicht planbar). Von Andreas bewusst zurückgestellt
   — reine Custom-Repository-Installation reicht erstmal.
-- **Polling-Frequenz der Sekundär-Endpunkte** (`getwizard_status.json`,
-  `gettemperature_calibration.json`, `getreg.json`): aktuell nur einmalig beim
-  Start, kein Refresh danach. Muss laut Andreas später genauer betrachtet
-  werden (eigenes langsames Intervall? Options-Flow-Einstellung? Reconnect-
-  Trigger?).
 - **Relais-Zähler/Saldo** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) noch nicht als
   einzelne Sensoren abgebildet — Freitext-Parsing bewusst auf später verschoben.
 - **EW-Sperre (`128`) / direkte Heizstufen-Pfade (`0`–`19`):** nicht als eigene

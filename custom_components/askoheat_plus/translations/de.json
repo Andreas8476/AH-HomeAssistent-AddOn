@@ -154,6 +154,18 @@
       },
       "auto_heater_off_timeout_set": {
         "name": "Auto-Abschaltung Timeout"
+      },
+      "legio_heatup_limit_set": {
+        "name": "Legionellenschutz Zeitbegrenzung"
+      },
+      "minimum_temperature_set": {
+        "name": "Minimaltemperatur"
+      },
+      "load_temperature_set": {
+        "name": "Temperatur bei Einspeisewert/Leistungsvorgabe"
+      },
+      "heater_step_temperature_set": {
+        "name": "Temperatur bei Heizstufe"
       }
     },
     "time": {
@@ -179,6 +191,63 @@
     "switch": {
       "emergency_mode": {
         "name": "Notbetrieb"
+      },
+      "heat_pump_request_enabled": {
+        "name": "Wärmepumpenanforderung/Notbetrieb Temperatur aktiv"
+      },
+      "minimum_temperature_enabled": {
+        "name": "Heizen auf Minimaltemperatur"
+      },
+      "low_tariff_enabled": {
+        "name": "Heizen während Niedertarifzeit"
+      },
+      "feedin_temperature_enabled": {
+        "name": "Temperatur bei Einspeisewert aktiv"
+      },
+      "setpoint_temperature_enabled": {
+        "name": "Temperatur bei Leistungsvorgabe aktiv"
+      },
+      "heater_step_temperature_enabled": {
+        "name": "Temperatur bei Heizstufe aktiv"
+      },
+      "legio_enabled": {
+        "name": "Legionellenschutz"
+      }
+    },
+    "select": {
+      "temperature_sensor_select": {
+        "name": "Fühler Temperatur-Funktionen",
+        "state": {
+          "sensor_0": "Interner Sensor 0",
+          "sensor_1": "Externer Sensor 1",
+          "sensor_2": "Externer Sensor 2",
+          "sensor_3": "Externer Sensor 3",
+          "sensor_4": "Externer Sensor 4"
+        }
+      },
+      "legio_sensor_select": {
+        "name": "Legionellenschutz Fühler",
+        "state": {
+          "sensor_0": "Interner Sensor 0",
+          "sensor_1": "Externer Sensor 1",
+          "sensor_2": "Externer Sensor 2",
+          "sensor_3": "Externer Sensor 3",
+          "sensor_4": "Externer Sensor 4"
+        }
+      },
+      "legio_interval_select": {
+        "name": "Legionellenschutz Intervall",
+        "state": {
+          "daily": "Täglich",
+          "weekly": "Wöchentlich (7 Tage)",
+          "fortnightly": "Zweiwöchentlich (14 Tage)",
+          "monthly": "Monatlich (30 Tage)"
+        }
+      }
+    },
+    "button": {
+      "reload_settings": {
+        "name": "Einstellungen neu laden"
       }
     }
   },

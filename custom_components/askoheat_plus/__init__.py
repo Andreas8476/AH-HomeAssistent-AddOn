@@ -18,6 +18,8 @@ PLATFORMS: list[Platform] = [
     Platform.NUMBER,
     Platform.SWITCH,
     Platform.TIME,
+    Platform.SELECT,
+    Platform.BUTTON,
 ]
 
 type AskoheatConfigEntry = ConfigEntry[AskoheatDataUpdateCoordinator]

@@ -405,6 +405,48 @@ project).
   target) — if a specific link there still doesn't work, I need the exact
   link/page from Andreas to fix it.
 
+## 2026-10-29 — Temperature functions + "Reload settings" button
+
+- At Andreas' request (screenshot of the "Temperatur Funktionen" tile of the
+  device web UI): all temperature programs are now readable and writable.
+  Bit layout reconstructed from `Jextended.js` of the device web UI:
+  - "Enabled" checkboxes = bits in `MODBUS_CON_INPUT_SETTING`
+    (`0x0080` heat pump request/emergency, `0x0200` minimum temperature,
+    `0x0100` low tariff, `0x0004` feed-in value, `0x0008` load setpoint,
+    `0x0010` heater step), legionella protection = `0x8000` in
+    `MODBUS_CON_LEGIO_SETTING`.
+  - Sensor = bits `0x0001`–`0x0010` in `MODBUS_CON_TEMPERATURE_SETTING`
+    (or `MODBUS_CON_LEGIO_SETTING` for legionella), legionella interval =
+    bits `0x0100`–`0x0800` in `MODBUS_CON_LEGIO_SETTING`.
+  - Cross-checked against the checkboxes of both devices (test device
+    `192.168.20.54`, SONNENBOOSTER `192.168.1.201`): matches the screenshot
+    exactly.
+- **Two device quirks** (not a limitation of the integration but how the
+  device firmware works): "temperature for feed-in value" and "temperature
+  for load setpoint" share one register
+  (`MODBUS_CON_TEMPERATURE_LOAD_SETPOINT`), and all six sensor dropdowns
+  write the same bits — so there is only one shared sensor. Hence one entity
+  each instead of two or six.
+- New: 7 switches (`switch.py`), 3 select entities (new `select.py`
+  platform), 4 number entities (minimum temperature, temperature for feed-in
+  value/load setpoint, temperature for heater step, legionella heat-up
+  limit). Details: [05_entities.md](05_entities.md), "Temperature functions".
+- Bitfield writes via read-modify-write in the coordinator
+  (`async_write_wizard_flags`): reload `getwizard.json` first, change only the
+  affected bits, so bits changed in the device web UI in the meantime are not
+  overwritten.
+- **Open point "polling of the secondary endpoints" resolved:** instead of an
+  automatic interval (Andreas' preference) a new `reload_settings` button
+  ("Reload settings", new `button.py` platform) reloads all secondary
+  endpoints on demand.
+- New doc [13_updating.md](13_updating.md) (+ DE:
+  [13_aktualisieren.md](../de/13_aktualisieren.md)): how users update the
+  add-on when a new GitHub version is out (HACS, manual, development setup),
+  plus the release procedure for us. Decision: no custom update mechanism in
+  the integration — HACS already provides one (update entity under
+  "Settings"); prerequisite is a real GitHub release per version (a tag
+  alone is not enough).
+
 ## Open points (TODO)
 
 - **Listing in the official HACS default store:** currently only
@@ -414,11 +456,6 @@ project).
   for the icon), then a review by the HACS maintainers (turnaround not
   predictable). Deliberately deferred by Andreas — plain custom-repository
   installation is enough for now.
-- **Polling frequency of the secondary endpoints** (`getwizard_status.json`,
-  `gettemperature_calibration.json`, `getreg.json`): currently loaded only
-  once at startup, no refresh afterward. Needs a closer look later per
-  Andreas (its own slow interval? an options-flow setting? a reconnect
-  trigger?).
 - **Relay counters/balance** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) not yet
   mapped as individual sensors — free-text parsing deliberately deferred.
 - **Grid-lock (`128`) / direct heater-step paths (`0`–`19`):** not mapped

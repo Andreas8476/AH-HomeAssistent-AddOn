@@ -12,6 +12,22 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Temperatur-Funktionen der Geräte-Weboberfläche vollständig les- und
+  schreibbar: "Aktiviert"-Schalter für Wärmepumpenanforderung/Notbetrieb,
+  Minimaltemperatur, Niedertarif, Einspeisewert, Leistungsvorgabe, Heizstufe
+  und Legionellenschutz (`switch.py`); Fühler-Auswahl und Legionellen-
+  Intervall (neue Plattform `select.py`); neue Number-Entities
+  Minimaltemperatur, Temperatur bei Einspeisewert/Leistungsvorgabe,
+  Temperatur bei Heizstufe, Legionellenschutz-Zeitbegrenzung. Details:
+  `docs/de/05_entities.md`.
+- Button "Einstellungen neu laden" (neue Plattform `button.py`): lädt
+  `getwizard.json` und die übrigen Sekundär-Endpunkte auf Anforderung neu
+  (statt automatischem Polling).
+- Neue Doku `docs/de/13_aktualisieren.md` (+ EN `13_updating.md`): AddOn auf
+  eine neue Version aktualisieren.
+
 ## [0.8.0] - 2026-09-26
 
 ### Hinzugefügt

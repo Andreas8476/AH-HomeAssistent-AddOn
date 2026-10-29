@@ -154,6 +154,18 @@
       },
       "auto_heater_off_timeout_set": {
         "name": "Auto heater-off timeout"
+      },
+      "legio_heatup_limit_set": {
+        "name": "Legionella protection heat-up limit"
+      },
+      "minimum_temperature_set": {
+        "name": "Minimum temperature"
+      },
+      "load_temperature_set": {
+        "name": "Temperature for feed-in value/load setpoint"
+      },
+      "heater_step_temperature_set": {
+        "name": "Temperature for heater step"
       }
     },
     "time": {
@@ -179,6 +191,63 @@
     "switch": {
       "emergency_mode": {
         "name": "Emergency mode"
+      },
+      "heat_pump_request_enabled": {
+        "name": "Heat pump request/emergency temperature enabled"
+      },
+      "minimum_temperature_enabled": {
+        "name": "Heat to minimum temperature"
+      },
+      "low_tariff_enabled": {
+        "name": "Heat during low tariff"
+      },
+      "feedin_temperature_enabled": {
+        "name": "Feed-in value temperature enabled"
+      },
+      "setpoint_temperature_enabled": {
+        "name": "Load setpoint temperature enabled"
+      },
+      "heater_step_temperature_enabled": {
+        "name": "Heater step temperature enabled"
+      },
+      "legio_enabled": {
+        "name": "Legionella protection"
+      }
+    },
+    "select": {
+      "temperature_sensor_select": {
+        "name": "Temperature functions sensor",
+        "state": {
+          "sensor_0": "Internal sensor 0",
+          "sensor_1": "External sensor 1",
+          "sensor_2": "External sensor 2",
+          "sensor_3": "External sensor 3",
+          "sensor_4": "External sensor 4"
+        }
+      },
+      "legio_sensor_select": {
+        "name": "Legionella protection sensor",
+        "state": {
+          "sensor_0": "Internal sensor 0",
+          "sensor_1": "External sensor 1",
+          "sensor_2": "External sensor 2",
+          "sensor_3": "External sensor 3",
+          "sensor_4": "External sensor 4"
+        }
+      },
+      "legio_interval_select": {
+        "name": "Legionella protection interval",
+        "state": {
+          "daily": "Daily",
+          "weekly": "Weekly (7 days)",
+          "fortnightly": "Fortnightly (14 days)",
+          "monthly": "Monthly (30 days)"
+        }
+      }
+    },
+    "button": {
+      "reload_settings": {
+        "name": "Reload settings"
       }
     }
   },

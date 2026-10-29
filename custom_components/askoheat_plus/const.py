@@ -20,9 +20,8 @@ CONF_SCAN_INTERVAL_DEFAULT = timedelta(seconds=DEFAULT_SCAN_INTERVAL)
 # und Status-Flags.
 ENDPOINT_HOME = "gethome.json"
 
-# Sekundär-Endpunkte: nur einmalig beim Start geladen (nicht im regulären
-# Polling-Zyklus). Abfrage-/Refresh-Strategie dafür ist noch offen, siehe
-# docs/de/07_changelog.md.
+# Sekundär-Endpunkte: nur beim Start und per Button "Einstellungen neu laden"
+# geladen (nicht im regulären Polling-Zyklus), siehe button.py.
 ENDPOINT_WIZARD = "getwizard.json"
 ENDPOINT_WIZARD_STATUS = "getwizard_status.json"
 ENDPOINT_TEMPERATURE_CALIBRATION = "gettemperature_calibration.json"

@@ -264,6 +264,61 @@ WIZARD_NUMBER_DESCRIPTIONS: tuple[AskoheatWizardNumberEntityDescription, ...] = 
         wizard_key="MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST",
     ),
     AskoheatWizardNumberEntityDescription(
+        key="legio_heatup_limit_set",
+        translation_key="legio_heatup_limit_set",
+        icon="mdi:timer-sand",
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+        native_min_value=0,
+        native_max_value=1440,
+        native_step=10,
+        mode=NumberMode.BOX,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_LEGIO_HEATUP_MINUTES",
+    ),
+    # --- Temperatur-Funktionen (Geräte-Weboberfläche: "Temperatur
+    # Funktionen"), zugehörige "Aktiviert"-Schalter in switch.py.
+    AskoheatWizardNumberEntityDescription(
+        key="minimum_temperature_set",
+        translation_key="minimum_temperature_set",
+        icon="mdi:thermometer-low",
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        native_min_value=0,
+        native_max_value=95,
+        native_step=1,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_TEMPERATURE_MINIMUM",
+    ),
+    # Achtung: Das Gerät kennt nur EIN Register für "Temperatur bei
+    # Einspeisewert" und "Temperatur bei Leistungsvorgabe" — die
+    # Geräte-Weboberfläche bindet beide Eingabefelder an
+    # MODBUS_CON_TEMPERATURE_LOAD_SETPOINT (Jextended.js), es gibt kein
+    # eigenes Feedin-Temperatur-Register. Daher hier bewusst nur eine Entity.
+    AskoheatWizardNumberEntityDescription(
+        key="load_temperature_set",
+        translation_key="load_temperature_set",
+        icon="mdi:solar-power-variant",
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        native_min_value=20,
+        native_max_value=95,
+        native_step=1,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_TEMPERATURE_LOAD_SETPOINT",
+    ),
+    AskoheatWizardNumberEntityDescription(
+        key="heater_step_temperature_set",
+        translation_key="heater_step_temperature_set",
+        icon="mdi:radiator",
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        native_min_value=20,
+        native_max_value=95,
+        native_step=1,
+        entity_category=EntityCategory.CONFIG,
+        wizard_key="MODBUS_CON_TEMPERATURE_SET_HEATER_STEP",
+    ),
+    AskoheatWizardNumberEntityDescription(
         key="auto_heater_off_timeout_set",
         translation_key="auto_heater_off_timeout_set",
         icon="mdi:timer-off-outline",

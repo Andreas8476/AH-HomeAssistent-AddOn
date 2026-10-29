@@ -104,6 +104,10 @@ verifiziert, siehe [07_changelog.md](07_changelog.md)).
 | `heat_pump_request_on_step_set` / `heat_pump_request_off_step_set` | Wärmepumpen-Anforderung Ein-/Aus-Stufe | `MODBUS_CON_HEAT_PUMP_REQUEST_ON/OFF_STEP` | `0`–`NUMBER_OF_STEPS` (dynamisch) | — |
 | `heat_pump_request_target_temperature_set` | Wärmepumpen-Anforderung Zieltemperatur | `MODBUS_CON_TEMPERATURE_HEAT_PUMP_REQUEST` | 20–95 | °C |
 | `auto_heater_off_timeout_set` | Auto-Abschaltung Timeout | `MODBUS_CON_AUTO_HEATER_OFF_MINUTES` | 0–1440 | min |
+| `legio_heatup_limit_set` | Legionellenschutz Zeitbegrenzung | `MODBUS_CON_LEGIO_HEATUP_MINUTES` | 0–1440 | min |
+| `minimum_temperature_set` | Minimaltemperatur | `MODBUS_CON_TEMPERATURE_MINIMUM` | 0–95 | °C |
+| `load_temperature_set` | Temperatur bei Einspeisewert/Leistungsvorgabe | `MODBUS_CON_TEMPERATURE_LOAD_SETPOINT` | 20–95 | °C |
+| `heater_step_temperature_set` | Temperatur bei Heizstufe | `MODBUS_CON_TEMPERATURE_SET_HEATER_STEP` | 20–95 | °C |
 
 Alle als `entity_category: config` eingestuft (erscheinen im UI unter
 "Konfiguration", nicht in der normalen Entity-Liste).
@@ -120,6 +124,67 @@ Entity kombiniert/zerlegt das transparent zu einem einzelnen `time`-Wert.
 | `low_tariff_start_time_set` / `low_tariff_end_time_set` | Niedertarif Start/Ende | `MODBUS_CON_LOW_TARIFF_START/END_TIME_HOUR`/`_MINUTE` |
 | `feedin_window_start_time_set` / `feedin_window_end_time_set` | Einspeise-Zeitfenster Start/Ende | `MODBUS_CON_USE_FEEDIN_START/END_TIME_HOUR`/`_MINUTE` |
 | `auto_reboot_time_set` | Auto-Reboot Zeit | `AUTO_REBOOT_HOUR`/`AUTO_REBOOT_MINUTE` |
+
+## Temperatur-Funktionen (`switch.py`/`select.py`, schreibbar)
+
+Bildet die Kachel **"Temperatur Funktionen"** der Geräte-Weboberfläche
+(`extended.html`) vollständig ab: pro Zeile ein "Aktiviert"-Schalter, die
+Zieltemperatur (Number-Entities oben), die Fühler-Auswahl und, wo vorhanden,
+das Zeitfenster (Time-Entities oben). Dazu der Legionellenschutz aus derselben
+Kachel.
+
+Die "Aktiviert"-Häkchen und Fühler-Auswahlen sind am Gerät keine eigenen
+Werte, sondern einzelne **Bits** in gemeinsam genutzten Registern
+(Bitbelegung aus `Jextended.js` der Geräte-Weboberfläche rekonstruiert und
+gegen die Häkchen beider Geräte abgeglichen). Beim Schreiben lädt die
+Integration deshalb zuerst `getwizard.json` frisch und ändert nur das
+betroffene Bit (Read-Modify-Write), alle anderen Bits bleiben unverändert —
+genau wie die Geräte-Weboberfläche selbst.
+
+| Zeile in der Geräte-UI | Schalter (Key) | Register / Bit | Temperatur | Zeitfenster |
+|---|---|---|---|---|
+| Wärmepumpenanforderung oder Notbetrieb | `heat_pump_request_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0080` | `heat_pump_request_target_temperature_set` | — |
+| Heizen auf Minimaltemperatur | `minimum_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0200` | `minimum_temperature_set` | — |
+| Heizen während der Niedertarifzeit | `low_tariff_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0100` | `low_tariff_target_temperature_set` | `low_tariff_start/end_time_set` |
+| Temperatur bei Einspeisewert | `feedin_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0004` | `load_temperature_set` ¹ | `feedin_window_start/end_time_set` |
+| Temperatur bei Leistungsvorgabe | `setpoint_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0008` | `load_temperature_set` ¹ | — |
+| Temperatur bei setzen der Heizstufe | `heater_step_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0010` | `heater_step_temperature_set` | — |
+| Legionellenschutz | `legio_enabled` | `MODBUS_CON_LEGIO_SETTING` / `0x8000` | `legio_target_temperature_set` | Startzeit `legio_activation_time_set`, Zeitbegrenzung `legio_heatup_limit_set` |
+
+¹ **Gerätebedingt ein gemeinsamer Wert:** Das Gerät hat für "Temperatur bei
+Einspeisewert" und "Temperatur bei Leistungsvorgabe" nur **ein** Register
+(`MODBUS_CON_TEMPERATURE_LOAD_SETPOINT`); die Geräte-Weboberfläche zeigt
+dasselbe Feld nur in zwei Zeilen an. Ändert man den Wert in einer Zeile,
+ändert er sich auch in der anderen.
+
+### Auswahl-Entities (`select.py`)
+
+| Key | Name (DE) | Register / Bits | Optionen |
+|---|---|---|---|
+| `temperature_sensor_select` | Fühler Temperatur-Funktionen | `MODBUS_CON_TEMPERATURE_SETTING` / `0x0001`–`0x0010` | Interner Sensor 0, Externer Sensor 1–4 |
+| `legio_sensor_select` | Legionellenschutz Fühler | `MODBUS_CON_LEGIO_SETTING` / `0x0001`–`0x0010` | Interner Sensor 0, Externer Sensor 1–4 |
+| `legio_interval_select` | Legionellenschutz Intervall | `MODBUS_CON_LEGIO_SETTING` / `0x0100`–`0x0800` | Täglich, Wöchentlich, Zweiwöchentlich, Monatlich |
+
+**Gerätebedingt ein gemeinsamer Fühler:** In der Geräte-Weboberfläche hat
+zwar jede der sechs Temperatur-Funktionen ein eigenes Fühler-Dropdown, alle
+schreiben aber dieselben Bits — es gibt also nur **einen** Fühler für alle
+Temperatur-Funktionen (nur der Legionellenschutz hat einen eigenen). Die Bits
+`0x0800`–`0x8000` desselben Registers gehören zur Pufferladepumpe und werden
+nicht verändert.
+
+## Button: Einstellungen neu laden (`button.py`)
+
+| Key | Name (DE) |
+|---|---|
+| `reload_settings` | Einstellungen neu laden |
+
+Die Installer-Einstellungen (`getwizard.json`, `getwizard_status.json`,
+`gettemperature_calibration.json`, `getreg.json`) werden bewusst **nicht**
+regelmäßig abgefragt, um den ESP32 des Geräts nicht zu belasten — nur beim
+Start der Integration und per Druck auf diesen Button. Nützlich, nachdem
+etwas direkt in der Geräte-Weboberfläche geändert wurde. Werte, die über
+Home Assistant geschrieben werden, sind sofort aktuell und brauchen den
+Button nicht.
 
 ## Switch-Entity (`switch.py`)
 
