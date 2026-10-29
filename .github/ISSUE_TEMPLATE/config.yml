@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Frage oder Austausch / Question or discussion
+    url: https://community.home-assistant.io/t/askoheat-askoma-pv-heating-element-custom-integration-local-no-cloud/1030960
+    about: Fragen und Erfahrungen im Home Assistant Forum / Questions and experiences in the Home Assistant community forum
+  - name: Dokumentation / Documentation
+    url: https://github.com/Andreas8476/AH-HomeAssistent-AddOn/tree/main/custom_components/askoheat_plus/docs
+    about: Installation, Bedienung und Entities / Installation, usage and entities

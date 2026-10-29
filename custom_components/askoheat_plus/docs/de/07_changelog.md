@@ -492,6 +492,17 @@ kurz auf dieses Projekt).
   des HACS-Store-Antrags und eine Vorlage zum Eintragen weiterer Foren.
   Aus dem README verlinkt.
 
+## 2026-10-29 — README überarbeitet, Issue-Vorlagen
+
+- README als Startseite neu aufgebaut (Funktionsübersicht, Screenshots, HACS-
+  Schnellstart mit "My Home Assistant"-Knopf, getestete Geräte, Hilfe,
+  Dokumentations-Tabelle, englische Kurzfassung).
+- GitHub-Issue-Formulare (`.github/ISSUE_TEMPLATE/`): "Fehler melden" fragt
+  Gerätemodell, Geräte-Firmware, Version der Integration, Home-Assistant-
+  Version, Installationsart und Protokoll ab; "Wunsch" für neue Funktionen
+  oder Modelle. Zweisprachig beschriftet (DE/EN). Leere Issues sind
+  abgeschaltet, stattdessen Verweise auf Forum und Doku. Läuft nur auf GitHub.
+
 ## Offene Punkte (ToDo)
 
 - **Aufnahme in den offiziellen HACS-Standard-Store:** in Vorbereitung

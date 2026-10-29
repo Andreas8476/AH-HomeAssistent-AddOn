@@ -1,0 +1,97 @@
+name: Fehler melden / Report a bug
+description: Etwas funktioniert nicht wie erwartet / Something does not work as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für die Meldung! Bitte die Felder so genau wie möglich ausfüllen, dann lässt sich der Fehler schneller finden. Deutsch oder Englisch ist beides in Ordnung.
+
+        Thanks for reporting! Please fill in the fields as precisely as possible. German or English is fine.
+
+        Vorher bitte kurz prüfen / Please check first: [Dokumentation / documentation](https://github.com/Andreas8476/AH-HomeAssistent-AddOn/tree/main/custom_components/askoheat_plus/docs) und die [offenen Issues / open issues](https://github.com/Andreas8476/AH-HomeAssistent-AddOn/issues).
+  - type: textarea
+    id: problem
+    attributes:
+      label: Was ist passiert? / What happened?
+      description: Was hast du erwartet, was ist stattdessen passiert? / What did you expect, what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zum Nachstellen / Steps to reproduce
+      description: Was hast du vor dem Fehler getan? / What did you do before the error occurred?
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: false
+  - type: input
+    id: device-model
+    attributes:
+      label: Gerätemodell / Device model
+      description: "Zu finden auf der Geräteseite in Home Assistant (Einstellungen → Geräte & Dienste → ASKOHEAT+ → Gerät) oder auf dem Typenschild. / Found on the device page in Home Assistant or on the type plate."
+      placeholder: "z.B. / e.g. AHF280-TI-plus-15.8"
+    validations:
+      required: true
+  - type: input
+    id: device-firmware
+    attributes:
+      label: Firmware-Version des Geräts / Device firmware version
+      description: "Auf der Geräteseite in Home Assistant unter „Firmware“. / On the device page in Home Assistant under “Firmware”."
+      placeholder: "z.B. / e.g. 5.3.an"
+    validations:
+      required: true
+  - type: input
+    id: integration-version
+    attributes:
+      label: Version der Integration / Integration version
+      description: "In HACS bei ASKOHEAT+. / In HACS under ASKOHEAT+."
+      placeholder: "z.B. / e.g. 0.10.1"
+    validations:
+      required: true
+  - type: input
+    id: ha-version
+    attributes:
+      label: Home-Assistant-Version / Home Assistant version
+      description: "Einstellungen → Über. / Settings → About."
+      placeholder: "z.B. / e.g. 2026.10.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Installationsart / Installation method
+      options:
+        - HACS (benutzerdefiniertes Repository / custom repository)
+        - HACS (Standard-Store / default store)
+        - Manuell / Manual
+        - Entwicklungs-Setup (Git-Klon) / Development setup (git clone)
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Protokoll / Log
+      description: |
+        Einstellungen → System → Protokolle, nach „askoheat“ suchen und relevante Zeilen einfügen. Wenn möglich mit eingeschaltetem Debug-Protokoll: Einstellungen → Geräte & Dienste → ASKOHEAT+ → ⋮ → Debug-Protokollierung aktivieren.
+
+        Settings → System → Logs, search for “askoheat” and paste the relevant lines. If possible with debug logging enabled: Settings → Devices & services → ASKOHEAT+ → ⋮ → Enable debug logging.
+      render: text
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Sonstiges / Anything else
+      description: Screenshots, weitere Beobachtungen. / Screenshots, further observations.
+    validations:
+      required: false
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Datenschutz / Privacy
+      options:
+        - label: Ich habe Passwörter, Zugangsdaten und andere private Angaben aus Logs und Screenshots entfernt. / I removed passwords, credentials and other private data from logs and screenshots.
+          required: true

@@ -12,6 +12,11 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- GitHub-Issue-Formulare (`.github/ISSUE_TEMPLATE/`) für Fehlermeldungen
+  und Wünsche, zweisprachig (DE/EN).
+
 ### Dokumentation
 
 - README überarbeitet: Funktionsübersicht, Screenshots, HACS-Schnellstart mit

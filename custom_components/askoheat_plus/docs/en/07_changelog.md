@@ -488,6 +488,17 @@ project).
   HACS store request and a template for adding further forums. Linked from
   the README.
 
+## 2026-10-29 — README reworked, issue templates
+
+- README rebuilt as a landing page (feature overview, screenshots, HACS
+  quick start with "My Home Assistant" button, tested devices, help,
+  documentation table, English summary).
+- GitHub issue forms (`.github/ISSUE_TEMPLATE/`): "Report a bug" asks for
+  device model, device firmware, integration version, Home Assistant version,
+  installation method and log; "Feature request" for new features or models.
+  Labelled bilingually (DE/EN). Blank issues are disabled, with links to the
+  forum and docs instead. GitHub only.
+
 ## Open points (TODO)
 
 - **Listing in the official HACS default store:** in preparation (Andreas

@@ -1,0 +1,32 @@
+name: Wunsch / Feature request
+description: Eine neue Funktion oder ein weiteres Gerätemodell vorschlagen / Suggest a new feature or another device model
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für den Vorschlag! Deutsch oder Englisch ist beides in Ordnung.
+
+        Thanks for the suggestion! German or English is fine.
+  - type: textarea
+    id: wish
+    attributes:
+      label: Was wünschst du dir? / What would you like?
+      description: Beschreibe die Funktion und wozu du sie brauchst. / Describe the feature and what you need it for.
+    validations:
+      required: true
+  - type: input
+    id: device-model
+    attributes:
+      label: Gerätemodell / Device model
+      description: Optional, falls der Wunsch ein bestimmtes Modell betrifft. / Optional, if the wish concerns a specific model.
+      placeholder: "z.B. / e.g. AHF280-TI-plus-15.8"
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Sonstiges / Anything else
+      description: Wo taucht der Wert oder die Einstellung in der Geräte-Weboberfläche auf? Screenshots helfen. / Where does the value or setting appear in the device web UI? Screenshots help.
+    validations:
+      required: false
