@@ -483,13 +483,15 @@ kurz auf dieses Projekt).
 
 ## Offene Punkte (ToDo)
 
-- **Aufnahme in den offiziellen HACS-Standard-Store:** aktuell nur als
-  HACS-Custom-Repository installierbar (fertig eingerichtet). Für den
-  Standard-Store bräuchte es zusätzlich einen `hacs/action`-Validierungs-
-  Workflow, eine PR bei `hacs/default` (+ optional eine bei
-  `home-assistant/brands` fürs Icon) und danach eine Review durch die
-  HACS-Maintainer (Dauer nicht planbar). Von Andreas bewusst zurückgestellt
-  — reine Custom-Repository-Installation reicht erstmal.
+- **Aufnahme in den offiziellen HACS-Standard-Store:** in Vorbereitung
+  (Andreas hat sich 2026-10-29 dafür entschieden). Erledigt: Validierungs-
+  Workflow `.github/workflows/validate.yml` (`hacs/action` + `hassfest`),
+  GitHub-Beschreibung/Topics, Releases, Marken-Bilder im Ordner `brand/`
+  (eine separate PR bei `home-assistant/brands` ist dafür nicht mehr nötig).
+  Offen: Workflow-Läufe auf GitHub grün abwarten, dann PR bei `hacs/default`
+  (Eintrag `Andreas8476/AH-HomeAssistent-AddOn` in der Datei `integration`,
+  alphabetisch einsortiert) durch den Repo-Besitzer, danach Review der
+  HACS-Maintainer (Dauer nicht planbar).
 - **Relais-Zähler/Saldo** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) noch nicht als
   einzelne Sensoren abgebildet — Freitext-Parsing bewusst auf später verschoben.
 - **EW-Sperre (`128`) / direkte Heizstufen-Pfade (`0`–`19`):** nicht als eigene

@@ -479,13 +479,15 @@ project).
 
 ## Open points (TODO)
 
-- **Listing in the official HACS default store:** currently only
-  installable as a HACS custom repository (fully set up). The default
-  store would additionally need a `hacs/action` validation workflow, a PR
-  against `hacs/default` (+ optionally one against `home-assistant/brands`
-  for the icon), then a review by the HACS maintainers (turnaround not
-  predictable). Deliberately deferred by Andreas — plain custom-repository
-  installation is enough for now.
+- **Listing in the official HACS default store:** in preparation (Andreas
+  decided on it 2026-10-29). Done: validation workflow
+  `.github/workflows/validate.yml` (`hacs/action` + `hassfest`), GitHub
+  description/topics, releases, brand images in the `brand/` folder (a
+  separate PR against `home-assistant/brands` is no longer needed for that).
+  Open: wait for green workflow runs on GitHub, then a PR against
+  `hacs/default` (entry `Andreas8476/AH-HomeAssistent-AddOn` in the file
+  `integration`, sorted alphabetically) by the repo owner, then review by the
+  HACS maintainers (turnaround not predictable).
 - **Relay counters/balance** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) not yet
   mapped as individual sensors — free-text parsing deliberately deferred.
 - **Grid-lock (`128`) / direct heater-step paths (`0`–`19`):** not mapped
