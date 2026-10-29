@@ -12,6 +12,12 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+### Dokumentation
+
+- Neue Doku `docs/de/14_community.md` (+ EN): Forenbeitrag im Home Assistant
+  Community Forum, HACS-Store-Antrag, veröffentlichte Texte und Vorlage für
+  weitere Foren.
+
 ## [0.10.1] - 2026-10-29
 
 ### Hinzugefügt

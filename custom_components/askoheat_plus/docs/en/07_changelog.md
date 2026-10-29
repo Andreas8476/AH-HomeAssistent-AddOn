@@ -477,6 +477,17 @@ project).
   option set in the config entry; "None" → option removed, feed-in value then
   reset to the original value 0.
 
+## 2026-10-29 — Community: forum post + HACS store request
+
+- Project presented in the Home Assistant Community Forum (category "Share
+  your Projects → Custom Integrations", English, with two screenshots):
+  https://community.home-assistant.io/t/askoheat-askoma-pv-heating-element-custom-integration-local-no-cloud/1030960
+- New doc [14_community.md](14_community.md) (+ DE:
+  [14_community.md](../de/14_community.md)): overview of all places with link,
+  date and status, the published texts (English and German), status of the
+  HACS store request and a template for adding further forums. Linked from
+  the README.
+
 ## Open points (TODO)
 
 - **Listing in the official HACS default store:** in preparation (Andreas

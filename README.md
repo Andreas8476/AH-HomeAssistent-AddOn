@@ -57,6 +57,12 @@ Wechselrichter-Sensor zu befüllen: siehe
 - **[GitLab](https://gitlab.com/SyberAlf/ah-homeassistent-addon)** — Haupt-Repo für die Entwicklung.
 - **[GitHub](https://github.com/Andreas8476/AH-HomeAssistent-AddOn)** — öffentlicher Spiegel, nötig für die HACS-Installation (HACS unterstützt nur GitHub). Beide enthalten denselben Stand.
 
+## Community
+
+Wo das Projekt vorgestellt wurde (Home Assistant Forum, HACS-Store-Antrag) und
+die dazugehörigen Texte: siehe
+[`14_community.md`](custom_components/askoheat_plus/docs/de/14_community.md).
+
 ## Changelog
 
 Siehe [CHANGELOG.md](CHANGELOG.md).

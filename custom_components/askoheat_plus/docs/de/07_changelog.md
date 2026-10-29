@@ -481,6 +481,17 @@ kurz auf dieses Projekt).
   im Config-Entry gesetzt; "Keine" → Option entfernt, Einspeisewert danach
   auf den Ausgangswert 0 zurückgesetzt.
 
+## 2026-10-29 — Community: Forenbeitrag + HACS-Store-Antrag
+
+- Projekt im Home Assistant Community Forum vorgestellt (Kategorie "Share
+  your Projects → Custom Integrations", englisch, mit zwei Screenshots):
+  https://community.home-assistant.io/t/askoheat-askoma-pv-heating-element-custom-integration-local-no-cloud/1030960
+- Neue Doku [14_community.md](14_community.md) (+ EN:
+  [14_community.md](../en/14_community.md)): Übersicht aller Orte mit Link,
+  Datum und Status, die veröffentlichten Texte (englisch und deutsch), Stand
+  des HACS-Store-Antrags und eine Vorlage zum Eintragen weiterer Foren.
+  Aus dem README verlinkt.
+
 ## Offene Punkte (ToDo)
 
 - **Aufnahme in den offiziellen HACS-Standard-Store:** in Vorbereitung
