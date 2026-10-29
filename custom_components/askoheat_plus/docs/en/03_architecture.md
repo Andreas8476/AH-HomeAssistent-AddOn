@@ -2,6 +2,39 @@
 
 *[Deutsche Version](../de/03_architektur.md) (primary, authoritative)*
 
+## Overview: who talks to whom?
+
+```mermaid
+flowchart LR
+    subgraph HA["Home Assistant"]
+        UI["Dashboard, device page,<br/>automations"]
+        SRC["Meter or<br/>inverter sensor"]
+        subgraph CC["Custom component askoheat_plus"]
+            ENT["Entities<br/>sensor, number, switch,<br/>select, time, button"]
+            COORD["Coordinator<br/>polls gethome.json"]
+            LINK["link.py<br/>link a source"]
+        end
+    end
+    subgraph DEV["ASKOHEAT+ heating element with ESP32"]
+        API["Local REST/JSON interface<br/>HTTP, port 80"]
+        HEAT["Heating elements<br/>and relays"]
+    end
+    UI <--> ENT
+    ENT <--> COORD
+    SRC -->|"state change"| LINK
+    LINK -->|"number.set_value"| ENT
+    COORD <-->|"HTTP and JSON,<br/>home network only"| API
+    API --- HEAT
+```
+
+> [!NOTE]
+> **No Modbus on this path:** the integration talks to the heating element exclusively via **HTTP**
+> (local REST/JSON interface, unauthenticated, home network only). Names like `MODBUS_CMD_…` or
+> `MODBUS_CON_…` are key and register names within this HTTP interface. The heating element
+> additionally offers a Modbus interface of its own (TCP/RTU) for other controllers, which this
+> integration does **not** use. See [02_api-reference.md](02_api-reference.md) and
+> [09_modbus-status-flags.md](09_modbus-status-flags.md).
+
 ## Folder structure
 
 ```
@@ -33,21 +66,23 @@
 /homeassistant/www/askoheat_plus                     # REAL copy of the images (no symlink possible, see 11_dashboard.md)
 ```
 
-**Why the symlink:** Home Assistant only loads custom integrations from
-`/homeassistant/custom_components/<domain>/`. So the project can still exist
-as a single, self-contained folder (which can later be pushed 1:1 to
-GitHub/GitLab, including README/LICENSE/hacs.json at repo root), the actual
-code lives under
-`/homeassistant/askoheat_plus/custom_components/askoheat_plus/` and is
-mounted via a symlink at `/homeassistant/custom_components/askoheat_plus`.
-No file duplication, one source of truth. Git is only initialized inside
-`/homeassistant/askoheat_plus/`.
+> [!NOTE]
+> **Why the symlink:** Home Assistant only loads custom integrations from
+> `/homeassistant/custom_components/<domain>/`. So the project can still exist
+> as a single, self-contained folder (which can later be pushed 1:1 to
+> GitHub/GitLab, including README/LICENSE/hacs.json at repo root), the actual
+> code lives under
+> `/homeassistant/askoheat_plus/custom_components/askoheat_plus/` and is
+> mounted via a symlink at `/homeassistant/custom_components/askoheat_plus`.
+> No file duplication, one source of truth. Git is only initialized inside
+> `/homeassistant/askoheat_plus/`.
 
-**Exception, dashboard images:** the same symlink trick does **not** work for
-`www/askoheat_plus` — Home Assistant's `/local/` file server doesn't follow
-symlinks pointing outside `www/` (a security measure). The images therefore
-live there as a real, manually synced copy. Details:
-[11_dashboard.md](11_dashboard.md).
+> [!WARNING]
+> **Exception, dashboard images:** the same symlink trick does **not** work for
+> `www/askoheat_plus` — Home Assistant's `/local/` file server doesn't follow
+> symlinks pointing outside `www/` (a security measure). The images therefore
+> live there as a real, manually synced copy. Details:
+> [11_dashboard.md](11_dashboard.md).
 
 ## Module responsibilities
 
@@ -69,50 +104,72 @@ live there as a real, manually synced copy. Details:
 
 ## Data flow
 
+```mermaid
+flowchart LR
+    HOME["gethome.json<br/>interval, default 30 s"] --> CLIENT
+    SEC["Secondary endpoints<br/>start and button"] --> CLIENT
+    CLIENT["AskoheatApiClient<br/>aiohttp, shared HA session"] --> COORD
+    COORD["Coordinator<br/>errors become UpdateFailed"] --> RT["entry.runtime_data"]
+    RT --> ENT["Entities as CoordinatorEntity<br/>value_fn reads a path from<br/>coordinator.data and coordinator.secondary"]
 ```
-gethome.json ──┐
-               ├─► AskoheatApiClient ──► AskoheatDataUpdateCoordinator ──► entry.runtime_data
-secondary endp.┘         (aiohttp,                  (polling every 30s,           │
- (start + button)   async_get_clientsession)         errors → UpdateFailed)      │
-                                                                                   ▼
-                                                          sensor.py / binary_sensor.py
-                                                          (CoordinatorEntity, value_fn reads
-                                                           a path from coordinator.data /
-                                                           coordinator.secondary.*)
-```
+
+> [!CAUTION]
+> **Spare the ESP32:** the device is a small microcontroller. Don't add extra endpoints to the regular
+> poll (`_async_update_data`) lightly, see [02_api-reference.md](02_api-reference.md), section
+> "Polling strategy".
 
 ## Write data flow
 
 Three write paths, depending on the kind of value:
 
+```mermaid
+flowchart TB
+    subgraph W1["Path 1: inline commands with keep-alive"]
+        N1["number.py<br/>heater step, load setpoint,<br/>feed-in value"] --> C1["GET command with value"]
+        C1 --> R1["Refresh, the next poll<br/>shows the actual state"]
+        N1 -.->|"every 45 s while value is not 0"| C1
+    end
+    subgraph W2["Path 2: installer settings with their own value"]
+        N2["number.py and time.py"] --> P2["POST /server1/"]
+        P2 --> A2["Response is the new getwizard.json dump<br/>coordinator.secondary.wizard"]
+    end
+    subgraph W3["Path 3: single bits of shared registers"]
+        N3["switch.py and select.py"] --> F3["async_write_wizard_flags"]
+        F3 --> G3["load a fresh getwizard.json"]
+        G3 --> M3["change only the bits of the mask"]
+        M3 --> P3["POST /server1/<br/>only if changed"]
+    end
 ```
-1) Inline commands (SET_INPUTS: heater step, load setpoint, feed-in value)
-number.py: async_set_native_value(value)
-    └─► coordinator.client.async_send_command(command, value)
-            └─► GET http://<host>/<command>?value=<value>   (e.g. "heater%20step")
-                    └─► coordinator.async_request_refresh()  → next poll shows the actual state
 
-2) Installer settings with their own value (number.py / time.py)
-    └─► client.async_write_wizard({key: value})
-            └─► POST http://<host>/server1/  → response = updated getwizard.json dump
-                    └─► coordinator.secondary.wizard = response (current immediately)
+Sequence of path 3, using a switch as an example:
 
-3) Single bits of shared registers (switch.py / select.py: "enabled", sensor, interval)
-    └─► coordinator.async_write_wizard_flags(register, mask, bits)
-            └─► load a fresh getwizard.json, change only the bits of the mask (read-modify-write)
-                    └─► POST /server1/ (only if the value changes)
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant E as Switch or select
+    participant C as Coordinator
+    participant D as Heating element
+    U->>E: toggle the switch
+    E->>C: async_write_wizard_flags with register, mask and bits
+    C->>D: GET getwizard.json
+    D-->>C: current register value
+    Note over C: replace only the bits of the mask
+    C->>D: POST /server1/ with the new value
+    D-->>C: updated getwizard.json dump
+    C-->>E: state is current immediately
 ```
 
 No separate write coordinator, no confirmation query. Errors while writing
 are passed on to the UI as `HomeAssistantError` (e.g. device unreachable).
 
-**Keep-alive (path 1 only):** as long as a set value is `≠ 0`, each number
-entity additionally holds its own `async_track_time_interval` timer (every
-45s) that resends the same command — preventing the 60s auto-expiry
-documented by the manufacturer. The timer lives per entity instance
-(`_unsub_keepalive`) and is stopped at `0` or `async_will_remove_from_hass`.
-Paths 2 and 3 do not expire, so no keep-alive is needed there. Details:
-[02_api-reference.md](02_api-reference.md).
+> [!IMPORTANT]
+> **Keep-alive (path 1 only):** as long as a set value is `≠ 0`, each number
+> entity additionally holds its own `async_track_time_interval` timer (every
+> 45s) that resends the same command — preventing the 60s auto-expiry
+> documented by the manufacturer. The timer lives per entity instance
+> (`_unsub_keepalive`) and is stopped at `0` or `async_will_remove_from_hass`.
+> Paths 2 and 3 do not expire, so no keep-alive is needed there. Details:
+> [02_api-reference.md](02_api-reference.md).
 
 ## HA conventions deliberately used
 

@@ -518,6 +518,22 @@ kurz auf dieses Projekt).
   (Karte "Konfiguration"). `08_neuerstellungs-prompt` bleibt bewusst auf dem
   Stand Phase 1, mit Hinweis auf die aktuellen Dokumente.
 
+## 2026-10-29 — Doku mit Mermaid-Diagrammen und GitHub-Alerts
+
+- Neues Überblicks-Diagramm in `03_architektur.md` ("Wer spricht womit?":
+  Home Assistant, Custom Component, Heizstab). **Klarstellung:** die
+  Integration spricht per **HTTP** (lokale REST/JSON-API), **nicht** per
+  Modbus — `MODBUS_*`-Namen sind nur Schlüssel-/Registerbezeichnungen der
+  HTTP-Schnittstelle; die eigene Modbus-Schnittstelle des Heizstabs
+  (TCP/RTU) nutzt die Integration nicht.
+- Datenfluss und Schreibwege in `03_architektur.md` als Mermaid statt
+  ASCII, dazu ein Sequenzdiagramm für das Bit-Schreiben (Read-Modify-Write).
+- Weitere Diagramme: Phasen (01), Polling-Strategie (02), Installationsablauf
+  (04), Release-Ablauf (06), Verknüpfung Einspeisewert (10),
+  Dashboard-Erzeugung (11), Update-Ablauf (13), README-Überblick.
+- Wichtige Hinweise in allen Dokumenten als GitHub-Alerts (`NOTE`, `TIP`,
+  `IMPORTANT`, `WARNING`, `CAUTION`) statt fetter Absätze.
+
 ## Offene Punkte (ToDo)
 
 - **Aufnahme in den offiziellen HACS-Standard-Store:** in Vorbereitung

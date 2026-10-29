@@ -2,7 +2,8 @@
 
 *[Deutsche Version](../de/06_entwicklung.md) (primary, authoritative)*
 
-> ⚠️ **MANDATORY RULE: every commit goes to BOTH remotes — GitLab
+> [!IMPORTANT]
+> **MANDATORY RULE: every commit goes to BOTH remotes — GitLab
 > (`origin`) AND GitHub (`github`).** Never push to only one of the two.
 > Reason: GitLab is the main repo, GitHub is strictly required for HACS to
 > work (HACS only installs from public GitHub repos). See the "Two git
@@ -84,12 +85,21 @@ every `commit`. Reason: HACS only installs from public GitHub repos, see
 
 ## Publishing a new version
 
+The path from a change to a release:
+
+```mermaid
+flowchart LR
+    A["Change"] --> B["py_compile and<br/>ha core check"] --> C["ha core restart,<br/>check the log"] --> D["Commit"] --> E["Push to GitLab<br/>and GitHub"] --> F["Tag and<br/>GitHub release"]
+```
+
 Bump the version in `manifest.json`, finish `CHANGELOG.md`, set the tag, push
 to **both** remotes and publish a release on GitHub — the complete procedure
 is in [13_updating.md](13_updating.md) (section "For developers"). The
 validation runs (HACS action, hassfest) run automatically via
 `.github/workflows/validate.yml`.
 
-**Note:** Home Assistant reads the version number from `manifest.json` only
-at startup. After bumping it (and after every code change) an
-`ha core restart` is needed, otherwise the UI still shows the old version.
+> [!NOTE]
+> Home Assistant reads the version number from `manifest.json` only
+> at startup. After bumping it (and after every code change) an
+> `ha core restart` is needed, otherwise the UI still shows the old version.
+> 

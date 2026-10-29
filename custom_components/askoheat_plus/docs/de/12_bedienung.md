@@ -34,6 +34,11 @@ Zeitfenster, Legionellenschutz, Quellen für Einspeisewert/Leistungsvorgabe,
 Button "Einstellungen neu laden"). Kein
 eigenes UI dieser Integration — reine Home-Assistant-Standardansicht.
 
+> [!TIP]
+> Wurde etwas direkt in der Geräte-Weboberfläche geändert, zeigt Home Assistant den neuen Wert erst nach
+> einem Druck auf den Button **"Einstellungen neu laden"** (Karte "Konfiguration"). Was du in Home Assistant
+> änderst, ist sofort aktuell.
+
 ## Neu konfigurieren (Host/Port/Abfrageintervall ändern)
 
 ![Neu konfigurieren](../../product_pics/HA_AH_Neu-Konfiguration.png)

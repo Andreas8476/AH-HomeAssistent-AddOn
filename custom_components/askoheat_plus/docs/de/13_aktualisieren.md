@@ -7,7 +7,8 @@ Wie man ASKOHEAT+ auf eine neue Version bringt, sobald auf
 neues Release erscheint. Welche Variante gilt, hängt davon ab, wie die
 Integration installiert wurde (siehe [04_installation.md](04_installation.md)).
 
-> **Hinweis:** Bei einem Update bleiben Einrichtung, Entitäten, Verlauf,
+> [!NOTE]
+> Bei einem Update bleiben Einrichtung, Entitäten, Verlauf,
 > Dashboard und Optionen (z.B. die Einspeisewert-Verknüpfung) erhalten. Die
 > Einstellungen am Gerät selbst sind davon ohnehin nicht betroffen.
 
@@ -15,6 +16,11 @@ Integration installiert wurde (siehe [04_installation.md](04_installation.md)).
 
 HACS hat bereits einen eingebauten Update-Mechanismus, es ist nichts extra
 einzurichten. HACS prüft regelmäßig, ob es auf GitHub ein neues Release gibt.
+
+```mermaid
+flowchart LR
+    R["Neues Release<br/>auf GitHub"] --> H["HACS prüft<br/>in Abständen"] --> N["Hinweis unter<br/>Einstellungen"] --> I["Installieren"] --> RS["Home Assistant<br/>neu starten"]
+```
 
 ### So sieht man, dass ein Update verfügbar ist
 
@@ -85,9 +91,10 @@ Geräte-Weboberfläche bzw. vom Hersteller aktualisiert, nicht über HACS.
 
 ## Für die Entwickler: neue Version veröffentlichen
 
-Damit HACS-Nutzer ein Update überhaupt angezeigt bekommen, muss jede neue
-Version auf GitHub als **Release** veröffentlicht werden — ein Git-Tag allein
-reicht nicht, HACS wertet die Releases aus.
+> [!IMPORTANT]
+> Damit HACS-Nutzer ein Update überhaupt angezeigt bekommen, muss jede neue
+> Version auf GitHub als **Release** veröffentlicht werden — ein Git-Tag allein
+> reicht nicht, HACS wertet die Releases aus.
 
 1. Version in `custom_components/askoheat_plus/manifest.json` hochzählen
    (Semantic Versioning, z.B. `0.8.0` → `0.9.0`).

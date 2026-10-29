@@ -7,7 +7,8 @@ How to bring ASKOHEAT+ to a new version once a new release appears on
 Which variant applies depends on how the integration was installed (see
 [04_installation.md](04_installation.md)).
 
-> **Note:** An update keeps your setup, entities, history, dashboard and
+> [!NOTE]
+> An update keeps your setup, entities, history, dashboard and
 > options (e.g. the feed-in value link). The settings on the device itself
 > are not affected anyway.
 
@@ -15,6 +16,11 @@ Which variant applies depends on how the integration was installed (see
 
 HACS already has a built-in update mechanism, nothing extra to set up. HACS
 regularly checks whether there is a new release on GitHub.
+
+```mermaid
+flowchart LR
+    R["New release<br/>on GitHub"] --> H["HACS checks<br/>at intervals"] --> N["Notice under<br/>Settings"] --> I["Install"] --> RS["Restart<br/>Home Assistant"]
+```
 
 ### How to see that an update is available
 
@@ -84,9 +90,10 @@ web UI or by the manufacturer, not via HACS.
 
 ## For developers: publishing a new version
 
-For HACS users to be shown an update at all, every new version has to be
-published on GitHub as a **release** — a git tag alone is not enough, HACS
-evaluates the releases.
+> [!IMPORTANT]
+> For HACS users to be shown an update at all, every new version has to be
+> published on GitHub as a **release** — a git tag alone is not enough, HACS
+> evaluates the releases.
 
 1. Bump the version in `custom_components/askoheat_plus/manifest.json`
    (semantic versioning, e.g. `0.8.0` → `0.9.0`).

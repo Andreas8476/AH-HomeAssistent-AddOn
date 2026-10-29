@@ -36,12 +36,13 @@ regularly, all others at startup and via the "Reload settings" button (see
 | `battery_size` | Battery size | registration | `EXTRA.BATTERY` | number, diagnostic | no |
 | `communication_timeout_heater_off` / `communication_timeout_reset` | Communication timeout (heater off/reset) | wizard | `COMMUNICATION_TIMEOUT_HEATER_OFF`/`_RESET` | number (unit unconfirmed), diagnostic | no |
 
-**Note on the `communication_timeout_*` sensors:** deliberately kept
-read-only (Andreas' explicit request) — a wrong value here could break
-device communication. All other installer settings originally listed here
-(legionella protection, low tariff, feed-in window, heat pump request, auto
-heater-off, auto reboot) are now writable `number`/`time` entities, see the
-corresponding sections below.
+> [!NOTE]
+> **Note on the `communication_timeout_*` sensors:** deliberately kept
+> read-only (Andreas' explicit request) — a wrong value here could break
+> device communication. All other installer settings originally listed here
+> (legionella protection, low tariff, feed-in window, heat pump request, auto
+> heater-off, auto reboot) are now writable `number`/`time` entities, see the
+> corresponding sections below.
 
 `getwizard.json` (the full installer config dump, source for `source:
 wizard`) is, like the other secondary endpoints, loaded when the integration
@@ -149,11 +150,12 @@ web UI itself.
 | Temperature for set heater step | `heater_step_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0010` | `heater_step_temperature_set` | — |
 | Legionella protection | `legio_enabled` | `MODBUS_CON_LEGIO_SETTING` / `0x8000` | `legio_target_temperature_set` | start time `legio_activation_time_set`, heat-up limit `legio_heatup_limit_set` |
 
-¹ **One shared value, due to the device:** the device has only **one**
-register for "temperature for feed-in value" and "temperature for load
-setpoint" (`MODBUS_CON_TEMPERATURE_LOAD_SETPOINT`); the device web UI merely
-shows the same field in two rows. Changing it in one row changes the other
-as well.
+> [!NOTE]
+> ¹ **One shared value, due to the device:** the device has only **one**
+> register for "temperature for feed-in value" and "temperature for load
+> setpoint" (`MODBUS_CON_TEMPERATURE_LOAD_SETPOINT`); the device web UI merely
+> shows the same field in two rows. Changing it in one row changes the other
+> as well.
 
 ### Select entities (`select.py`)
 
@@ -163,11 +165,12 @@ as well.
 | `legio_sensor_select` | Legionella protection sensor | `MODBUS_CON_LEGIO_SETTING` / `0x0001`–`0x0010` | Internal sensor 0, external sensor 1–4 |
 | `legio_interval_select` | Legionella protection interval | `MODBUS_CON_LEGIO_SETTING` / `0x0100`–`0x0800` | Daily, weekly, fortnightly, monthly |
 
-**One shared sensor, due to the device:** in the device web UI each of the
-six temperature functions has its own sensor dropdown, but they all write the
-same bits — so there is only **one** sensor for all temperature functions
-(only legionella protection has its own). Bits `0x0800`–`0x8000` of the same
-register belong to the buffer charging pump and are left untouched.
+> [!NOTE]
+> **One shared sensor, due to the device:** in the device web UI each of the
+> six temperature functions has its own sensor dropdown, but they all write the
+> same bits — so there is only **one** sensor for all temperature functions
+> (only legionella protection has its own). Bits `0x0800`–`0x8000` of the same
+> register belong to the buffer charging pump and are left untouched.
 
 ### Link selection (`select.py`)
 

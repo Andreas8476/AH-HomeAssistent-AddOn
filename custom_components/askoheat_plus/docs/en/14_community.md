@@ -70,6 +70,10 @@ The German text is in [the German version of this document](../de/14_community.m
 
 ## HACS default store
 
+> [!IMPORTANT]
+> Leave the pull request at `hacs/default` **unchanged** until the maintainers have decided, and
+> answer any questions there.
+
 - **Pull request:** <https://github.com/hacs/default/pull/12952> (entry
   `Andreas8476/AH-HomeAssistent-AddOn` in the file `integration`).
 - **Submitted:** 2026-10-29, with release v0.10.1 (created after the first

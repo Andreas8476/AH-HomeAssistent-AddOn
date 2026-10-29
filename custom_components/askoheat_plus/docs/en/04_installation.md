@@ -18,6 +18,13 @@ worked with a terminal or with HACS before:
 - **Step 2:** install HACS (only if not already installed)
 - **Steps 3–5:** install and set up ASKOHEAT+ via HACS
 
+The steps at a glance:
+
+```mermaid
+flowchart LR
+    A["Terminal access<br/>only if needed"] --> B["Install HACS<br/>only if needed"] --> C["Add custom<br/>repository"] --> D["Download<br/>ASKOHEAT+"] --> E["Restart<br/>Home Assistant"] --> F["Set up the<br/>integration"]
+```
+
 ### Step 1 — set up terminal access (if not already available)
 
 Prerequisite: your Home Assistant runs as **Home Assistant OS** or
@@ -81,6 +88,7 @@ Detailed, up-to-date instructions if anything differs:
 HACS doesn't know this project automatically (no entry in the official
 HACS default store) — it must be added once as a **custom repository**:
 
+> [!WARNING]
 > **Careful, don't mix this up:** the URL does **not** work under
 > **Settings → Apps (Add-ons) → Add-on store → ⋮ → Repositories**. Only
 > Supervisor apps can be added there (standalone programs in a container,
@@ -128,11 +136,12 @@ without removing and re-adding the integration:
 3. Adjust the values, submit — the integration tests the new connection
    just like at initial setup and then reloads automatically.
 
-**Important:** when reconfiguring, the same physical device (same device
-ID) must respond at the new address as at the original setup — otherwise
-the dialog aborts with an error message. For a completely different device,
-set up a second, separate integration instead (see "Adding multiple heating
-elements" below).
+> [!IMPORTANT]
+> when reconfiguring, the same physical device (same device
+> ID) must respond at the new address as at the original setup — otherwise
+> the dialog aborts with an error message. For a completely different device,
+> set up a second, separate integration instead (see "Adding multiple heating
+> elements" below).
 
 ### Adding multiple heating elements
 

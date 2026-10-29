@@ -45,6 +45,16 @@ Angeboten werden alle Leistungs-Entities (Geräteklasse Leistung bzw. Einheit
 W/kW), ohne die eigenen Entities des Geräts. **"Keine (manuell)"** hebt die
 Verknüpfung wieder auf. Beim Speichern lädt sich die Integration kurz neu.
 
+So funktioniert die eingebaute Verknüpfung:
+
+```mermaid
+flowchart LR
+    SRC["Quell-Sensor<br/>Zähler oder Wechselrichter"] -->|"Zustandsänderung"| L["link.py<br/>State-Listener"]
+    L -->|"number.set_value"| N["number Einspeisewert<br/>bzw. Leistungsvorgabe"]
+    N -->|"HTTP, mit Keep-Alive<br/>alle 45 s"| D["ASKOHEAT+"]
+    SET["Auswahl im Dashboard<br/>oder unter Konfigurieren"] -.->|"Optionen speichern,<br/>Integration lädt neu"| L
+```
+
 ## Alternative: eigene Automation (Blueprint)
 
 Für alle, die zusätzliche Bedingungen/Filter brauchen (z.B. nur zwischen
@@ -83,10 +93,9 @@ Keep-Alive der Integration bereits (alle 45s, solange der Wert `≠ 0` ist).
 
 ## Hinweise
 
-- Vorzeichen prüfen: manche Zähler/Wechselrichter liefern Einspeisung als
-  positiven Wert — dann vor dem Verknüpfen ggf. einen Hilfs-Sensor mit
-  invertiertem Vorzeichen anlegen (Template-Sensor), da ASKOHEAT+ negativ =
-  Überschuss erwartet.
+> [!WARNING]
+> **Vorzeichen prüfen:** manche Zähler/Wechselrichter liefern Einspeisung als positiven Wert — dann vor dem Verknüpfen ggf. einen Hilfs-Sensor mit invertiertem Vorzeichen anlegen (Template-Sensor), da ASKOHEAT+ negativ = Überschuss erwartet.
+
 - Die Blueprint setzt keine Ober-/Untergrenzen über den in
   [02_api-referenz.md](02_api-referenz.md) dokumentierten int16-Bereich
   (`-32768`–`32767`) hinaus — `number.set_value` lehnt Werte außerhalb des in

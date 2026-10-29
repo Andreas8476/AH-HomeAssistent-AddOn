@@ -20,9 +20,10 @@ integration deliberately uses only a subset, see below.
 
 ## Polling strategy (protecting the ESP32)
 
-The ASKOHEAT+ runs on an ESP32. The device's own web UI polls its "home" page
-every 2 seconds according to the manufacturer docs — so that's the reference
-point for "safe". This integration is deliberately much more conservative:
+> [!IMPORTANT]
+> The ASKOHEAT+ runs on an ESP32. The device's own web UI polls its "home" page
+> every 2 seconds according to the manufacturer docs — so that's the reference
+> point for "safe". This integration is deliberately much more conservative:
 
 | Endpoint | Use | Interval |
 |---|---|---|
@@ -38,6 +39,17 @@ the integration starts and on demand via the "Reload settings" button
 was dropped so as not to burden the ESP32 further; after a write through
 Home Assistant the local state is current immediately anyway — see
 [07_changelog.md](07_changelog.md).
+
+```mermaid
+flowchart LR
+    subgraph REG["Regularly"]
+        T["Coordinator interval<br/>default 30 s, adjustable 10 to 300 s"] --> G["gethome.json"]
+    end
+    subgraph SEL["Rarely"]
+        S["Integration start"] --> SEC["getwizard.json, getwizard_status.json,<br/>gettemperature_calibration.json, getreg.json"]
+        B["Reload settings button"] --> SEC
+    end
+```
 
 ## Why exactly these 5 endpoints
 
@@ -106,13 +118,14 @@ keeps the state until the next press, like a real button):
 Implemented in `api.py` (`AskoheatApiClient.async_send_bare_command`) and
 `switch.py` (`AskoheatSwitch`).
 
-**Important — automatic revert after 60 seconds, prevented via keep-alive:**
-according to the manufacturer docs, the Askoheat+ automatically clears a
-value set this way after 60 seconds if it isn't resent by a (or another)
-controlling device — the device **explicitly expects** a continuously
-controlling device. Unlike read polling (see "Polling strategy" above),
-periodically resending here is manufacturer-intended behavior, not an extra
-risk for the ESP32.
+> [!IMPORTANT]
+> **automatic revert after 60 seconds, prevented via keep-alive:**
+> according to the manufacturer docs, the Askoheat+ automatically clears a
+> value set this way after 60 seconds if it isn't resent by a (or another)
+> controlling device — the device **explicitly expects** a continuously
+> controlling device. Unlike read polling (see "Polling strategy" above),
+> periodically resending here is manufacturer-intended behavior, not an extra
+> risk for the ESP32.
 
 Each number entity (`number.py`) therefore remembers the last value it sent
 and automatically resends it via `async_track_time_interval` every

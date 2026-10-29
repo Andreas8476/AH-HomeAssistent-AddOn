@@ -44,6 +44,16 @@ stay in sync. All power entities (device class power or unit W/kW) are
 offered, excluding the device's own entities. **"None (manual)"** removes the
 link again. Saving briefly reloads the integration.
 
+How the built-in link works:
+
+```mermaid
+flowchart LR
+    SRC["Source sensor<br/>meter or inverter"] -->|"state change"| L["link.py<br/>state listener"]
+    L -->|"number.set_value"| N["number feed-in value<br/>or load setpoint"]
+    N -->|"HTTP, with keep-alive<br/>every 45 s"| D["ASKOHEAT+"]
+    SET["Selection in the dashboard<br/>or under Configure"] -.->|"save options,<br/>integration reloads"| L
+```
+
 ## Alternative: your own automation (blueprint)
 
 For anyone who needs extra conditions/filters (e.g. only linking during
@@ -81,9 +91,9 @@ keep-alive already handles that (every 45s, as long as the value is `≠ 0`).
 
 ## Notes
 
-- Check the sign: some meters/inverters report feed-in as a positive
-  value — if so, create a helper sensor with an inverted sign before
-  linking (a template sensor), since ASKOHEAT+ expects negative = surplus.
+> [!WARNING]
+> **Check the sign:** some meters/inverters report feed-in as a positive value — if so, create a helper sensor with an inverted sign before linking (a template sensor), since ASKOHEAT+ expects negative = surplus.
+
 - The blueprint doesn't enforce upper/lower bounds beyond the int16 range
   documented in [02_api-reference.md](02_api-reference.md)
   (`-32768`–`32767`) — `number.set_value` automatically rejects values

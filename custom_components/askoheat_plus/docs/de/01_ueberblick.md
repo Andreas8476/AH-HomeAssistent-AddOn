@@ -41,6 +41,11 @@ Das Projekt wurde bewusst in Schritten aufgebaut, alle sind umgesetzt:
    Legionellen-Intervall), Quellen-Auswahl für Einspeisewert/Leistungsvorgabe
    direkt im Dashboard und der Button "Einstellungen neu laden".
 
+```mermaid
+flowchart LR
+    P1["Phase 1<br/>Lesen"] --> P2["Phase 2<br/>Schreiben"] --> P3["Phase 3<br/>Dashboard"] --> P4["Phase 4<br/>Installer-<br/>Einstellungen"] --> P5["Phase 5<br/>Temperatur-Funktionen<br/>und Komfort"]
+```
+
 ## Aktueller Stand
 
 Aktuelle Version: **0.10.1** (siehe [CHANGELOG.md](../../../../CHANGELOG.md)).
@@ -73,6 +78,8 @@ Englische Übersetzung parallel unter [docs/en/](../en/).
 
 ## Autor
 
-Andreas Stegemann, in Zusammenarbeit mit Claude (Anthropic, Sonnet 5) als
-Coding-Assistent entwickelt. Privates Projekt, keine offizielle Software der
-ASKOMA AG — Details siehe [README.md](../../../../README.md#autor).
+> [!NOTE]
+> Andreas Stegemann, in Zusammenarbeit mit Claude (Anthropic, Sonnet 5) als
+> Coding-Assistent entwickelt. Privates Projekt, keine offizielle Software der
+> ASKOMA AG — Details siehe [README.md](../../../../README.md#autor).
+> 

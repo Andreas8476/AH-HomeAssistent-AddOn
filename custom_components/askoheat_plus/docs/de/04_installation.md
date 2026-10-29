@@ -18,6 +18,13 @@ einem Terminal oder mit HACS gearbeitet hast:
 - **Schritt 2:** HACS installieren (nur falls noch nicht vorhanden)
 - **Schritt 3–5:** ASKOHEAT+ über HACS installieren und einrichten
 
+Der Ablauf im Überblick:
+
+```mermaid
+flowchart LR
+    A["Terminal-Zugriff<br/>nur falls nötig"] --> B["HACS installieren<br/>nur falls nötig"] --> C["Benutzerdefiniertes<br/>Repository eintragen"] --> D["ASKOHEAT+<br/>herunterladen"] --> E["Home Assistant<br/>neu starten"] --> F["Integration<br/>einrichten"]
+```
+
 ### Schritt 1 — Terminal-Zugriff einrichten (falls noch nicht vorhanden)
 
 Voraussetzung: dein Home Assistant läuft als **Home Assistant OS** oder
@@ -87,6 +94,7 @@ HACS kennt dieses Projekt nicht automatisch (kein Eintrag im offiziellen
 HACS-Standard-Store) — es muss einmalig als **Custom Repository** eingetragen
 werden:
 
+> [!WARNING]
 > **Achtung, nicht verwechseln:** Unter **Einstellungen → Apps (Add-ons) →
 > Add-on Store → ⋮ → Repositorys** funktioniert die URL **nicht**. Dort
 > lassen sich nur Supervisor-Apps eintragen (eigenständige Programme in einem
@@ -135,11 +143,12 @@ ohne die Integration zu entfernen und neu einzurichten:
 3. Werte anpassen, absenden — die Integration testet die neue Verbindung
    genauso wie beim Ersteinrichten und lädt sich danach automatisch neu.
 
-**Wichtig:** Beim Neu-Konfigurieren muss unter der neuen Adresse dasselbe
-physische Gerät antworten (gleiche Geräte-ID) wie beim ursprünglichen Setup —
-sonst bricht der Dialog mit einer Fehlermeldung ab. Für ein komplett anderes
-Gerät stattdessen eine zweite, separate Integration einrichten (siehe
-"Mehrere Heizstäbe" unten).
+> [!IMPORTANT]
+> Beim Neu-Konfigurieren muss unter der neuen Adresse dasselbe
+> physische Gerät antworten (gleiche Geräte-ID) wie beim ursprünglichen Setup —
+> sonst bricht der Dialog mit einer Fehlermeldung ab. Für ein komplett anderes
+> Gerät stattdessen eine zweite, separate Integration einrichten (siehe
+> "Mehrere Heizstäbe" unten).
 
 ### Mehrere Heizstäbe einbinden
 

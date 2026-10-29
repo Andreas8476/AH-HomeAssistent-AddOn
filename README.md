@@ -37,6 +37,21 @@ Home Assistant bedienen.
 
 <img src="custom_components/askoheat_plus/product_pics/HA_AH_Ausschnitt_Einstellungen.png" alt="Geräteseite mit Steuerung, Konfiguration und Diagnose">
 
+## So funktioniert es
+
+```mermaid
+flowchart LR
+    subgraph HA["Home Assistant"]
+        UI["Dashboard und<br/>Automationen"] <--> CC["ASKOHEAT+<br/>Custom Component"]
+    end
+    CC <-->|"HTTP, lokal im Heimnetz,<br/>keine Cloud"| DEV["ASKOHEAT+ Heizstab"]
+    SRC["Zähler oder<br/>Wechselrichter"] -.->|"Einspeisewert"| CC
+```
+
+> [!NOTE]
+> Die Integration spricht per **HTTP** direkt mit dem Heizstab, nicht über Modbus und nicht über eine Cloud.
+> Details und das ausführliche Diagramm: [`03_architektur.md`](custom_components/askoheat_plus/docs/de/03_architektur.md).
+
 ## Schnellstart (HACS)
 
 [![Repository in HACS öffnen](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Andreas8476&repository=AH-HomeAssistent-AddOn&category=integration)
@@ -51,10 +66,11 @@ Home Assistant bedienen.
 3. **Einstellungen → Geräte & Dienste → Integration hinzufügen → ASKOHEAT+**,
    die IP-Adresse des Heizstabs eingeben, fertig.
 
-Ohne HACS, HACS selbst installieren oder die Entwicklungs-Variante: siehe
-[Installation](custom_components/askoheat_plus/docs/de/04_installation.md).
-Neue Version verfügbar? HACS zeigt das Update unter **Einstellungen** an,
-siehe [Aktualisieren](custom_components/askoheat_plus/docs/de/13_aktualisieren.md).
+> [!TIP]
+> Ohne HACS, HACS selbst installieren oder die Entwicklungs-Variante: siehe
+> [Installation](custom_components/askoheat_plus/docs/de/04_installation.md).
+> Neue Version verfügbar? HACS zeigt das Update unter **Einstellungen** an,
+> siehe [Aktualisieren](custom_components/askoheat_plus/docs/de/13_aktualisieren.md).
 
 ## Getestet mit
 
@@ -126,12 +142,14 @@ Bugs and wishes: [GitHub issues](https://github.com/Andreas8476/AH-HomeAssistent
 Entwickelt von **Andreas Stegemann** in Zusammenarbeit mit **Claude**
 (Anthropic, Modell Sonnet 5) als Coding-Assistent.
 
-Andreas ist Mitarbeiter der **ASKOMA AG** (Bützberg, Schweiz), Hersteller des
-ASKOHEAT+ und weiterer Heizelemente/Thermostate für Trink- und Heizungswasser
-(u.a. Produktlinien ASKOHEAT+ und ASKOFAMILY+, [askoma.com](https://www.askoma.com)).
-Dieses Projekt ist jedoch ein **privates Projekt für den Eigengebrauch** und
-**keine offizielle Software der ASKOMA AG** — es basiert auf öffentlich
-zugänglicher Herstellerdokumentation der REST-/Modbus-Schnittstelle.
+> [!NOTE]
+> Andreas ist Mitarbeiter der **ASKOMA AG** (Bützberg, Schweiz), Hersteller des
+> ASKOHEAT+ und weiterer Heizelemente/Thermostate für Trink- und Heizungswasser
+> (u.a. Produktlinien ASKOHEAT+ und ASKOFAMILY+, [askoma.com](https://www.askoma.com)).
+> Dieses Projekt ist jedoch ein **privates Projekt für den Eigengebrauch** und
+> **keine offizielle Software der ASKOMA AG** — es basiert auf öffentlich
+> zugänglicher Herstellerdokumentation der REST-Schnittstelle (und der Modbus-
+> Registerdoku für die Status-Bits).
 
 ## Lizenz
 

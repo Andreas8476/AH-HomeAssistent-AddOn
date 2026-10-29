@@ -33,6 +33,11 @@ time windows, legionella protection, sources for feed-in value/load
 setpoint, "Reload settings" button). No custom UI from
 this integration — plain stock Home Assistant behavior.
 
+> [!TIP]
+> If something was changed directly in the device web UI, Home Assistant only shows the new value after you press
+> the **"Reload settings"** button ("Konfiguration" card). Whatever you change in Home Assistant is current
+> immediately.
+
 ## Reconfigure (change host/port/polling interval)
 
 ![Reconfigure](../../product_pics/HA_AH_Neu-Konfiguration.png)

@@ -7,7 +7,8 @@ sich diese Integration (Phase 1 — Lesen) auch ohne den ursprünglichen Chat-
 Verlauf von Grund auf nachbauen lässt. Einfach als Ganzes an einen KI-Coding-
 Assistenten (z.B. Claude Code) übergeben.
 
-> **Hinweis:** Dieser Prompt beschreibt bewusst den **Stand der ersten Phase**
+> [!NOTE]
+> Dieser Prompt beschreibt bewusst den **Stand der ersten Phase**
 > (nur Lesen). Der heutige Funktionsumfang (Steuern, Installer-Einstellungen,
 > Temperatur-Funktionen, Dashboard) steht in [01_ueberblick.md](01_ueberblick.md),
 > [03_architektur.md](03_architektur.md) und [05_entities.md](05_entities.md).

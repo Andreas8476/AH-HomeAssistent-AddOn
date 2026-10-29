@@ -34,14 +34,15 @@ columns each a nested `type: vertical-stack`) — the only Lovelace card
 types that guarantee an exact column position instead of a pure
 height-balancing heuristic.
 
-**Important — the view needs `type: panel`:** the default masonry view
-treats every top-level card (even a `horizontal-stack`) as *one* card and
-caps it at a single masonry column width (default ~500px) — with only one
-card in `cards:`, that rendered as a tiny, centered window that then also
-had to squeeze the three inner columns into it (the problem in Andreas'
-screenshot after the first layout version: the column widths "didn't match
-at all anymore"). Each device view therefore now sets `type: panel` — panel
-views give their one card the view's full width, with no column cap.
+> [!IMPORTANT]
+> **the view needs `type: panel`:** the default masonry view
+> treats every top-level card (even a `horizontal-stack`) as *one* card and
+> caps it at a single masonry column width (default ~500px) — with only one
+> card in `cards:`, that rendered as a tiny, centered window that then also
+> had to squeeze the three inner columns into it (the problem in Andreas'
+> screenshot after the first layout version: the column widths "didn't match
+> at all anymore"). Each device view therefore now sets `type: panel` — panel
+> views give their one card the view's full width, with no column cap.
 
 **Label positions (image 1):** the tank contains two visually distinct
 parts: the large heating coil (heat-exchanger spiral) and the actual
@@ -71,13 +72,14 @@ positions, gets overwritten on the next script run — for a permanent change,
 adjust `HISTORY_TEMPERATURE_KEYS`/`HISTORY_LOAD_KEY` or the `hours_to_show`
 value directly in `generate_dashboard.py`).
 
-**Important note about the images:** these are Andreas' own, unmodified
-original Askoma render images — I have no way to generate new images. The
-positioning of the overlay labels (percentage coordinates) is a sensible
-starting point, not a precision measurement of real sensor positions. For
-multiple devices, the **same** image pair is currently used for every view
-(no photo per device model available) — but content-wise each view is
-correctly separated, since each view points at that device's own entities.
+> [!NOTE]
+> **About the images:** these are Andreas' own, unmodified
+> original Askoma render images — I have no way to generate new images. The
+> positioning of the overlay labels (percentage coordinates) is a sensible
+> starting point, not a precision measurement of real sensor positions. For
+> multiple devices, the **same** image pair is currently used for every view
+> (no photo per device model available) — but content-wise each view is
+> correctly separated, since each view points at that device's own entities.
 
 ## Temperature functions and source selection
 
@@ -97,6 +99,15 @@ feed-in value to link an entity directly, see
 [10_automation.md](10_automation.md).
 
 ## Multiple heating elements: auto-generated, not hand-maintained
+
+How the dashboard comes about:
+
+```mermaid
+flowchart LR
+    CE[".storage/core.config_entries<br/>configured devices"] --> GEN
+    ER[".storage/core.entity_registry<br/>entity IDs"] --> GEN
+    GEN["generate_dashboard.py"] --> Y["askoheat_plus_dashboard.yaml<br/>one view per device"] --> RS["ha core restart"] --> DASH["ASKOHEAT+ dashboard<br/>in the sidebar"]
+```
 
 **The problem:** plain Lovelace YAML can't generically express "one card
 per ASKOHEAT+ device" — `picture-elements` elements need concrete entity
@@ -155,12 +166,13 @@ one place" principle), doesn't touch the existing UI dashboards.
 
 ## Images must additionally be copied to `www/`
 
-**Important limitation that ruled out the original symlink idea (as used
-for `custom_components/`):** Home Assistant's static file server (`/local/`
-→ `<config>/www/`) does not, for security reasons, **follow symlinks that
-point outside `www/`** — an attempt to mount the images purely via a
-symlink from `dashboard/images/` to `www/askoheat_plus/` consistently
-produced `404`.
+> [!WARNING]
+> **Limitation that ruled out the original symlink idea (as used
+> for `custom_components/`):** Home Assistant's static file server (`/local/`
+> → `<config>/www/`) does not, for security reasons, **follow symlinks that
+> point outside `www/`** — an attempt to mount the images purely via a
+> symlink from `dashboard/images/` to `www/askoheat_plus/` consistently
+> produced `404`.
 
 So: the images additionally live as a **real copy** under
 `/homeassistant/www/askoheat_plus/` (not part of the git repo, since it's

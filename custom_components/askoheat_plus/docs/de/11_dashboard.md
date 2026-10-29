@@ -32,16 +32,17 @@ rechte Spalte je ein verschachtelter `type: vertical-stack`) — die einzigen
 Lovelace-Kartentypen, die eine exakte Spalten-Position statt einer reinen
 Höhen-Heuristik garantieren.
 
-**Wichtig — Ansicht braucht `type: panel`:** die Standard-Masonry-Ansicht
-behandelt jede Top-Level-Karte (auch einen `horizontal-stack`) als *eine*
-Karte und begrenzt sie auf eine einzelne Masonry-Spaltenbreite (Default
-~500px) — bei nur einer Karte in `cards:` wirkte das wie ein winziges,
-zentriertes Fenster, in dem sich dann auch noch die drei inneren Spalten
-drängen mussten (das Problem aus Andreas' Screenshot nach der ersten
-Layout-Version: Spaltenbreiten "stimmten gar nicht mehr"). Jede
-Geräte-Ansicht hat deshalb jetzt `type: panel` gesetzt — Panel-Ansichten
-geben ihrer einzigen Karte die volle Breite der Ansicht ohne
-Spalten-Begrenzung.
+> [!IMPORTANT]
+> **Ansicht braucht `type: panel`:** die Standard-Masonry-Ansicht
+> behandelt jede Top-Level-Karte (auch einen `horizontal-stack`) als *eine*
+> Karte und begrenzt sie auf eine einzelne Masonry-Spaltenbreite (Default
+> ~500px) — bei nur einer Karte in `cards:` wirkte das wie ein winziges,
+> zentriertes Fenster, in dem sich dann auch noch die drei inneren Spalten
+> drängen mussten (das Problem aus Andreas' Screenshot nach der ersten
+> Layout-Version: Spaltenbreiten "stimmten gar nicht mehr"). Jede
+> Geräte-Ansicht hat deshalb jetzt `type: panel` gesetzt — Panel-Ansichten
+> geben ihrer einzigen Karte die volle Breite der Ansicht ohne
+> Spalten-Begrenzung.
 
 **Label-Positionen (Bild 1):** Der Tank enthält zwei optisch unterscheidbare
 Teile: die große Heizwendel (Wärmetauscher-Spirale) und das eigentliche
@@ -71,13 +72,14 @@ aber wie die Label-Positionen bei einem erneuten Skript-Lauf überschrieben —
 für eine dauerhafte Änderung `HISTORY_TEMPERATURE_KEYS`/`HISTORY_LOAD_KEY`
 bzw. den `hours_to_show`-Wert direkt in `generate_dashboard.py` anpassen).
 
-**Wichtiger Hinweis zu den Bildern:** Es sind Andreas' eigene, unveränderte
-Original-Renderbilder von Askoma — ich habe keine Möglichkeit, neue Bilder zu
-erzeugen. Die Positionierung der Overlay-Labels (Prozent-Koordinaten) ist ein
-sinnvoller Startpunkt, keine Präzisionsmessung realer Sensorpositionen. Für
-mehrere Geräte wird aktuell für jede Ansicht **dasselbe** Bildpaar verwendet
-(kein Foto pro Gerätemodell verfügbar) — inhaltlich aber korrekt getrennt,
-da jede Ansicht auf die Entities des jeweiligen Geräts zeigt.
+> [!NOTE]
+> **Zu den Bildern:** Es sind Andreas' eigene, unveränderte
+> Original-Renderbilder von Askoma — ich habe keine Möglichkeit, neue Bilder zu
+> erzeugen. Die Positionierung der Overlay-Labels (Prozent-Koordinaten) ist ein
+> sinnvoller Startpunkt, keine Präzisionsmessung realer Sensorpositionen. Für
+> mehrere Geräte wird aktuell für jede Ansicht **dasselbe** Bildpaar verwendet
+> (kein Foto pro Gerätemodell verfügbar) — inhaltlich aber korrekt getrennt,
+> da jede Ansicht auf die Entities des jeweiligen Geräts zeigt.
 
 ## Temperatur-Funktionen und Quellen-Auswahl
 
@@ -97,6 +99,15 @@ Leistungsvorgabe und Einspeisewert, um dort direkt eine Entity zu
 verknüpfen, siehe [10_automatisierung.md](10_automatisierung.md).
 
 ## Mehrere Heizstäbe: automatisch generiert, nicht von Hand gepflegt
+
+So entsteht das Dashboard:
+
+```mermaid
+flowchart LR
+    CE[".storage/core.config_entries<br/>eingerichtete Geräte"] --> GEN
+    ER[".storage/core.entity_registry<br/>Entity-IDs"] --> GEN
+    GEN["generate_dashboard.py"] --> Y["askoheat_plus_dashboard.yaml<br/>eine Ansicht pro Gerät"] --> RS["ha core restart"] --> DASH["Dashboard ASKOHEAT+<br/>in der Seitenleiste"]
+```
 
 **Das Problem:** Lovelace-YAML kann nicht "für jedes ASKOHEAT+-Gerät eine
 Karte" generisch ausdrücken — `picture-elements`-Elemente brauchen konkrete
@@ -156,12 +167,13 @@ Ort"-Prinzip), rührt die bestehenden UI-Dashboards nicht an.
 
 ## Bilder müssen zusätzlich nach `www/` kopiert werden
 
-**Wichtige Einschränkung, die die ursprüngliche Symlink-Idee (wie bei
-`custom_components/`) verhindert hat:** Home Assistants statischer
-Datei-Server (`/local/` → `<config>/www/`) folgt aus Sicherheitsgründen
-**keinen Symlinks, die aus `www/` herauszeigen** — ein Versuch, die Bilder
-nur per Symlink aus `dashboard/images/` nach `www/askoheat_plus/`
-einzuhängen, ergab durchgehend `404`.
+> [!WARNING]
+> **Einschränkung, die die ursprüngliche Symlink-Idee (wie bei
+> `custom_components/`) verhindert hat:** Home Assistants statischer
+> Datei-Server (`/local/` → `<config>/www/`) folgt aus Sicherheitsgründen
+> **keinen Symlinks, die aus `www/` herauszeigen** — ein Versuch, die Bilder
+> nur per Symlink aus `dashboard/images/` nach `www/askoheat_plus/`
+> einzuhängen, ergab durchgehend `404`.
 
 Deshalb: die Bilder liegen **zusätzlich als echte Kopie** unter
 `/homeassistant/www/askoheat_plus/` (nicht Teil des Git-Repos, da außerhalb

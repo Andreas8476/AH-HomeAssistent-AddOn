@@ -42,6 +42,11 @@ The project was deliberately built in steps, all of them are implemented:
    interval), source selection for feed-in value/load setpoint directly in
    the dashboard and the "Reload settings" button.
 
+```mermaid
+flowchart LR
+    P1["Phase 1<br/>reading"] --> P2["Phase 2<br/>writing"] --> P3["Phase 3<br/>dashboard"] --> P4["Phase 4<br/>installer<br/>settings"] --> P5["Phase 5<br/>temperature functions<br/>and convenience"]
+```
+
 ## Current status
 
 Current version: **0.10.1** (see [CHANGELOG.md](../../../../CHANGELOG.md)).
@@ -75,6 +80,8 @@ authoritative version; this translation may occasionally lag behind it.
 
 ## Author
 
-Developed by Andreas Stegemann in collaboration with Claude (Anthropic,
-Sonnet 5) as a coding assistant. A private project, not official ASKOMA AG
-software — details see [README.md](../../../../README.md#autor).
+> [!NOTE]
+> Developed by Andreas Stegemann in collaboration with Claude (Anthropic,
+> Sonnet 5) as a coding assistant. A private project, not official ASKOMA AG
+> software — details see [README.md](../../../../README.md#autor).
+> 

@@ -2,7 +2,8 @@
 
 *[English version](../en/06_development.md)*
 
-> ⚠️ **VERBINDLICHE REGEL: Jeder Commit geht auf BEIDE Remotes — GitLab
+> [!IMPORTANT]
+> **VERBINDLICHE REGEL: Jeder Commit geht auf BEIDE Remotes — GitLab
 > (`origin`) UND GitHub (`github`).** Kein Push nur auf eines der beiden.
 > Grund: GitLab ist das Haupt-Repo, GitHub ist zwingend nötig, damit HACS
 > funktioniert (HACS installiert nur aus öffentlichen GitHub-Repos). Siehe
@@ -81,12 +82,21 @@ GitHub-Repos, siehe [04_installation.md](04_installation.md).
 
 ## Neue Version veröffentlichen
 
+Der Ablauf von der Änderung bis zum Release:
+
+```mermaid
+flowchart LR
+    A["Änderung"] --> B["py_compile und<br/>ha core check"] --> C["ha core restart,<br/>Log prüfen"] --> D["Commit"] --> E["Push auf GitLab<br/>und GitHub"] --> F["Tag und<br/>GitHub-Release"]
+```
+
 Version in `manifest.json` hochzählen, `CHANGELOG.md` abschließen, Tag setzen,
 auf **beide** Remotes pushen und auf GitHub ein Release veröffentlichen — der
 komplette Ablauf steht in [13_aktualisieren.md](13_aktualisieren.md)
 (Abschnitt "Für die Entwickler"). Die Prüfläufe (HACS-Action, hassfest)
 laufen automatisch über `.github/workflows/validate.yml`.
 
-**Hinweis:** Home Assistant liest die Versionsnummer aus der `manifest.json`
-nur beim Start. Nach dem Hochzählen (und nach jeder Code-Änderung) ist ein
-`ha core restart` nötig, sonst zeigt die Oberfläche die alte Version.
+> [!NOTE]
+> Home Assistant liest die Versionsnummer aus der `manifest.json`
+> nur beim Start. Nach dem Hochzählen (und nach jeder Code-Änderung) ist ein
+> `ha core restart` nötig, sonst zeigt die Oberfläche die alte Version.
+> 

@@ -94,6 +94,10 @@ Fragen, Fehler und Wünsche gern hier oder als Issue auf GitHub.
 
 ## HACS-Standard-Store
 
+> [!IMPORTANT]
+> Die Pull Request bei `hacs/default` bis zur Entscheidung der Maintainer **nicht mehr verändern**
+> und auf Rückfragen dort antworten.
+
 - **Pull Request:** <https://github.com/hacs/default/pull/12952> (Eintrag
   `Andreas8476/AH-HomeAssistent-AddOn` in der Datei `integration`).
 - **Eingereicht:** 2026-10-29, mit Release v0.10.1 (nach den ersten grünen

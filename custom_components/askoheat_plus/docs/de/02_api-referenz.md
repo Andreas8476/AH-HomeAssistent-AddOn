@@ -20,10 +20,11 @@ diese Integration nutzt bewusst nur eine Teilmenge, siehe unten.
 
 ## Abfrage-Strategie (ESP32 schonen)
 
-Der ASKOHEAT+ läuft auf einem ESP32. Die geräteeigene Weboberfläche fragt ihre
-eigene "home"-Seite laut Herstellerdoku alle 2 Sekunden ab — das ist also die
-Referenz für "unbedenklich". Diese Integration ist bewusst deutlich
-zurückhaltender:
+> [!IMPORTANT]
+> Der ASKOHEAT+ läuft auf einem ESP32. Die geräteeigene Weboberfläche fragt ihre
+> eigene "home"-Seite laut Herstellerdoku alle 2 Sekunden ab — das ist also die
+> Referenz für "unbedenklich". Diese Integration ist bewusst deutlich
+> zurückhaltender:
 
 | Endpunkt | Verwendung | Intervall |
 |---|---|---|
@@ -39,6 +40,17 @@ laden“ (`button.py`, `coordinator.async_reload_secondary`). Ein automatisches
 Intervall wurde verworfen, um den ESP32 nicht zusätzlich zu belasten; nach
 einem Schreibzugriff über Home Assistant ist der lokale Stand ohnehin sofort
 aktuell — siehe [07_changelog.md](07_changelog.md).
+
+```mermaid
+flowchart LR
+    subgraph REG["Regelmäßig"]
+        T["Coordinator-Intervall<br/>Standard 30 s, einstellbar 10 bis 300 s"] --> G["gethome.json"]
+    end
+    subgraph SEL["Selten"]
+        S["Start der Integration"] --> SEC["getwizard.json, getwizard_status.json,<br/>gettemperature_calibration.json, getreg.json"]
+        B["Button Einstellungen neu laden"] --> SEC
+    end
+```
 
 ## Warum ausgerechnet diese 5 Endpunkte
 
@@ -107,13 +119,14 @@ Zustand bis zur nächsten Betätigung, wie eine echte Taste):
 Implementiert in `api.py` (`AskoheatApiClient.async_send_bare_command`) und
 `switch.py` (`AskoheatSwitch`).
 
-**Wichtig — automatischer Verfall nach 60 Sekunden, per Keep-Alive verhindert:**
-Laut Herstellerdoku löscht der Askoheat+ einen so gesetzten Wert nach 60
-Sekunden automatisch, wenn er nicht von einem (anderen) Steuergerät erneut
-gesendet wird — das Gerät **erwartet ausdrücklich** ein kontinuierlich
-steuerndes Gerät. Anders als beim Lese-Polling (siehe "Abfrage-Strategie"
-oben) ist regelmäßiges erneutes Senden hier laut Hersteller vorgesehenes
-Verhalten, kein Zusatzrisiko für den ESP32.
+> [!IMPORTANT]
+> **automatischer Verfall nach 60 Sekunden, per Keep-Alive verhindert:**
+> Laut Herstellerdoku löscht der Askoheat+ einen so gesetzten Wert nach 60
+> Sekunden automatisch, wenn er nicht von einem (anderen) Steuergerät erneut
+> gesendet wird — das Gerät **erwartet ausdrücklich** ein kontinuierlich
+> steuerndes Gerät. Anders als beim Lese-Polling (siehe "Abfrage-Strategie"
+> oben) ist regelmäßiges erneutes Senden hier laut Hersteller vorgesehenes
+> Verhalten, kein Zusatzrisiko für den ESP32.
 
 Jede Number-Entity (`number.py`) merkt sich daher den zuletzt gesendeten Wert
 und sendet ihn per `async_track_time_interval` alle

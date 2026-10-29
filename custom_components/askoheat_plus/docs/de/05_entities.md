@@ -37,13 +37,14 @@ bzw. bedienbar.
 | `battery_size` | Batteriegröße | registration | `EXTRA.BATTERY` | Zahl, diagnostic | nein |
 | `communication_timeout_heater_off` / `communication_timeout_reset` | Kommunikations-Timeout (Heizstab aus/Reset) | wizard | `COMMUNICATION_TIMEOUT_HEATER_OFF`/`_RESET` | Zahl (Einheit unbestätigt), diagnostic | nein |
 
-**Hinweis zu den `communication_timeout_*`-Sensoren:** bewusst read-only
-belassen (Andreas' ausdrücklicher Wunsch) — ein Fehlwert hier könnte die
-Geräte-Kommunikation lahmlegen. Alle anderen ursprünglich hier gelisteten
-Installer-Einstellungen (Legionellenschutz, Niedertarif, Einspeise-
-Zeitfenster, Wärmepumpen-Anforderung, Auto-Abschaltung, Auto-Reboot) sind
-jetzt schreibbare `number`-/`time`-Entities, siehe die entsprechenden
-Abschnitte unten.
+> [!NOTE]
+> **Hinweis zu den `communication_timeout_*`-Sensoren:** bewusst read-only
+> belassen (Andreas' ausdrücklicher Wunsch) — ein Fehlwert hier könnte die
+> Geräte-Kommunikation lahmlegen. Alle anderen ursprünglich hier gelisteten
+> Installer-Einstellungen (Legionellenschutz, Niedertarif, Einspeise-
+> Zeitfenster, Wärmepumpen-Anforderung, Auto-Abschaltung, Auto-Reboot) sind
+> jetzt schreibbare `number`-/`time`-Entities, siehe die entsprechenden
+> Abschnitte unten.
 
 `getwizard.json` (der volle Installer-Konfigurations-Dump, Quelle für
 `source: wizard`) wird wie die anderen Sekundär-Endpunkte beim Integrations-Start und per
@@ -152,11 +153,12 @@ genau wie die Geräte-Weboberfläche selbst.
 | Temperatur bei setzen der Heizstufe | `heater_step_temperature_enabled` | `MODBUS_CON_INPUT_SETTING` / `0x0010` | `heater_step_temperature_set` | — |
 | Legionellenschutz | `legio_enabled` | `MODBUS_CON_LEGIO_SETTING` / `0x8000` | `legio_target_temperature_set` | Startzeit `legio_activation_time_set`, Zeitbegrenzung `legio_heatup_limit_set` |
 
-¹ **Gerätebedingt ein gemeinsamer Wert:** Das Gerät hat für "Temperatur bei
-Einspeisewert" und "Temperatur bei Leistungsvorgabe" nur **ein** Register
-(`MODBUS_CON_TEMPERATURE_LOAD_SETPOINT`); die Geräte-Weboberfläche zeigt
-dasselbe Feld nur in zwei Zeilen an. Ändert man den Wert in einer Zeile,
-ändert er sich auch in der anderen.
+> [!NOTE]
+> ¹ **Gerätebedingt ein gemeinsamer Wert:** Das Gerät hat für "Temperatur bei
+> Einspeisewert" und "Temperatur bei Leistungsvorgabe" nur **ein** Register
+> (`MODBUS_CON_TEMPERATURE_LOAD_SETPOINT`); die Geräte-Weboberfläche zeigt
+> dasselbe Feld nur in zwei Zeilen an. Ändert man den Wert in einer Zeile,
+> ändert er sich auch in der anderen.
 
 ### Auswahl-Entities (`select.py`)
 
@@ -166,12 +168,13 @@ dasselbe Feld nur in zwei Zeilen an. Ändert man den Wert in einer Zeile,
 | `legio_sensor_select` | Legionellenschutz Fühler | `MODBUS_CON_LEGIO_SETTING` / `0x0001`–`0x0010` | Interner Sensor 0, Externer Sensor 1–4 |
 | `legio_interval_select` | Legionellenschutz Intervall | `MODBUS_CON_LEGIO_SETTING` / `0x0100`–`0x0800` | Täglich, Wöchentlich, Zweiwöchentlich, Monatlich |
 
-**Gerätebedingt ein gemeinsamer Fühler:** In der Geräte-Weboberfläche hat
-zwar jede der sechs Temperatur-Funktionen ein eigenes Fühler-Dropdown, alle
-schreiben aber dieselben Bits — es gibt also nur **einen** Fühler für alle
-Temperatur-Funktionen (nur der Legionellenschutz hat einen eigenen). Die Bits
-`0x0800`–`0x8000` desselben Registers gehören zur Pufferladepumpe und werden
-nicht verändert.
+> [!NOTE]
+> **Gerätebedingt ein gemeinsamer Fühler:** In der Geräte-Weboberfläche hat
+> zwar jede der sechs Temperatur-Funktionen ein eigenes Fühler-Dropdown, alle
+> schreiben aber dieselben Bits — es gibt also nur **einen** Fühler für alle
+> Temperatur-Funktionen (nur der Legionellenschutz hat einen eigenen). Die Bits
+> `0x0800`–`0x8000` desselben Registers gehören zur Pufferladepumpe und werden
+> nicht verändert.
 
 ### Verknüpfungs-Auswahl (`select.py`)
 

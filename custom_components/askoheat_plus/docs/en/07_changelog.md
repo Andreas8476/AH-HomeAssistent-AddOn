@@ -514,6 +514,22 @@ project).
   deliberately stays at the phase-1 state, with a note pointing to the
   current documents.
 
+## 2026-10-29 — Docs with Mermaid diagrams and GitHub alerts
+
+- New overview diagram in `03_architecture.md` ("who talks to whom?": Home
+  Assistant, custom component, heating element). **Clarification:** the
+  integration talks via **HTTP** (local REST/JSON API), **not** via Modbus —
+  `MODBUS_*` names are only key/register names of the HTTP interface; the
+  integration does not use the heating element's own Modbus interface
+  (TCP/RTU).
+- Data flow and write paths in `03_architecture.md` as Mermaid instead of
+  ASCII, plus a sequence diagram for bit writing (read-modify-write).
+- Further diagrams: phases (01), polling strategy (02), installation steps
+  (04), release procedure (06), feed-in value link (10), dashboard generation
+  (11), update flow (13), README overview.
+- Important notes in all documents as GitHub alerts (`NOTE`, `TIP`,
+  `IMPORTANT`, `WARNING`, `CAUTION`) instead of bold paragraphs.
+
 ## Open points (TODO)
 
 - **Listing in the official HACS default store:** in preparation (Andreas

@@ -19,6 +19,9 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ### Dokumentation
 
+- Mermaid-Diagramme (Architektur, Datenfluss, Schreibwege, Installation,
+  Update, Release u.a.) und GitHub-Alerts in Doku und README; Klarstellung,
+  dass die Integration per HTTP und nicht per Modbus spricht.
 - Doku (DE/EN) gegen den Code geprüft und auf den Stand v0.10.1 gebracht
   (Überblick, API-Referenz, Architektur, Entities, Installation, Entwicklung,
   Bedienung).
