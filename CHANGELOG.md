@@ -19,6 +19,9 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ### Dokumentation
 
+- Doku (DE/EN) gegen den Code geprüft und auf den Stand v0.10.1 gebracht
+  (Überblick, API-Referenz, Architektur, Entities, Installation, Entwicklung,
+  Bedienung).
 - README überarbeitet: Funktionsübersicht, Screenshots, HACS-Schnellstart mit
   "My Home Assistant"-Knopf, getestete Geräte, Hilfe/Fehler melden,
   Dokumentations-Tabelle und englische Kurzfassung.
