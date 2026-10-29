@@ -172,6 +172,17 @@ Temperatur-Funktionen (nur der Legionellenschutz hat einen eigenen). Die Bits
 `0x0800`–`0x8000` desselben Registers gehören zur Pufferladepumpe und werden
 nicht verändert.
 
+### Verknüpfungs-Auswahl (`select.py`)
+
+| Key | Name (DE) | Options-Flow-Schlüssel |
+|---|---|---|
+| `feedin_source_select` | Einspeisewert Quelle | `feedin_source_entity_id` |
+| `setpoint_source_select` | Leistungsvorgabe Quelle | `setpoint_source_entity_id` |
+
+Wählen die Quell-Entity für die automatische Übernahme von Einspeisewert/
+Leistungsvorgabe direkt im Dashboard, statt über "⋮ → Konfigurieren".
+Gleiche Einstellung wie dort, siehe [10_automatisierung.md](10_automatisierung.md).
+
 ## Button: Einstellungen neu laden (`button.py`)
 
 | Key | Name (DE) |

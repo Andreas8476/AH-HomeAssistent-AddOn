@@ -36,6 +36,15 @@ denselben `number.set_value`-Service, den auch die UI und die Blueprint
 unten nutzen — der Keep-Alive greift also identisch). Eine Änderung der
 Auswahl lädt die Integration automatisch neu, kein manueller Neustart nötig.
 
+**Alternativ direkt im Dashboard:** Auf der Geräte-Ansicht (Karte "Alle
+Werte") gibt es zwei Auswahlfelder **"↳ Einspeisewert Quelle"** und
+**"↳ Leistungsvorgabe Quelle"** (Entities `select.*_einspeisewert_quelle` /
+`*_leistungsvorgabe_quelle`, Kategorie "Konfiguration"). Sie bearbeiten
+dieselbe Einstellung wie der Options-Flow — beide Wege bleiben synchron.
+Angeboten werden alle Leistungs-Entities (Geräteklasse Leistung bzw. Einheit
+W/kW), ohne die eigenen Entities des Geräts. **"Keine (manuell)"** hebt die
+Verknüpfung wieder auf. Beim Speichern lädt sich die Integration kurz neu.
+
 ## Alternative: eigene Automation (Blueprint)
 
 Für alle, die zusätzliche Bedingungen/Filter brauchen (z.B. nur zwischen

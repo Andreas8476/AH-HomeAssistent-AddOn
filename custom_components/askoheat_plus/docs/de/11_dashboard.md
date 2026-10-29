@@ -79,6 +79,23 @@ mehrere Geräte wird aktuell für jede Ansicht **dasselbe** Bildpaar verwendet
 (kein Foto pro Gerätemodell verfügbar) — inhaltlich aber korrekt getrennt,
 da jede Ansicht auf die Entities des jeweiligen Geräts zeigt.
 
+## Temperatur-Funktionen und Quellen-Auswahl
+
+Die linke Spalte jeder Geräte-Ansicht enthält unter "Alle Werte" eine
+zweite Karte **"Temperatur-Funktionen"**, aufgebaut wie die gleichnamige
+Kachel der Geräte-Weboberfläche: pro Funktion ein Abschnitt mit
+"Aktiviert"-Schalter, Temperatur und ggf. Von/Bis-Zeitfenster, dazu Fühler,
+Legionellenschutz (Intervall, Startzeit, Zeitbegrenzung) und der Button
+"Einstellungen vom Gerät neu laden". Alles direkt bedienbar. Details zu den
+Entities: [05_entities.md](05_entities.md). Gerätebedingt gemeinsam:
+Temperatur bei Einspeisewert/Leistungsvorgabe (ein Wert) und der Fühler (ein
+Wert für alle Funktionen außer Legionellenschutz) — erscheint deshalb in
+beiden Zeilen bzw. nur einmal.
+
+In "Alle Werte" gibt es außerdem je ein Auswahlfeld **"↳ … Quelle"** unter
+Leistungsvorgabe und Einspeisewert, um dort direkt eine Entity zu
+verknüpfen, siehe [10_automatisierung.md](10_automatisierung.md).
+
 ## Mehrere Heizstäbe: automatisch generiert, nicht von Hand gepflegt
 
 **Das Problem:** Lovelace-YAML kann nicht "für jedes ASKOHEAT+-Gerät eine

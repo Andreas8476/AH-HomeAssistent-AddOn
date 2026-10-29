@@ -84,8 +84,56 @@ FALLBACK_ENTITIES = [
     ("temperature_sensor_0", "Temperatur"),
     ("heater_step_target", "Ziel-Heizstufe"),
     ("load_setpoint", "Leistungsvorgabe"),
+    ("setpoint_source_select", "↳ Leistungsvorgabe Quelle"),
     ("load_feedin", "Einspeisewert"),
+    ("feedin_source_select", "↳ Einspeisewert Quelle"),
     ("emergency_mode", "Notbetrieb"),
+]
+
+# Karte "Temperatur-Funktionen", aufgebaut wie die gleichnamige Kachel der
+# Geräte-Weboberfläche (Wunsch von Andreas, 2026-10-29): pro Funktion ein
+# Abschnitt mit Aktiviert-Schalter, Temperatur und ggf. Zeitfenster.
+# (Abschnittstitel, [(unique_id-Suffix, Kurzname), ...]); ein Abschnitt mit
+# Titel None wird ohne Überschrift ausgegeben.
+TEMPERATURE_FUNCTION_SECTIONS = [
+    (None, [("temperature_sensor_select", "Fühler (alle Funktionen)")]),
+    ("Wärmepumpenanforderung / Notbetrieb", [
+        ("heat_pump_request_enabled", "Aktiviert"),
+        ("heat_pump_request_target_temperature_set", "Temperatur"),
+    ]),
+    ("Heizen auf Minimaltemperatur", [
+        ("minimum_temperature_enabled", "Aktiviert"),
+        ("minimum_temperature_set", "Temperatur"),
+    ]),
+    ("Heizen während der Niedertarifzeit", [
+        ("low_tariff_enabled", "Aktiviert"),
+        ("low_tariff_target_temperature_set", "Temperatur"),
+        ("low_tariff_start_time_set", "Von"),
+        ("low_tariff_end_time_set", "Bis"),
+    ]),
+    ("Temperatur bei Einspeisewert", [
+        ("feedin_temperature_enabled", "Aktiviert"),
+        ("load_temperature_set", "Temperatur (gemeinsam mit Leistungsvorgabe)"),
+        ("feedin_window_start_time_set", "Von"),
+        ("feedin_window_end_time_set", "Bis"),
+    ]),
+    ("Temperatur bei Leistungsvorgabe", [
+        ("setpoint_temperature_enabled", "Aktiviert"),
+        ("load_temperature_set", "Temperatur (gemeinsam mit Einspeisewert)"),
+    ]),
+    ("Temperatur bei Heizstufe", [
+        ("heater_step_temperature_enabled", "Aktiviert"),
+        ("heater_step_temperature_set", "Temperatur"),
+    ]),
+    ("Legionellenschutz", [
+        ("legio_enabled", "Aktiviert"),
+        ("legio_target_temperature_set", "Temperatur"),
+        ("legio_sensor_select", "Fühler"),
+        ("legio_interval_select", "Intervall"),
+        ("legio_activation_time_set", "Startzeit"),
+        ("legio_heatup_limit_set", "Zeitbegrenzung"),
+    ]),
+    (None, [("reload_settings", "Einstellungen vom Gerät neu laden")]),
 ]
 
 
@@ -210,10 +258,32 @@ def render_view(device: dict) -> str:
     # Verlaufs-Grafen (ebenfalls vertical-stack). horizontal-stack/
     # vertical-stack sind die einzigen Lovelace-Kartentypen, die eine exakte
     # Spalten-Position statt einer Höhen-Heuristik garantieren.
-    fallback_card = f"""      - type: entities
-        title: Alle Werte (Fallback / Details)
-        entities:
-{fallback_rows}"""
+    temperature_rows = ""
+    for section_title, rows in TEMPERATURE_FUNCTION_SECTIONS:
+        present = [(suffix, name) for suffix, name in rows if suffix in ents]
+        if not present:
+            continue
+        if section_title:
+            temperature_rows += f"          - type: section\n            label: {section_title}\n"
+        temperature_rows += "".join(
+            f"          - entity: {ents[suffix]}\n            name: {name}\n"
+            for suffix, name in present
+        )
+
+    # Linke Spalte: Fallback-Tabelle, darunter die Temperatur-Funktionen
+    # (eine vierte Spalte wäre auf normalen Bildschirmen zu schmal).
+    fallback_card = f"""      - type: vertical-stack
+        cards:
+          - type: entities
+            title: Alle Werte (Fallback / Details)
+            entities:
+{textwrap.indent(fallback_rows, "    ")}"""
+    if temperature_rows:
+        fallback_card += f"""          - type: entities
+            title: Temperatur-Funktionen
+            show_header_toggle: false
+            entities:
+{textwrap.indent(temperature_rows, "    ")}"""
 
     meter_and_sensor_cards = f"""      - type: markdown
         content: >

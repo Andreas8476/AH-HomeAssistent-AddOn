@@ -169,6 +169,17 @@ same bits — so there is only **one** sensor for all temperature functions
 (only legionella protection has its own). Bits `0x0800`–`0x8000` of the same
 register belong to the buffer charging pump and are left untouched.
 
+### Link selection (`select.py`)
+
+| Key | Name (EN) | Options-flow key |
+|---|---|---|
+| `feedin_source_select` | Feed-in value source | `feedin_source_entity_id` |
+| `setpoint_source_select` | Load setpoint source | `setpoint_source_entity_id` |
+
+Choose the source entity for automatically taking over the feed-in value/
+load setpoint directly in the dashboard instead of via "⋮ → Configure". Same
+setting as there, see [10_automation.md](10_automation.md).
+
 ## Button: reload settings (`button.py`)
 
 | Key | Name (EN) |

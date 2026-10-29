@@ -243,6 +243,18 @@
           "fortnightly": "Fortnightly (14 days)",
           "monthly": "Monthly (30 days)"
         }
+      },
+      "feedin_source_select": {
+        "name": "Feed-in value source",
+        "state": {
+          "none": "None (manual)"
+        }
+      },
+      "setpoint_source_select": {
+        "name": "Load setpoint source",
+        "state": {
+          "none": "None (manual)"
+        }
       }
     },
     "button": {

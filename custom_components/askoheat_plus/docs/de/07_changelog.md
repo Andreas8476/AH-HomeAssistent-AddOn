@@ -463,6 +463,24 @@ kurz auf dieses Projekt).
   `ServerDisconnectedError` einmal (unbedenklich, absolute Werte =
   idempotent). Danach liefen alle Schritte fehlerfrei.
 
+## 2026-10-29 — Dashboard: Temperatur-Funktionen + Quellen-Auswahl
+
+- Dashboard (`generate_dashboard.py`): neue Karte "Temperatur-Funktionen" in
+  der linken Spalte (aufgebaut wie die Kachel der Geräte-Weboberfläche, alles
+  direkt bedienbar) und je ein Auswahlfeld "↳ Quelle" unter
+  Leistungsvorgabe/Einspeisewert.
+- Neue `select`-Entities `feedin_source_select`/`setpoint_source_select`
+  (`select.py`): Quell-Entity für Einspeisewert/Leistungsvorgabe direkt im
+  Dashboard wählen statt über "⋮ → Konfigurieren". Schreiben die
+  Options-Flow-Optionen des Config-Entry (gleiche Einstellung, beide Wege
+  synchron); der bestehende Update-Listener lädt die Integration neu und
+  `link.py` richtet die Verknüpfung ein. Angeboten werden Leistungs-Entities
+  (device_class power bzw. W/kW), ohne die eigenen Entities des Geräts.
+- Live am Testgerät `192.168.20.54` getestet (Freigabe Andreas): Quelle
+  `sensor.solar_grid_power` gewählt → Einspeisewert folgt dem Sensor, Option
+  im Config-Entry gesetzt; "Keine" → Option entfernt, Einspeisewert danach
+  auf den Ausgangswert 0 zurückgesetzt.
+
 ## Offene Punkte (ToDo)
 
 - **Aufnahme in den offiziellen HACS-Standard-Store:** aktuell nur als

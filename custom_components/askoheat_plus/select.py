@@ -7,11 +7,13 @@ from dataclasses import dataclass
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import AskoheatConfigEntry
 from .api import AskoheatApiError, extract_number
+from .const import CONF_FEEDIN_SOURCE_ENTITY_ID, CONF_SETPOINT_SOURCE_ENTITY_ID
 from .entity import AskoheatEntity
 
 # Fühler-Auswahl: ein Bit pro Fühler (Radio-Gruppe in der Geräte-
@@ -113,6 +115,93 @@ class AskoheatWizardFlagSelect(AskoheatEntity, SelectEntity):
             ) from err
 
 
+@dataclass(frozen=True, kw_only=True)
+class AskoheatLinkSelectEntityDescription(SelectEntityDescription):
+    """Beschreibt die Quell-Auswahl einer Einspeisewert-/Leistungsvorgabe-Verknüpfung.
+
+    ``option_key`` ist derselbe Options-Flow-Schlüssel, den auch der Dialog
+    "⋮ → Konfigurieren" setzt (siehe config_flow.py/link.py) — Dashboard und
+    Options-Flow bearbeiten also dieselbe Einstellung und bleiben synchron.
+    """
+
+    option_key: str
+
+
+LINK_SELECT_DESCRIPTIONS: tuple[AskoheatLinkSelectEntityDescription, ...] = (
+    AskoheatLinkSelectEntityDescription(
+        key="feedin_source_select",
+        translation_key="feedin_source_select",
+        icon="mdi:link-variant",
+        entity_category=EntityCategory.CONFIG,
+        option_key=CONF_FEEDIN_SOURCE_ENTITY_ID,
+    ),
+    AskoheatLinkSelectEntityDescription(
+        key="setpoint_source_select",
+        translation_key="setpoint_source_select",
+        icon="mdi:link-variant",
+        entity_category=EntityCategory.CONFIG,
+        option_key=CONF_SETPOINT_SOURCE_ENTITY_ID,
+    ),
+)
+
+# Option für "keine Verknüpfung" (rein manuelle Steuerung), übersetzt.
+LINK_NONE = "none"
+
+_LINK_SOURCE_DOMAINS = ("sensor", "number", "input_number")
+_POWER_UNITS = ("W", "kW")
+
+
+class AskoheatLinkSelect(AskoheatEntity, SelectEntity):
+    """Wählt die Quell-Entity für Einspeisewert/Leistungsvorgabe direkt im Dashboard.
+
+    Angeboten werden alle Leistungs-Entities (device_class power bzw. Einheit
+    W/kW) aus sensor/number/input_number, ohne die eigenen Entities dieses
+    Geräts (eine Verknüpfung auf sich selbst wäre eine Schleife). Die Liste
+    wird bei jedem Zugriff neu aufgebaut, neue Sensoren erscheinen also ohne
+    Neustart. Eine im Options-Flow gewählte Entity, die keine Leistungs-
+    Entity ist, wird trotzdem angezeigt, damit die Auswahl nie "leer" wirkt.
+    Speichern aktualisiert die Optionen des Config-Entry; der bestehende
+    Update-Listener (__init__.py) lädt die Integration daraufhin neu und
+    link.py richtet die Verknüpfung ein — derselbe Weg wie beim Options-Flow.
+    """
+
+    entity_description: AskoheatLinkSelectEntityDescription
+
+    @property
+    def current_option(self) -> str | None:
+        return self.coordinator.config_entry.options.get(self.entity_description.option_key) or LINK_NONE
+
+    @property
+    def options(self) -> list[str]:
+        entry_id = self.coordinator.config_entry.entry_id
+        registry = er.async_get(self.hass)
+        own = {
+            ent.entity_id for ent in er.async_entries_for_config_entry(registry, entry_id)
+        }
+        candidates = {
+            state.entity_id
+            for state in self.hass.states.async_all(_LINK_SOURCE_DOMAINS)
+            if state.entity_id not in own
+            and (
+                state.attributes.get("device_class") == "power"
+                or state.attributes.get("unit_of_measurement") in _POWER_UNITS
+            )
+        }
+        current = self.current_option
+        if current and current != LINK_NONE:
+            candidates.add(current)
+        return [LINK_NONE, *sorted(candidates)]
+
+    async def async_select_option(self, option: str) -> None:
+        entry = self.coordinator.config_entry
+        options = dict(entry.options)
+        if option == LINK_NONE:
+            options.pop(self.entity_description.option_key, None)
+        else:
+            options[self.entity_description.option_key] = option
+        self.hass.config_entries.async_update_entry(entry, options=options)
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: AskoheatConfigEntry,
@@ -121,5 +210,11 @@ async def async_setup_entry(
     """ASKOHEAT+-Select-Entities aus einem Config-Entry einrichten."""
     coordinator = entry.runtime_data
     async_add_entities(
-        AskoheatWizardFlagSelect(coordinator, description) for description in SELECT_DESCRIPTIONS
+        [
+            *(
+                AskoheatWizardFlagSelect(coordinator, description)
+                for description in SELECT_DESCRIPTIONS
+            ),
+            *(AskoheatLinkSelect(coordinator, description) for description in LINK_SELECT_DESCRIPTIONS),
+        ]
     )

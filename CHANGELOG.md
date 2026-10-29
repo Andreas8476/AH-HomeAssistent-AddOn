@@ -12,6 +12,14 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- Dashboard: neue Karte "Temperatur-Funktionen" je Geräte-Ansicht (Schalter,
+  Temperaturen, Zeitfenster, Fühler, Legionellenschutz, Reload-Button).
+- Auswahlfelder "Einspeisewert Quelle"/"Leistungsvorgabe Quelle"
+  (`select.py`): Verknüpfung mit einer Quell-Entity direkt im Dashboard
+  statt nur über den Options-Flow (gleiche Einstellung, beide Wege synchron).
+
 ## [0.9.0] - 2026-10-29
 
 ### Hinzugefügt

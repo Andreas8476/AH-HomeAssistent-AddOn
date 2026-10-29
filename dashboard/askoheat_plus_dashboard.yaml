@@ -24,25 +24,97 @@ views:
     cards:
       - type: horizontal-stack
         cards:
-          - type: entities
-            title: Alle Werte (Fallback / Details)
-            entities:
-              - entity: sensor.ahf280_ti_plus_15_8_geratestatus
-                name: Gerätestatus
-              - entity: sensor.ahf280_ti_plus_15_8_heizstufe
-                name: Heizstufe (Ist)
-              - entity: sensor.ahf280_ti_plus_15_8_heizleistung
-                name: Heizleistung
-              - entity: sensor.ahf280_ti_plus_15_8_temperatur
-                name: Temperatur
-              - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_ziel_heizstufe
-                name: Ziel-Heizstufe
-              - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
-                name: Leistungsvorgabe
-              - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
-                name: Einspeisewert
-              - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_notbetrieb
-                name: Notbetrieb
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: Alle Werte (Fallback / Details)
+                entities:
+                  - entity: sensor.ahf280_ti_plus_15_8_geratestatus
+                    name: Gerätestatus
+                  - entity: sensor.ahf280_ti_plus_15_8_heizstufe
+                    name: Heizstufe (Ist)
+                  - entity: sensor.ahf280_ti_plus_15_8_heizleistung
+                    name: Heizleistung
+                  - entity: sensor.ahf280_ti_plus_15_8_temperatur
+                    name: Temperatur
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_ziel_heizstufe
+                    name: Ziel-Heizstufe
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe
+                    name: Leistungsvorgabe
+                  - entity: select.arbeitszimmer_ahf280_ti_plus_15_8_leistungsvorgabe_quelle
+                    name: ↳ Leistungsvorgabe Quelle
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert
+                    name: Einspeisewert
+                  - entity: select.arbeitszimmer_ahf280_ti_plus_15_8_einspeisewert_quelle
+                    name: ↳ Einspeisewert Quelle
+                  - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_notbetrieb
+                    name: Notbetrieb
+              - type: entities
+                title: Temperatur-Funktionen
+                show_header_toggle: false
+                entities:
+                  - entity: select.arbeitszimmer_ahf280_ti_plus_15_8_fuhler_temperatur_funktionen
+                    name: Fühler (alle Funktionen)
+                  - type: section
+                    label: Wärmepumpenanforderung / Notbetrieb
+                  - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_warmepumpenanforderung_notbetrieb_temperatur_aktiv
+                    name: Aktiviert
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_warmepumpen_anforderung_zieltemperatur
+                    name: Temperatur
+                  - type: section
+                    label: Heizen auf Minimaltemperatur
+                  - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_heizen_auf_minimaltemperatur
+                    name: Aktiviert
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_minimaltemperatur
+                    name: Temperatur
+                  - type: section
+                    label: Heizen während der Niedertarifzeit
+                  - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_heizen_wahrend_niedertarifzeit
+                    name: Aktiviert
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_niedertarif_zieltemperatur
+                    name: Temperatur
+                  - entity: time.arbeitszimmer_ahf280_ti_plus_15_8_niedertarif_start
+                    name: Von
+                  - entity: time.arbeitszimmer_ahf280_ti_plus_15_8_niedertarif_ende
+                    name: Bis
+                  - type: section
+                    label: Temperatur bei Einspeisewert
+                  - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_bei_einspeisewert_aktiv
+                    name: Aktiviert
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_bei_einspeisewert_leistungsvorgabe
+                    name: Temperatur (gemeinsam mit Leistungsvorgabe)
+                  - entity: time.arbeitszimmer_ahf280_ti_plus_15_8_einspeise_zeitfenster_start
+                    name: Von
+                  - entity: time.arbeitszimmer_ahf280_ti_plus_15_8_einspeise_zeitfenster_ende
+                    name: Bis
+                  - type: section
+                    label: Temperatur bei Leistungsvorgabe
+                  - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_bei_leistungsvorgabe_aktiv
+                    name: Aktiviert
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_bei_einspeisewert_leistungsvorgabe
+                    name: Temperatur (gemeinsam mit Einspeisewert)
+                  - type: section
+                    label: Temperatur bei Heizstufe
+                  - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_bei_heizstufe_aktiv
+                    name: Aktiviert
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_temperatur_bei_heizstufe
+                    name: Temperatur
+                  - type: section
+                    label: Legionellenschutz
+                  - entity: switch.arbeitszimmer_ahf280_ti_plus_15_8_legionellenschutz
+                    name: Aktiviert
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_legionellenschutz_zieltemperatur
+                    name: Temperatur
+                  - entity: select.arbeitszimmer_ahf280_ti_plus_15_8_legionellenschutz_fuhler
+                    name: Fühler
+                  - entity: select.arbeitszimmer_ahf280_ti_plus_15_8_legionellenschutz_intervall
+                    name: Intervall
+                  - entity: time.arbeitszimmer_ahf280_ti_plus_15_8_legionellenschutz_startzeit
+                    name: Startzeit
+                  - entity: number.arbeitszimmer_ahf280_ti_plus_15_8_legionellenschutz_zeitbegrenzung
+                    name: Zeitbegrenzung
+                  - entity: button.arbeitszimmer_ahf280_ti_plus_15_8_einstellungen_neu_laden
+                    name: Einstellungen vom Gerät neu laden
 
           - type: vertical-stack
             cards:
@@ -198,25 +270,97 @@ views:
     cards:
       - type: horizontal-stack
         cards:
-          - type: entities
-            title: Alle Werte (Fallback / Details)
-            entities:
-              - entity: sensor.sonnenbooster_52_kw_geratestatus
-                name: Gerätestatus
-              - entity: sensor.sonnenbooster_52_kw_heizstufe
-                name: Heizstufe (Ist)
-              - entity: sensor.sonnenbooster_52_kw_heizleistung
-                name: Heizleistung
-              - entity: sensor.sonnenbooster_52_kw_temperatur
-                name: Temperatur
-              - entity: number.sonnenbooster_52_kw_ziel_heizstufe
-                name: Ziel-Heizstufe
-              - entity: number.sonnenbooster_52_kw_leistungsvorgabe
-                name: Leistungsvorgabe
-              - entity: number.sonnenbooster_52_kw_einspeisewert
-                name: Einspeisewert
-              - entity: switch.sonnenbooster_52_kw_notbetrieb
-                name: Notbetrieb
+          - type: vertical-stack
+            cards:
+              - type: entities
+                title: Alle Werte (Fallback / Details)
+                entities:
+                  - entity: sensor.sonnenbooster_52_kw_geratestatus
+                    name: Gerätestatus
+                  - entity: sensor.sonnenbooster_52_kw_heizstufe
+                    name: Heizstufe (Ist)
+                  - entity: sensor.sonnenbooster_52_kw_heizleistung
+                    name: Heizleistung
+                  - entity: sensor.sonnenbooster_52_kw_temperatur
+                    name: Temperatur
+                  - entity: number.sonnenbooster_52_kw_ziel_heizstufe
+                    name: Ziel-Heizstufe
+                  - entity: number.sonnenbooster_52_kw_leistungsvorgabe
+                    name: Leistungsvorgabe
+                  - entity: select.heizungsraum_sonnenbooster_52_kw_leistungsvorgabe_quelle
+                    name: ↳ Leistungsvorgabe Quelle
+                  - entity: number.sonnenbooster_52_kw_einspeisewert
+                    name: Einspeisewert
+                  - entity: select.heizungsraum_sonnenbooster_52_kw_einspeisewert_quelle
+                    name: ↳ Einspeisewert Quelle
+                  - entity: switch.sonnenbooster_52_kw_notbetrieb
+                    name: Notbetrieb
+              - type: entities
+                title: Temperatur-Funktionen
+                show_header_toggle: false
+                entities:
+                  - entity: select.heizungsraum_sonnenbooster_52_kw_fuhler_temperatur_funktionen
+                    name: Fühler (alle Funktionen)
+                  - type: section
+                    label: Wärmepumpenanforderung / Notbetrieb
+                  - entity: switch.heizungsraum_sonnenbooster_52_kw_warmepumpenanforderung_notbetrieb_temperatur_aktiv
+                    name: Aktiviert
+                  - entity: number.heizungsraum_sonnenbooster_52_kw_warmepumpen_anforderung_zieltemperatur
+                    name: Temperatur
+                  - type: section
+                    label: Heizen auf Minimaltemperatur
+                  - entity: switch.heizungsraum_sonnenbooster_52_kw_heizen_auf_minimaltemperatur
+                    name: Aktiviert
+                  - entity: number.heizungsraum_sonnenbooster_52_kw_minimaltemperatur
+                    name: Temperatur
+                  - type: section
+                    label: Heizen während der Niedertarifzeit
+                  - entity: switch.heizungsraum_sonnenbooster_52_kw_heizen_wahrend_niedertarifzeit
+                    name: Aktiviert
+                  - entity: number.heizungsraum_sonnenbooster_52_kw_niedertarif_zieltemperatur
+                    name: Temperatur
+                  - entity: time.heizungsraum_sonnenbooster_52_kw_niedertarif_start
+                    name: Von
+                  - entity: time.heizungsraum_sonnenbooster_52_kw_niedertarif_ende
+                    name: Bis
+                  - type: section
+                    label: Temperatur bei Einspeisewert
+                  - entity: switch.heizungsraum_sonnenbooster_52_kw_temperatur_bei_einspeisewert_aktiv
+                    name: Aktiviert
+                  - entity: number.heizungsraum_sonnenbooster_52_kw_temperatur_bei_einspeisewert_leistungsvorgabe
+                    name: Temperatur (gemeinsam mit Leistungsvorgabe)
+                  - entity: time.heizungsraum_sonnenbooster_52_kw_einspeise_zeitfenster_start
+                    name: Von
+                  - entity: time.heizungsraum_sonnenbooster_52_kw_einspeise_zeitfenster_ende
+                    name: Bis
+                  - type: section
+                    label: Temperatur bei Leistungsvorgabe
+                  - entity: switch.heizungsraum_sonnenbooster_52_kw_temperatur_bei_leistungsvorgabe_aktiv
+                    name: Aktiviert
+                  - entity: number.heizungsraum_sonnenbooster_52_kw_temperatur_bei_einspeisewert_leistungsvorgabe
+                    name: Temperatur (gemeinsam mit Einspeisewert)
+                  - type: section
+                    label: Temperatur bei Heizstufe
+                  - entity: switch.heizungsraum_sonnenbooster_52_kw_temperatur_bei_heizstufe_aktiv
+                    name: Aktiviert
+                  - entity: number.heizungsraum_sonnenbooster_52_kw_temperatur_bei_heizstufe
+                    name: Temperatur
+                  - type: section
+                    label: Legionellenschutz
+                  - entity: switch.heizungsraum_sonnenbooster_52_kw_legionellenschutz
+                    name: Aktiviert
+                  - entity: number.heizungsraum_sonnenbooster_52_kw_legionellenschutz_zieltemperatur
+                    name: Temperatur
+                  - entity: select.heizungsraum_sonnenbooster_52_kw_legionellenschutz_fuhler
+                    name: Fühler
+                  - entity: select.heizungsraum_sonnenbooster_52_kw_legionellenschutz_intervall
+                    name: Intervall
+                  - entity: time.heizungsraum_sonnenbooster_52_kw_legionellenschutz_startzeit
+                    name: Startzeit
+                  - entity: number.heizungsraum_sonnenbooster_52_kw_legionellenschutz_zeitbegrenzung
+                    name: Zeitbegrenzung
+                  - entity: button.heizungsraum_sonnenbooster_52_kw_einstellungen_neu_laden
+                    name: Einstellungen vom Gerät neu laden
 
           - type: vertical-stack
             cards:

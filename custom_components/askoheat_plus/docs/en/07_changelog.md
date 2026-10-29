@@ -460,6 +460,23 @@ project).
   (harmless, absolute values = idempotent). After that all steps ran
   without errors.
 
+## 2026-10-29 — Dashboard: temperature functions + source selection
+
+- Dashboard (`generate_dashboard.py`): new card "Temperatur-Funktionen" in the
+  left column (modelled on the device web UI tile, everything directly
+  operable) and a "↳ source" select under load setpoint/feed-in value.
+- New `select` entities `feedin_source_select`/`setpoint_source_select`
+  (`select.py`): choose the source entity for feed-in value/load setpoint
+  directly in the dashboard instead of via "⋮ → Configure". They write the
+  config entry's options-flow options (same setting, both ways in sync); the
+  existing update listener reloads the integration and `link.py` sets up the
+  link. Power entities are offered (device_class power or W/kW), excluding the
+  device's own entities.
+- Tested live on the test device `192.168.20.54` (Andreas' approval): source
+  `sensor.solar_grid_power` selected → feed-in value follows the sensor,
+  option set in the config entry; "None" → option removed, feed-in value then
+  reset to the original value 0.
+
 ## Open points (TODO)
 
 - **Listing in the official HACS default store:** currently only

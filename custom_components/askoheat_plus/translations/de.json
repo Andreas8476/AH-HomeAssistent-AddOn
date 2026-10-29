@@ -243,6 +243,18 @@
           "fortnightly": "Zweiwöchentlich (14 Tage)",
           "monthly": "Monatlich (30 Tage)"
         }
+      },
+      "feedin_source_select": {
+        "name": "Einspeisewert Quelle",
+        "state": {
+          "none": "Keine (manuell)"
+        }
+      },
+      "setpoint_source_select": {
+        "name": "Leistungsvorgabe Quelle",
+        "state": {
+          "none": "Keine (manuell)"
+        }
       }
     },
     "button": {

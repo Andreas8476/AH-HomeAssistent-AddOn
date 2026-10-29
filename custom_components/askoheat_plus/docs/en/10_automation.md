@@ -35,6 +35,15 @@ UI and the blueprint below also use — so the keep-alive applies
 identically). Changing the selection automatically reloads the
 integration, no manual restart needed.
 
+**Alternatively directly in the dashboard:** the device view (card "Alle
+Werte") has two select fields **"↳ Einspeisewert Quelle"** (feed-in value
+source) and **"↳ Leistungsvorgabe Quelle"** (load setpoint source) (entities
+`select.*_einspeisewert_quelle` / `*_leistungsvorgabe_quelle`, category
+"Configuration"). They edit the same setting as the options flow — both ways
+stay in sync. All power entities (device class power or unit W/kW) are
+offered, excluding the device's own entities. **"None (manual)"** removes the
+link again. Saving briefly reloads the integration.
+
 ## Alternative: your own automation (blueprint)
 
 For anyone who needs extra conditions/filters (e.g. only linking during

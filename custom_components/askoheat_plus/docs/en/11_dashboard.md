@@ -79,6 +79,23 @@ multiple devices, the **same** image pair is currently used for every view
 (no photo per device model available) — but content-wise each view is
 correctly separated, since each view points at that device's own entities.
 
+## Temperature functions and source selection
+
+The left column of each device view contains, below "Alle Werte", a second
+card **"Temperatur-Funktionen"**, modelled on the tile of the same name in
+the device web UI: one section per function with an "enabled" switch,
+temperature and, where applicable, from/to time window, plus sensor,
+legionella protection (interval, start time, heat-up limit) and the button
+"reload settings from the device". All directly operable. Entity details:
+[05_entities.md](05_entities.md). Shared due to the device: temperature for
+feed-in value/load setpoint (one value) and the sensor (one value for all
+functions except legionella protection) — hence it appears in both rows or
+only once.
+
+"Alle Werte" also has a **"↳ … source"** select under load setpoint and
+feed-in value to link an entity directly, see
+[10_automation.md](10_automation.md).
+
 ## Multiple heating elements: auto-generated, not hand-maintained
 
 **The problem:** plain Lovelace YAML can't generically express "one card
