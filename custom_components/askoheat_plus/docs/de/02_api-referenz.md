@@ -28,16 +28,17 @@ zurückhaltender:
 | Endpunkt | Verwendung | Intervall |
 |---|---|---|
 | `gethome.json` | Haupt-Polling: Gerätestammdaten + Live-Werte + Soll-Werte + Status/Relais in einer Antwort | Coordinator-Intervall, Default **30s**, einstellbar 10–300s |
-| `getwizard_status.json` | Verbindungsdiagnose (TCP/RTU/SENEC/SMA) | einmalig beim Setup |
-| `gettemperature_calibration.json` | präzise Temperaturwerte (2 Nachkommastellen) + Kalibrier-Offsets | einmalig beim Setup |
-| `getreg.json` | Installationsdaten (`EXTRA.*`: PV-Peak, Batteriegröße, Pufferspeicher) | einmalig beim Setup |
-| `getwizard.json` | voller Konfigurations-Dump (groß) — Referenz/Diagnose | nicht automatisch abgerufen in Phase 1 |
+| `getwizard_status.json` | Verbindungsdiagnose (TCP/RTU/SENEC/SMA) | beim Start und per Button „Einstellungen neu laden“ |
+| `gettemperature_calibration.json` | präzise Temperaturwerte (2 Nachkommastellen) + Kalibrier-Offsets | beim Start und per Button „Einstellungen neu laden“ |
+| `getreg.json` | Installationsdaten (`EXTRA.*`: PV-Peak, Batteriegröße, Pufferspeicher) | beim Start und per Button „Einstellungen neu laden“ |
+| `getwizard.json` | voller Konfigurations-Dump (groß) — Referenz/Diagnose | beim Start und per Button „Einstellungen neu laden“ |
 
-**Offener Punkt:** die vier Sekundär-Endpunkte werden aktuell nur ein einziges
-Mal beim Start der Integration geladen, nicht wiederholt. Ob/wie oft sie erneut
-abgefragt werden sollten (z.B. bei Reconnect, oder ein eigenes langsames
-Intervall von z.B. 15–30 Minuten), ist bewusst noch nicht entschieden — siehe
-[07_changelog.md](07_changelog.md).
+**Sekundär-Endpunkte:** werden bewusst nicht regelmäßig abgefragt, sondern beim
+Start der Integration und auf Anforderung über den Button „Einstellungen neu
+laden“ (`button.py`, `coordinator.async_reload_secondary`). Ein automatisches
+Intervall wurde verworfen, um den ESP32 nicht zusätzlich zu belasten; nach
+einem Schreibzugriff über Home Assistant ist der lokale Stand ohnehin sofort
+aktuell — siehe [07_changelog.md](07_changelog.md).
 
 ## Warum ausgerechnet diese 5 Endpunkte
 

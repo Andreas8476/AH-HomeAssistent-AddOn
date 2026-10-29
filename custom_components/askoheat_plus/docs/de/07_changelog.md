@@ -503,6 +503,21 @@ kurz auf dieses Projekt).
   oder Modelle. Zweisprachig beschriftet (DE/EN). Leere Issues sind
   abgeschaltet, stattdessen Verweise auf Forum und Doku. Läuft nur auf GitHub.
 
+## 2026-10-29 — Doku-Durchsicht (Stand v0.10.1)
+
+- Komplette Doku (DE + EN) gegen den Code geprüft: alle 64 Entity-Schlüssel
+  sind in `05_entities.md` dokumentiert, keine kaputten Links/Anker, DE und
+  EN haben identische Struktur.
+- Veraltetes korrigiert: `01_ueberblick` (Phasen 1–5, aktueller Stand),
+  `02_api-referenz` (Sekundär-Endpunkte: Start + Button statt "einmalig",
+  Offener-Punkt-Absatz erledigt), `03_architektur` (Ordnerstruktur, alle
+  Module inkl. `link.py`/`time.py`/`select.py`/`button.py`, drei
+  Schreibwege, Datenfluss, Coordinator-Entscheidung), `05_entities`
+  (Einleitung, "nicht abgebildet"), `04_installation`, `06_entwicklung`
+  (Release-Hinweis, Neustart nach Versionsänderung), `12_bedienung`
+  (Karte "Konfiguration"). `08_neuerstellungs-prompt` bleibt bewusst auf dem
+  Stand Phase 1, mit Hinweis auf die aktuellen Dokumente.
+
 ## Offene Punkte (ToDo)
 
 - **Aufnahme in den offiziellen HACS-Standard-Store:** in Vorbereitung

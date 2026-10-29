@@ -28,7 +28,10 @@ Gerätenamen (z.B. "SONNENBOOSTER 5,2 kW"). Home Assistant gruppiert die
 Entities hier selbstständig nach Domäne: die Karte "Steuerung" zeigt die
 schreibbaren `number`-Entities (Einspeisewert, Leistungsvorgabe,
 Ziel-Heizstufe) und den Notbetrieb-Schalter, die Karte "Sensoren" die
-read-only-Werte (Gerätestatus, Heizleistung, Heizstufe, Pumpe, ...). Kein
+read-only-Werte (Gerätestatus, Heizleistung, Heizstufe, Pumpe, ...), die
+Karte "Konfiguration" die Installer-Einstellungen (Temperatur-Funktionen,
+Zeitfenster, Legionellenschutz, Quellen für Einspeisewert/Leistungsvorgabe,
+Button "Einstellungen neu laden"). Kein
 eigenes UI dieser Integration — reine Home-Assistant-Standardansicht.
 
 ## Neu konfigurieren (Host/Port/Abfrageintervall ändern)

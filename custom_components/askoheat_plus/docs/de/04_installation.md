@@ -121,7 +121,8 @@ werden:
 
 4. Absenden — die Integration testet die Verbindung (`gethome.json`) sofort.
    Bei Erfolg wird das Gerät mit Modellname als Titel angelegt, inkl. aller
-   Sensoren/Binary-Sensoren/Number-Entities (siehe [05_entities.md](05_entities.md)).
+   Entities (Sensoren, Schalter, Zahlen-, Zeit- und
+   Auswahlfelder, siehe [05_entities.md](05_entities.md)).
 
 ### Host/Port/Abfrageintervall später ändern
 

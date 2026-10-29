@@ -27,7 +27,10 @@ The device page Home Assistant generates automatically — reached via
 on its own: the "Steuerung" (controls) card shows the writable `number`
 entities (feed-in value, load setpoint, target heater step) and the
 emergency-mode switch; the "Sensoren" card shows the read-only values
-(device status, heater load, heater step, pump, ...). No custom UI from
+(device status, heater load, heater step, pump, ...); the "Konfiguration"
+(configuration) card shows the installer settings (temperature functions,
+time windows, legionella protection, sources for feed-in value/load
+setpoint, "Reload settings" button). No custom UI from
 this integration — plain stock Home Assistant behavior.
 
 ## Reconfigure (change host/port/polling interval)

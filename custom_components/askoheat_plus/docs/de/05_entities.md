@@ -2,11 +2,12 @@
 
 *[English version](../en/05_entities.md)*
 
-Sensoren und Binary-Sensoren (Phase 1) sind reine Anzeige-Entities (read-only).
+Sensoren und Binary-Sensoren sind reine Anzeige-Entities (read-only).
 `source` gibt an, aus welchem Endpunkt der Wert stammt — `home` wird
-regelmäßig gepollt, alle anderen einmalig beim Start (siehe
-[02_api-referenz.md](02_api-referenz.md)). Number-Entities (Phase 2, eigener
-Abschnitt unten) sind **schreibbar**.
+regelmäßig gepollt, alle anderen beim Start und per Button „Einstellungen neu
+laden“ (siehe [02_api-referenz.md](02_api-referenz.md)). Die Abschnitte
+darunter (`number`, `time`, `switch`, `select`, `button`) sind **schreibbar**
+bzw. bedienbar.
 
 ## Sensoren (`sensor.py`)
 
@@ -45,8 +46,8 @@ jetzt schreibbare `number`-/`time`-Entities, siehe die entsprechenden
 Abschnitte unten.
 
 `getwizard.json` (der volle Installer-Konfigurations-Dump, Quelle für
-`source: wizard`) wird wie die anderen Sekundär-Endpunkte nur einmalig beim
-Integrations-Start geladen. Nach einem Schreibzugriff über eine der unten
+`source: wizard`) wird wie die anderen Sekundär-Endpunkte beim Integrations-Start und per
+Button „Einstellungen neu laden“ geladen. Nach einem Schreibzugriff über eine der unten
 dokumentierten `number`-/`time`-Entities wird der lokale Cache aber sofort
 mit der vollständigen Geräte-Antwort aktualisiert — die Werte sind also nur
 dann veraltet, wenn die Einstellung stattdessen direkt über die Geräte-
@@ -225,14 +226,17 @@ werden automatisch reaktiviert, sobald sie live einen Wert liefern (kein
 Entfernen/Neu-Einrichten nötig). Siehe `sensor.py`
 (`_resolve_temp_sensor_defaults`, `_reenable_now_connected_temp_sensors`).
 
-## Bewusst nicht abgebildet (Phase 1)
+## Bewusst nicht abgebildet
 
 - Freitextige Relais-Zähler (`STATUS_FLAGS.HEATER_1_RELAY` etc., Format
   `"off (1x on today) (saldo +135393 used 0)"`) — zu fragiles Parsing für v1.
 - `USER_CONTACT.*` / `INSTALLER_CONTACT.*` aus `getreg.json` — personenbezogene
   Daten, bewusst nicht als Entity/Recorder-Historie abgebildet.
-- Voller `getwizard.json`-Dump — nur als Referenz in
-  [02_api-referenz.md](02_api-referenz.md) dokumentiert.
+- Der Rest des `getwizard.json`-Dumps: nur die in diesem Dokument aufgeführten
+  Einstellungen sind Entities. Nicht abgebildet sind z.B. Netzwerk-,
+  Modbus-/SENEC-Einstellungen und die Kommunikations-Timeouts (nur lesbar,
+  bewusst nicht schreibbar). Gesamtübersicht in
+  [02_api-referenz.md](02_api-referenz.md).
 - Direkte Heizstufen-Pfade (`0`–`19`) und `128` (EW-Sperre/Notaus) als separate
   `button`-Entities — die `number`-Entity "Ziel-Heizstufe" deckt den regulären
   Anwendungsfall ab, EW-Sperre ist eine spätere Idee.

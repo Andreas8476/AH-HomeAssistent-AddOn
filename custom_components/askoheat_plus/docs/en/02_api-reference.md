@@ -27,15 +27,16 @@ point for "safe". This integration is deliberately much more conservative:
 | Endpoint | Use | Interval |
 |---|---|---|
 | `gethome.json` | Main poll: device master data + live values + setpoints + status/relays in one response | Coordinator interval, default **30s**, configurable 10–300s |
-| `getwizard_status.json` | Connection diagnostics (TCP/RTU/SENEC/SMA) | once at setup |
-| `gettemperature_calibration.json` | precise temperature values (2 decimal places) + calibration offsets | once at setup |
-| `getreg.json` | installation data (`EXTRA.*`: PV peak, battery size, buffer storage) | once at setup |
-| `getwizard.json` | full config dump (large) — reference/diagnostics | not fetched automatically in phase 1 |
+| `getwizard_status.json` | Connection diagnostics (TCP/RTU/SENEC/SMA) | at startup and via the "Reload settings" button |
+| `gettemperature_calibration.json` | precise temperature values (2 decimal places) + calibration offsets | at startup and via the "Reload settings" button |
+| `getreg.json` | installation data (`EXTRA.*`: PV peak, battery size, buffer storage) | at startup and via the "Reload settings" button |
+| `getwizard.json` | full config dump (large) — reference/diagnostics | at startup and via the "Reload settings" button |
 
-**Open point:** the four secondary endpoints are currently loaded only once
-when the integration starts, not repeated. Whether/how often they should be
-re-fetched (e.g. on reconnect, or their own slow interval of, say, 15–30
-minutes) is deliberately not yet decided — see
+**Secondary endpoints:** are deliberately not polled regularly but loaded when
+the integration starts and on demand via the "Reload settings" button
+(`button.py`, `coordinator.async_reload_secondary`). An automatic interval
+was dropped so as not to burden the ESP32 further; after a write through
+Home Assistant the local state is current immediately anyway — see
 [07_changelog.md](07_changelog.md).
 
 ## Why exactly these 5 endpoints

@@ -68,8 +68,8 @@ GitHub-Repos, siehe [04_installation.md](04_installation.md).
 - **Symlink nicht kaputt machen:** `/homeassistant/custom_components/askoheat_plus`
   ist ein Symlink. Nicht versehentlich mit `cp`/Editoren in eine echte Kopie
   auflösen — dann laufen Repo und geladene Integration auseinander.
-- **Übersetzungen zweisprachig pflegen:** neue `translation_key`s in `sensor.py`/
-  `binary_sensor.py` brauchen einen passenden Eintrag in **beiden**
+- **Übersetzungen zweisprachig pflegen:** neue `translation_key`s (in `sensor.py`, `number.py`, `switch.py`,
+  `select.py`, `time.py`, `button.py` usw.) brauchen einen passenden Eintrag in **beiden**
   `translations/de.json` und `translations/en.json`, sonst zeigt HA den rohen
   Key statt eines lesbaren Namens.
 - **ESP32 schonen:** keine zusätzlichen Endpunkte leichtfertig in den regulären
@@ -78,3 +78,15 @@ GitHub-Repos, siehe [04_installation.md](04_installation.md).
 - **Code-Kommentare/Docstrings auf Deutsch:** unabhängig von der Doku-Sprache
   (siehe [01_ueberblick.md](01_ueberblick.md)) sind Kommentare und Docstrings
   im gesamten Python-Code durchgängig auf Deutsch zu schreiben.
+
+## Neue Version veröffentlichen
+
+Version in `manifest.json` hochzählen, `CHANGELOG.md` abschließen, Tag setzen,
+auf **beide** Remotes pushen und auf GitHub ein Release veröffentlichen — der
+komplette Ablauf steht in [13_aktualisieren.md](13_aktualisieren.md)
+(Abschnitt "Für die Entwickler"). Die Prüfläufe (HACS-Action, hassfest)
+laufen automatisch über `.github/workflows/validate.yml`.
+
+**Hinweis:** Home Assistant liest die Versionsnummer aus der `manifest.json`
+nur beim Start. Nach dem Hochzählen (und nach jeder Code-Änderung) ist ein
+`ha core restart` nötig, sonst zeigt die Oberfläche die alte Version.

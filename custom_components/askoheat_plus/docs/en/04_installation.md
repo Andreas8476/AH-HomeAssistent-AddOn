@@ -114,7 +114,8 @@ HACS default store) — it must be added once as a **custom repository**:
 
 4. Submit — the integration immediately tests the connection
    (`gethome.json`). On success, the device is created with its model name
-   as the title, including all sensors/binary sensors/number entities (see
+   as the title, including all entities (sensors, switches, number, time and select
+   fields, see
    [05_entities.md](05_entities.md)).
 
 ### Changing host/port/polling interval later

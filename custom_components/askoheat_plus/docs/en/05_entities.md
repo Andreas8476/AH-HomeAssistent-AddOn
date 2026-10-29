@@ -2,11 +2,11 @@
 
 *[Deutsche Version](../de/05_entities.md) (primary, authoritative)*
 
-Sensors and binary sensors (phase 1) are purely display entities (read-only).
+Sensors and binary sensors are purely display entities (read-only).
 `source` says which endpoint the value comes from — `home` is polled
-regularly, all others once at startup (see
-[02_api-reference.md](02_api-reference.md)). Number entities (phase 2, own
-section below) are **writable**.
+regularly, all others at startup and via the "Reload settings" button (see
+[02_api-reference.md](02_api-reference.md)). The sections below (`number`,
+`time`, `switch`, `select`, `button`) are **writable**/operable.
 
 ## Sensors (`sensor.py`)
 
@@ -44,8 +44,8 @@ heater-off, auto reboot) are now writable `number`/`time` entities, see the
 corresponding sections below.
 
 `getwizard.json` (the full installer config dump, source for `source:
-wizard`) is, like the other secondary endpoints, only loaded once when the
-integration starts. After a write through one of the `number`/`time`
+wizard`) is, like the other secondary endpoints, loaded when the integration
+starts and via the "Reload settings" button. After a write through one of the `number`/`time`
 entities documented below, though, the local cache is updated immediately
 with the device's full response — so the values are only stale if the
 setting was instead changed directly via the device's own web UI
@@ -220,14 +220,16 @@ are automatically re-enabled as soon as they report a value live (no
 removing/re-adding needed). See `sensor.py`
 (`_resolve_temp_sensor_defaults`, `_reenable_now_connected_temp_sensors`).
 
-## Deliberately not mapped (phase 1)
+## Deliberately not mapped
 
 - Free-text relay counters (`STATUS_FLAGS.HEATER_1_RELAY` etc., format
   `"off (1x on today) (saldo +135393 used 0)"`) — too fragile to parse for v1.
 - `USER_CONTACT.*` / `INSTALLER_CONTACT.*` from `getreg.json` — personal
   data, deliberately not mapped as an entity/recorder history.
-- Full `getwizard.json` dump — only documented as a reference in
-  [02_api-reference.md](02_api-reference.md).
+- The rest of the `getwizard.json` dump: only the settings listed in this
+  document are entities. Not mapped are e.g. network, Modbus/SENEC settings
+  and the communication timeouts (readable only, deliberately not writable).
+  Overview in [02_api-reference.md](02_api-reference.md).
 - Direct heater-step paths (`0`–`19`) and `128` (grid-lock/emergency stop)
   as separate `button` entities — the "target heater step" `number` entity
   covers the regular use case, grid-lock is a later idea.

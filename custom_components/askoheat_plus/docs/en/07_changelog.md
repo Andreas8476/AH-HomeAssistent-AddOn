@@ -499,6 +499,21 @@ project).
   Labelled bilingually (DE/EN). Blank issues are disabled, with links to the
   forum and docs instead. GitHub only.
 
+## 2026-10-29 — Documentation review (as of v0.10.1)
+
+- Complete docs (DE + EN) checked against the code: all 64 entity keys are
+  documented in `05_entities.md`, no broken links/anchors, DE and EN have an
+  identical structure.
+- Outdated passages corrected: `01_overview` (phases 1–5, current status),
+  `02_api-reference` (secondary endpoints: start + button instead of "once",
+  open-point paragraph resolved), `03_architecture` (folder structure, all
+  modules incl. `link.py`/`time.py`/`select.py`/`button.py`, three write
+  paths, data flow, coordinator decision), `05_entities` (introduction, "not
+  mapped"), `04_installation`, `06_development` (release note, restart after
+  version change), `12_usage` ("Konfiguration" card). `08_recreation-prompt`
+  deliberately stays at the phase-1 state, with a note pointing to the
+  current documents.
+
 ## Open points (TODO)
 
 - **Listing in the official HACS default store:** in preparation (Andreas

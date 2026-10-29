@@ -7,6 +7,11 @@ integration (phase 1 — reading) can be rebuilt from scratch even without the
 original chat history. Just hand it over as a whole to an AI coding
 assistant (e.g. Claude Code).
 
+> **Note:** This prompt deliberately describes the **state of the first phase**
+> (reading only). Today's feature set (control, installer settings,
+> temperature functions, dashboard) is in [01_overview.md](01_overview.md),
+> [03_architecture.md](03_architecture.md) and [05_entities.md](05_entities.md).
+
 ---
 
 ## Prompt (to copy)

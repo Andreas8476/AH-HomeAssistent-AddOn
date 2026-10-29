@@ -71,8 +71,8 @@ every `commit`. Reason: HACS only installs from public GitHub repos, see
   is a symlink. Don't accidentally resolve it into a real copy with
   `cp`/editors — that would make the repo and the loaded integration
   diverge.
-- **Keep translations bilingual:** new `translation_key`s in `sensor.py`/
-  `binary_sensor.py` need a matching entry in **both**
+- **Keep translations bilingual:** new `translation_key`s (in `sensor.py`, `number.py`, `switch.py`,
+  `select.py`, `time.py`, `button.py` etc.) need a matching entry in **both**
   `translations/de.json` and `translations/en.json`, otherwise HA shows the
   raw key instead of a readable name.
 - **Protect the ESP32:** don't casually add extra endpoints to the regular
@@ -81,3 +81,15 @@ every `commit`. Reason: HACS only installs from public GitHub repos, see
 - **Code comments/docstrings in German:** regardless of the documentation
   language (see [01_overview.md](01_overview.md)), comments and docstrings
   throughout the Python code are written in German.
+
+## Publishing a new version
+
+Bump the version in `manifest.json`, finish `CHANGELOG.md`, set the tag, push
+to **both** remotes and publish a release on GitHub — the complete procedure
+is in [13_updating.md](13_updating.md) (section "For developers"). The
+validation runs (HACS action, hassfest) run automatically via
+`.github/workflows/validate.yml`.
+
+**Note:** Home Assistant reads the version number from `manifest.json` only
+at startup. After bumping it (and after every code change) an
+`ha core restart` is needed, otherwise the UI still shows the old version.

@@ -5,8 +5,9 @@
 ## Goal
 
 A Home Assistant integration for the **ASKOHEAT+** PV heating element
-(manufacturer [Askoma](https://www.askoma.com)) that reads its local,
-unauthenticated REST API on the home network and, later, also controls it.
+(manufacturer [Askoma](https://www.askoma.com)) that reads and controls
+its local, unauthenticated REST API on the home network — including the
+settings of the device's web UI.
 
 ## Why a custom integration instead of an add-on
 
@@ -24,29 +25,42 @@ served as a model:
 
 ## Phases
 
-The project is deliberately laid out in steps:
+The project was deliberately built in steps, all of them are implemented:
 
-1. **Phase 1 — Reading (this baseline)**: sensors/binary sensors showing the
-   device's current state (heater step, power, temperature, status, errors).
-   No write access.
-2. **Phase 2 — Writing** *(shipped)*: setting heater step, load setpoint and
-   feed-in value — via the manufacturer-documented inline commands, as
-   `number` entities.
-3. **Phase 3 — Dashboard** *(shipped)*: a dedicated Lovelace dashboard using
-   Andreas' Askoma render images as a background with live values overlaid.
+1. **Phase 1 — reading:** sensors/binary sensors for the device's current
+   state (heater step, power, temperature, status, errors).
+2. **Phase 2 — writing:** set heater step, load setpoint and feed-in value
+   via the manufacturer-documented inline commands, as `number` entities
+   (with keep-alive), plus the emergency-mode switch.
+3. **Phase 3 — dashboard:** a dedicated Lovelace dashboard with Andreas'
+   Askoma renders as the background and live values as an overlay.
+4. **Phase 4 — installer settings:** writable `number`/`time` entities for
+   legionella protection, low tariff, feed-in window, heat pump request etc.
+   via `POST /server1/`.
+5. **Phase 5 — temperature functions & convenience:** all temperature
+   functions of the device web UI (switches, temperatures, sensor, legionella
+   interval), source selection for feed-in value/load setpoint directly in
+   the dashboard and the "Reload settings" button.
 
 ## Current status
 
-- [x] Phase 1: integration with sensor and binary sensor entities, config
-      flow via the UI, polling `gethome.json`.
-- [x] Phase 2: control/writing — three `number` entities (target heater
-      step, load setpoint, feed-in value) with a built-in keep-alive against
-      the 60s auto-revert, plus an automation blueprint to link the feed-in
-      value to a meter/inverter, see
-      [05_entities.md](05_entities.md) and [10_automation.md](10_automation.md).
-- [x] Phase 3: dashboard — a dedicated YAML Lovelace dashboard with two
-      image cards (temperature sensors + heater load at the tank, feed-in
-      value/load setpoint at the meter cabinet), see [11_dashboard.md](11_dashboard.md).
+Current version: **0.10.1** (see [CHANGELOG.md](../../../../CHANGELOG.md)).
+
+- [x] Reading: sensor/binary sensor entities, config flow via the UI, polling
+      of `gethome.json`, secondary endpoints at startup and via button.
+- [x] Controlling: `number` entities (target heater step, load setpoint,
+      feed-in value) with keep-alive against the 60s expiry, emergency-mode
+      switch, linking to a meter/inverter via the options flow, dashboard
+      selection or blueprint, see [05_entities.md](05_entities.md) and
+      [10_automation.md](10_automation.md).
+- [x] Installer settings and temperature functions: writable
+      `number`/`time`/`switch`/`select` entities, see
+      [05_entities.md](05_entities.md).
+- [x] Dashboard: YAML Lovelace dashboard per device with image cards,
+      history graphs and the "Temperatur-Funktionen" card, see
+      [11_dashboard.md](11_dashboard.md).
+- [x] Updating and community: [13_updating.md](13_updating.md),
+      [14_community.md](14_community.md).
 
 ## Test environment
 
@@ -63,4 +77,4 @@ authoritative version; this translation may occasionally lag behind it.
 
 Developed by Andreas Stegemann in collaboration with Claude (Anthropic,
 Sonnet 5) as a coding assistant. A private project, not official ASKOMA AG
-software — details see [README.md](../../../../README.md#author).
+software — details see [README.md](../../../../README.md#autor).
