@@ -28,6 +28,12 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Neue Doku `docs/de/13_aktualisieren.md` (+ EN `13_updating.md`): AddOn auf
   eine neue Version aktualisieren.
 
+### Behoben
+
+- `api.py`: Schreiben von Installer-Einstellungen (`POST /server1/`)
+  wiederholt den Request einmal, wenn das Gerät eine wiederverwendete
+  Keep-Alive-Verbindung geschlossen hat ("Server disconnected").
+
 ## [0.8.0] - 2026-09-26
 
 ### Hinzugefügt

@@ -448,6 +448,20 @@ kurz auf dieses Projekt).
   in der Integration — HACS bringt das bereits mit (Update-Entity unter
   "Einstellungen"), Voraussetzung ist ein echtes GitHub-Release pro Version
   (Tag allein reicht nicht).
+- **Live-Schreibtest** am Testgerät `192.168.20.54` (mit Andreas'
+  ausdrücklicher Freigabe, SONNENBOOSTER nicht angefasst), über die echten
+  HA-Services: Schalter Minimaltemperatur ein/aus (`INPUT_SETTING`
+  `0x20dc` → `0x22dc` → `0x20dc`), Fühler Sensor 1/0 (`0x0801` → `0x0802` →
+  `0x0801`), Legionellen-Intervall wöchentlich/zweiwöchentlich (`0x0401` →
+  `0x0201` → `0x0401`), Minimaltemperatur 21/20 °C, Reload-Button. Jeweils
+  nur das erwartete Bit geändert, am Ende vollständiger `getwizard.json`-
+  Vergleich vorher/nachher: keine Unterschiede.
+- **Fix dabei gefunden:** Der erste Versuch scheiterte mit "Server
+  disconnected" (nichts geschrieben) — der POST direkt nach dem frischen
+  GET erwischte eine vom ESP32 bereits geschlossene Keep-Alive-Verbindung.
+  `api.py`: `async_write_wizard` wiederholt den POST bei
+  `ServerDisconnectedError` einmal (unbedenklich, absolute Werte =
+  idempotent). Danach liefen alle Schritte fehlerfrei.
 
 ## Offene Punkte (ToDo)
 

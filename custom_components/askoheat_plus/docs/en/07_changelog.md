@@ -446,6 +446,19 @@ project).
   the integration — HACS already provides one (update entity under
   "Settings"); prerequisite is a real GitHub release per version (a tag
   alone is not enough).
+- **Live write test** on the test device `192.168.20.54` (with Andreas'
+  explicit approval, SONNENBOOSTER not touched), via the real HA services:
+  minimum temperature switch on/off (`INPUT_SETTING` `0x20dc` → `0x22dc` →
+  `0x20dc`), sensor 1/0 (`0x0801` → `0x0802` → `0x0801`), legionella interval
+  weekly/fortnightly (`0x0401` → `0x0201` → `0x0401`), minimum temperature
+  21/20 °C, reload button. Only the expected bit changed each time; full
+  `getwizard.json` comparison before/after at the end: no differences.
+- **Fix found along the way:** the first attempt failed with "Server
+  disconnected" (nothing written) — the POST right after the fresh GET hit a
+  keep-alive connection already closed by the ESP32. `api.py`:
+  `async_write_wizard` retries the POST once on `ServerDisconnectedError`
+  (harmless, absolute values = idempotent). After that all steps ran
+  without errors.
 
 ## Open points (TODO)
 

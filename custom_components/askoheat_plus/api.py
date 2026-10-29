@@ -130,9 +130,18 @@ class AskoheatApiClient:
         """
         url = f"{self.base_url}/server1/"
         try:
-            async with self._session.post(url, json=values) as response:
-                response.raise_for_status()
-                text = await response.text()
+            try:
+                text = await self._async_post(url, values)
+            except aiohttp.ServerDisconnectedError:
+                # Der ESP32-Webserver schließt Keep-Alive-Verbindungen teils
+                # stillschweigend; direkt nach einem GET (Read-Modify-Write
+                # im Coordinator) erwischt der POST dann eine bereits tote,
+                # wiederverwendete Verbindung (live am Testgerät beobachtet,
+                # der Wert wurde dabei nicht geschrieben). Ein einmaliger
+                # Wiederholungsversuch ist unbedenklich, da der POST absolute
+                # Werte setzt (idempotent).
+                _LOGGER.debug("Server disconnected on %s, retrying once", url)
+                text = await self._async_post(url, values)
         except TimeoutError as err:
             raise AskoheatApiError(f"Timeout writing to {url}") from err
         except (aiohttp.ClientError, RuntimeError) as err:
@@ -147,6 +156,12 @@ class AskoheatApiClient:
             raise AskoheatApiError(f"Unexpected JSON shape from {url}: {data!r}")
 
         return data
+
+    async def _async_post(self, url: str, values: dict[str, str]) -> str:
+        """Einen JSON-POST senden und den Antwort-Body als Text liefern."""
+        async with self._session.post(url, json=values) as response:
+            response.raise_for_status()
+            return await response.text()
 
     async def async_send_bare_command(self, path: str) -> None:
         """Einen parameterlosen Befehl senden, z.B. path="on" für den Notbetrieb.
