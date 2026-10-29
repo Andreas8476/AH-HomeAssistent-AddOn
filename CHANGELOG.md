@@ -12,6 +12,14 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-10-29
+
+### Hinzugefügt
+
+- GitHub-Workflow `.github/workflows/validate.yml` (HACS-Action + hassfest),
+  Voraussetzung für die Aufnahme in den HACS-Standard-Store. Keine
+  Funktionsänderung an der Integration.
+
 ## [0.10.0] - 2026-10-29
 
 ### Hinzugefügt
@@ -250,7 +258,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Phase 2: Steuerung/Schreiben (Heizstufe, Leistungsvorgabe, Einspeisewert).
 - Phase 3: Lovelace-Dashboard mit Heizstab-Bildern.
 
-[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.10.0...main
+[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.10.1...main
+[0.10.1]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.10.0...v0.10.1
 [0.10.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.9.0...v0.10.0
 [0.9.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.8.0...v0.9.0
 [0.8.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.7.0...v0.8.0
