@@ -484,10 +484,12 @@ project).
   `.github/workflows/validate.yml` (`hacs/action` + `hassfest`), GitHub
   description/topics, releases, brand images in the `brand/` folder (a
   separate PR against `home-assistant/brands` is no longer needed for that).
-  Open: wait for green workflow runs on GitHub, then a PR against
-  `hacs/default` (entry `Andreas8476/AH-HomeAssistent-AddOn` in the file
-  `integration`, sorted alphabetically) by the repo owner, then review by the
-  HACS maintainers (turnaround not predictable).
+  **PR submitted (2026-10-29):** https://github.com/hacs/default/pull/12952
+  (entry in the file `integration`, sorted alphabetically, preliminary checks
+  Sorted/JSON schema/Preflight green). Open: review by the HACS maintainers
+  (turnaround not predictable), answer any questions there, leave the PR
+  unchanged until then. Release v0.10.1 was created specifically after the
+  first green workflow run (checklist item of the PR template).
 - **Relay counters/balance** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) not yet
   mapped as individual sensors — free-text parsing deliberately deferred.
 - **Grid-lock (`128`) / direct heater-step paths (`0`–`19`):** not mapped

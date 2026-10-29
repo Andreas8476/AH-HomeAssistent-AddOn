@@ -488,10 +488,12 @@ kurz auf dieses Projekt).
   Workflow `.github/workflows/validate.yml` (`hacs/action` + `hassfest`),
   GitHub-Beschreibung/Topics, Releases, Marken-Bilder im Ordner `brand/`
   (eine separate PR bei `home-assistant/brands` ist dafür nicht mehr nötig).
-  Offen: Workflow-Läufe auf GitHub grün abwarten, dann PR bei `hacs/default`
-  (Eintrag `Andreas8476/AH-HomeAssistent-AddOn` in der Datei `integration`,
-  alphabetisch einsortiert) durch den Repo-Besitzer, danach Review der
-  HACS-Maintainer (Dauer nicht planbar).
+  **PR eingereicht (2026-10-29):** https://github.com/hacs/default/pull/12952
+  (Eintrag in der Datei `integration`, alphabetisch einsortiert, Vorab-Checks
+  Sorted/JSON-Schema/Preflight grün). Offen: Review der HACS-Maintainer
+  (Dauer nicht planbar), auf Rückfragen dort antworten, die PR bis dahin
+  nicht mehr ändern. Release v0.10.1 wurde eigens nach dem ersten grünen
+  Workflow-Lauf erstellt (Checklisten-Punkt der PR-Vorlage).
 - **Relais-Zähler/Saldo** (`STATUS_FLAGS.HEATER_1_RELAY` etc.) noch nicht als
   einzelne Sensoren abgebildet — Freitext-Parsing bewusst auf später verschoben.
 - **EW-Sperre (`128`) / direkte Heizstufen-Pfade (`0`–`19`):** nicht als eigene
