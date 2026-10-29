@@ -14,6 +14,9 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ### Dokumentation
 
+- README überarbeitet: Funktionsübersicht, Screenshots, HACS-Schnellstart mit
+  "My Home Assistant"-Knopf, getestete Geräte, Hilfe/Fehler melden,
+  Dokumentations-Tabelle und englische Kurzfassung.
 - Neue Doku `docs/de/14_community.md` (+ EN): Forenbeitrag im Home Assistant
   Community Forum, HACS-Store-Antrag, veröffentlichte Texte und Vorlage für
   weitere Foren.
