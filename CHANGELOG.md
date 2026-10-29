@@ -12,6 +12,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-29
+
 ### Hinzugefügt
 
 - Dashboard: neue Karte "Temperatur-Funktionen" je Geräte-Ansicht (Schalter,
@@ -248,7 +250,8 @@ Ausführlichere, erzählende Projekt-Historie (inkl. Begründungen/Entscheidunge
 - Phase 2: Steuerung/Schreiben (Heizstufe, Leistungsvorgabe, Einspeisewert).
 - Phase 3: Lovelace-Dashboard mit Heizstab-Bildern.
 
-[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.9.0...main
+[Unreleased]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.10.0...main
+[0.10.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.9.0...v0.10.0
 [0.9.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.8.0...v0.9.0
 [0.8.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.7.0...v0.8.0
 [0.7.0]: https://gitlab.com/SyberAlf/ah-homeassistent-addon/-/compare/v0.6.0...v0.7.0
